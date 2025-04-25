@@ -1,33 +1,35 @@
-{$ extends 'auth/base.html' %} {% block title %}  <!-- Django:base.htmlの内容をベースに拡張(extend)する。Block title base.htmlの子のテンプレート？-->
-<title>login</title> <!-- ウェブページのタイトルを指定。このタイトルは、ブラウザのタブや検索エンジンの結果ページに表示-->
-{% endlock %} {% block body%} <!-- https://qiita.com/keishi04hrikzira/items/d81a38b655361352fe55 -->
+{$ extends 'auth/base.html' %} {% block title %}  <!-- Flask:base.htmlの内容をベースに拡張(extend)する。タイトルに代入する。-->
+<title>login</title> <!-- ブラウザのタグの部分 -->
+{% endblock %} {% block body %} <!-- タイトル終了、ここからbodyに代入する。-->
 <div class="auth-wrapper"> <!--wrapper:ユーザーが読みやすい様幅にwebページを包んで表示する。全ページ同じ？ https://mightyace.co.jp/2021/09/04/column3380/ -->
 　<div class = "auth-container"> <!-- container：コンテンツの横幅、余白、配置を調整する。 -->
 　　<img
       src="{{ url_for('static',filename='img/hagyutto-main.png') }}"   
       class="auth-main-pic"
-     /> <!-- なぜ{}が２回も使用されているのか不思議。-->
+      alt="はぎゅっと　チャット"
+     /> <!-- PC版の画像を貼り付け。{{}}Flaskの書き方。バックエンド側にデータが保存されており、そちらを参照。変数のため絶対パスではないので、ディレクトリが移動しても参照できる。->
 　　<img
       src="{{ url_for('static',filename='img/~~~~~~~~~~~~~) }}"   
       class="auth-mobile-pic"
-     /> <!-- モバイル版の画像を貼り付け -->
+      alt="はぎゅっと　チャット"
+     /> <!--モバイル版の画像を貼り付け -->
     <div class ="auth-form-wrapper"> <!-- 入力フォーム画面の横幅等の調整。-->
        <div class="auth-logo ">
           <img
            src="{{ url_for('static' ,filename='img/hagyutto-logo.png')}}"
            alt="logo"
-          /> <!-- なぜここだけaltなのか。-->
+          /> <!-- logoの画像-->
        </div>
-       <form class ='auth-form' method="post">　<!--「FORM」とは、入力・送信フォームを作成する際に使用する要素。入力された値はmethod属性で指定した転送方法とenctype属性で指定したデータ形式でサーバへ送信され、action属性で指定したアクションを呼びだす。-->
-          <h1 class="auth-title">ログイン</h1>　<!-- 見出し：タイトル表示（ログイン)--> 
+       <form class ='auth-form' method="post"> <!--「FORM」とは、入力・送信フォームを作成する際に使用する要素。入力された値はmethod属性で指定した転送方法とenctype属性で指定したデータ形式でサーバへ送信され、action属性で指定したアクションを呼びだす。-->
+          <h1 class="auth-title">ログイン</h1> <!-- 見出し：タイトル表示（ログイン)--> 
           <div>
-            <label for="email input">Email</label> <!-- <label> は、フォームの中で、フォーム部品とラベルを関係付けるために使用。ラベルを明示することにより、ブラウザでラベルをクリックした時や、ラベルのアクセスキーを押した時に、その部品をクリックしたのと同じ動作をさせることができるようになります。-->
+            <label for="email input">Email</label> <!-- <label> は、フォームの中で、フォーム部品とラベルを関係付けるために使用。ラベルを明示することにより、ブラウザでラベルをクリックした時や、ラベルのアクセスキーを押した時に、その部品をクリックしたのと同じ動作をさせることができるようになります。ラベル無しにする？-->
             <input
                type="text"
                placeholder="メールアドレス" 
                name="email"
                id="email-input"
-            /> <!--name無しでも問題ないか。--> <!-- 「INPUT」とは、<form>タグで作成したフォームの中でテキスト入力欄やボタンなどの部品を作成する要素-->
+            /> <!-- 「INPUT」とは、<form>タグで作成したフォームの中でテキスト入力欄やボタンなどの部品を作成する要素-->
                <!--type:部品の形式を指定。name:部品の名前を指定。placeholder:フォームコントロールに値がないときにユーザーにヒントを出す。id:ページ内に一つ。-->
           </div>
           <div>
@@ -40,8 +42,14 @@
                />
           </div>
           <div class="auth-button-container">
-            {% with messages = get_flashed_messages() %} {% if messages %} <!-- ユーザーが操作をしたときに、画面にその結果を表示する機能やメッセージのこと。ログインした。投稿した-->
-          </div>
+            {% with messages = get_flashed_messages() %} {% if messages %} <!-- django flash message:ユーザーが操作をしたときに、画面にその結果を表示する機能やメッセージのこと。ログインした。投稿した-->
+            <ul class="flashes"> <!-- <ul> タグは Unordered List 順序のないリスト -->
+               {% for message in messages %} <!-- Flask:バックエンド側にてmessagesの中に複数のエラー分が入っており、その中からmessageが出てくるようになっている-->
+                 <li>{{ message }}</li>　<!-- エラーが出た分だけ、messageが表示される。-->
+               {% endfor %}
+            </ul>
+            ｛ endif
+         </div>
 
 
 
@@ -56,3 +64,6 @@
 
 
 <!-- labelタグの意味がまだわかっていない-->
+<!-- flashメッセージとは、クライアントからサーバへリクエストを送信したとき、そのリクエストにより実行した処理が正常に終了したか否かをユーザに伝えるメッセージのことです。-->
+<!-- https://qiita.com/yu__programming/items/dd0cdc38982b752d45b9-->
+<!-- Django（ジャンゴ）は、Pythonで作られたWebアプリケーションフレームワークです。WebサイトやWebアプリケーションの開発を効率化するために、開発者が頻繁に使う機能をあらかじめ提供しており、迅速な開発とクリーンな設計を可能にします。具体的には、データベースとの連携、テンプレートエンジン、URLルーティング、フォーム処理、認証機能などが組み込まれている-->
