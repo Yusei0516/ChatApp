@@ -1,36 +1,35 @@
-{$ extends 'auth/base.html' %} {% block title %}  <!-- Flask:base.htmlの内容をベースに拡張(extend)する。タイトルに代入する。-->
+{% extends 'auth/base.html' %} {% block title %}  <!-- Flask:base.htmlの内容をベースに拡張(extend)する。タイトルに代入する。-->
 <title>login</title> <!-- ブラウザのタグの部分 -->
 {% endblock %} {% block body %} <!-- タイトル終了、ここからbodyに代入する。-->
-<div class="auth-wrapper"> <!--wrapper:ユーザーが読みやすい様幅にwebページを包んで表示する。全ページ同じ？ https://mightyace.co.jp/2021/09/04/column3380/ -->
-　<div class = "auth-container"> <!-- container：コンテンツの横幅、余白、配置を調整する。 -->
-　　<img
-      src="{{ url_for('static',filename='img/hagyutto-main.png') }}"   
-      class="auth-main-pic"
-      alt="はぎゅっと　チャット"
-     /> <!-- PC版の画像を貼り付け。{{}}Flaskの書き方。バックエンド側にデータが保存されており、そちらを参照。変数のため絶対パスではないので、ディレクトリが移動しても参照できる。->
-　　<img
-      src="{{ url_for('static',filename='img/~~~~~~~~~~~~~) }}"   
-      class="auth-mobile-pic"
-      alt="はぎゅっと　チャット"
-     /> <!--モバイル版の画像を貼り付け -->
+<div class="auth-wrapper"> <!--wrapper:ユーザーが読みやすい様な幅にwebページを包んで表示する。全ページ同じ？ https://mightyace.co.jp/2021/09/04/column3380/ -->
+ <div class = "auth-container"> <!-- container：コンテンツの横幅、余白、配置を調整する。 -->
+    <img
+     src="{{ url_for('static',filename='img/hagyutto-main.png') }}"   
+     class="auth-main-pic"
+     alt="はぎゅっとチャット"
+    /> <!-- PC版の画像を貼り付け。{{}}Flaskの書き方。バックエンド側にデータが保存されており、そちらを参照。変数のため絶対パスではないので、ディレクトリが移動しても参照できる。->
+　  <img
+     src="{{ url_for('static',filename='img/~~~~~~~~~~~~~) }}"   
+     class="auth-mobile-pic"
+     alt="はぎゅっと　チャット"
+    /> <!--モバイル版の画像を貼り付け -->
     <div class ="auth-form-wrapper"> <!-- 入力フォーム画面の横幅等の調整。-->
-       <div class="auth-logo ">
+       <div class="auth-logo">
           <img
-           src="{{ url_for('static' ,filename='img/hagyutto-logo.png')}}"
-           alt="logo"
+             src="{{ url_for('static' ,filename='img/hagyutto-logo.png')}}"
+             alt="logo"
           /> <!-- logoの画像-->
        </div>
-       <form class ='auth-form' method="post"> <!--「FORM」とは、入力・送信フォームを作成する際に使用する要素。入力された値はmethod属性で指定した転送方法とenctype属性で指定したデータ形式でサーバへ送信され、action属性で指定したアクションを呼びだす。-->
+       <form class ='auth-form' method="post"> <!--「FORM」とは、入力・送信フォームを作成する際に使用する要素。入力された値はmethod属性で指定した転送方法とにてサーバへ送信される-->
           <h1 class="auth-title">ログイン</h1> <!-- 見出し：タイトル表示（ログイン)--> 
           <div>
-            <label for="email input">Email</label> <!-- <label> は、フォームの中で、フォーム部品とラベルを関係付けるために使用。ラベルを明示することにより、ブラウザでラベルをクリックした時や、ラベルのアクセスキーを押した時に、その部品をクリックしたのと同じ動作をさせることができるようになります。ラベル無しにする？-->
+            <label for="email-input">Email</label> <!-- <label> は、なくても良い。inputの箱の説明分。-->
             <input
-               type="text"
-               placeholder="メールアドレス" 
-               name="email"
-               id="email-input"
-            /> <!-- 「INPUT」とは、<form>タグで作成したフォームの中でテキスト入力欄やボタンなどの部品を作成する要素-->
-               <!--type:部品の形式を指定。name:部品の名前を指定。placeholder:フォームコントロールに値がないときにユーザーにヒントを出す。id:ページ内に一つ。-->
+              type="text"
+              placeholder="メールアドレス" 
+              name="email"
+              id="email-input"
+            />  <!-- 「INPUT」とは、<form>タグで作成したフォームの中でテキスト入力欄やボタンなどの部品を作成する要素--><!--type:部品の形式を指定。name:部品の名前を指定。placeholder:フォームコントロールに値がないときにユーザーにヒントを出す。id:ページ内に一つ。-->
           </div>
           <div>
                <label for="password-input">Password</label>
@@ -41,29 +40,24 @@
                   id="possword-input"
                />
           </div>
-          <div class="auth-button-container">
-            {% with messages = get_flashed_messages() %} {% if messages %} <!-- django flash message:ユーザーが操作をしたときに、画面にその結果を表示する機能やメッセージのこと。ログインした。投稿した-->
+          <div class="auth-button-container"> <!--ボタンの幅等-->
+            {% with messages = get_flashed_messages() %} {% if messages %} <!-- flash message:ユーザーが操作をしたときに、画面にその結果を表示する機能やメッセージのこと。ログインした。投稿した。ログインできなかった。-->
             <ul class="flashes"> <!-- <ul> タグは Unordered List 順序のないリスト -->
-               {% for message in messages %} <!-- Flask:バックエンド側にてmessagesの中に複数のエラー分が入っており、その中からmessageが出てくるようになっている-->
-                 <li>{{ message }}</li>　<!-- エラーが出た分だけ、messageが表示される。-->
+               {% for message in messages %} <!-- Flask:バックエンド側にてmessagesの中に複数のエラー分が入っており、その中からmessageが出てくるようになっている。for:ループ。@がない。大文字を使用してね。等-->
+                 <li>{{ message }}</li> <!-- エラーが出た分だけ、messageが表示される。-->
                {% endfor %}
             </ul>
-            ｛ endif
+            {% endif %} {% endwith %} <!-- fkask:endif:条件分岐。endwithが出てくるまで条件分岐する様だ。定かではない。-->
+            <button class="auth-button white">LOGIN</button>
+            <a class ="switch-auth-mode" href="{{ url for('~~~~')}}"> <!--画面登録のURLを貼り付け。ボタンにするにはどうするか確認する。-->
+               登録はこちら
+            </a>
          </div>
-
-
-
        </form>
     </div>
-
-
-  </div>
-
-
+ </div>
 </div>
+{% endblock %}
 
-
-<!-- labelタグの意味がまだわかっていない-->
-<!-- flashメッセージとは、クライアントからサーバへリクエストを送信したとき、そのリクエストにより実行した処理が正常に終了したか否かをユーザに伝えるメッセージのことです。-->
+<!-- flashメッセージとは、クライアントからサーバへリクエストを送信したとき、そのリクエストにより実行した処理が正常に終了したか否かをユーザに伝えるメッセージのこと。-->
 <!-- https://qiita.com/yu__programming/items/dd0cdc38982b752d45b9-->
-<!-- Django（ジャンゴ）は、Pythonで作られたWebアプリケーションフレームワークです。WebサイトやWebアプリケーションの開発を効率化するために、開発者が頻繁に使う機能をあらかじめ提供しており、迅速な開発とクリーンな設計を可能にします。具体的には、データベースとの連携、テンプレートエンジン、URLルーティング、フォーム処理、認証機能などが組み込まれている-->
