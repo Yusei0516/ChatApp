@@ -35,3 +35,26 @@ class User:
             abort(500)
         finally:
             db_pool.release(conn)
+
+#グループチャット
+class Group:            
+    @classmethod
+    def find_by_user_id(cls, group_id):
+        conn = db_pool.get_conn()
+        try:
+            with conn.cursor() as cur:
+                sql = """
+                SELECT group_chats.id, group_chats.name
+                FROM group_members
+                JOIN group_chats ON group_members.group_chat_id = group_chats.id
+                WHERE group_members.user_id = %s 
+                LIMIT 1
+                """
+                cur.execute(sql, (user_id))
+                group = cur.fetchone()
+                return group
+        except pymysql.Error as e:
+            print(f'エラーが発生しています: {e}')
+            abort(500)
+        finally:
+            db_pool.release(conn)
