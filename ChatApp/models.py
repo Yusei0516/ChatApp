@@ -1,6 +1,6 @@
 from flask import abort
 import pymysql
-from util.DB import DB
+from ChatApp.util.DB import DB
 
 #初期起動時にコネクションプールを作成し接続を確率
 db_pool = DB.init_db_pool()
@@ -28,7 +28,7 @@ class User:
                 with conn.cursor() as cur:
                     sql = "SELECT * FROM users WHERE email=%s"
                     cur.execute(sql, (email,))
-                    user = cur.ferchone()
+                    user = cur.fetchone()
                 return user
         except pymysql.Error as e:
             print(f'エラーが発生しています：{e}')
