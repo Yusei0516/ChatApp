@@ -23,7 +23,10 @@ def index():
     uid = session.get('uid')
     if uid is None:
         return redirect(url_for('login_view'))
-    return redirect(url_for('user_dashboard'))
+    if uid == 'admin123':
+        return redirect(url_for('admin_dashboard'))
+    else:
+        return redirect(url_for('user_dashborad'))
 
 
 # サインアップページの表示
