@@ -1,7 +1,7 @@
 from flask import Flask, request, redirect, render_template, session, flash, abort, url_for
 from datetime import timedelta
 import hashlib, uuid, re, os
-from models import User, Channel, Message
+from models import User, Group, Channel, Message
 from util.assets import bundle_css_files
  
 # 定数定義
@@ -94,3 +94,16 @@ def login_process():
 def logout():
     session.clear()
     return redirect(url_for('login_view'))
+
+#グループチャット
+@app.route('/group_list', methods=['GET'])
+def group_chat():
+    uid = session.get('uid')
+    if uid is None:
+        return redirect(url_for('login_view'))
+    
+    group = Group.find_by_user_id(uid)
+    if group is None:
+        flash("グループに所属していません")
+        return redirect(url_for('user_menu_view'))
+    return redirect(url_for('group_chat,group_id=group['id']))
