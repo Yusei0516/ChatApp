@@ -1,12 +1,12 @@
 import hashlib
-from models import db_pool
+from ChatApp.models import db_pool
 
 def create_admin():
     uid = 'admin123'
     name = '管理者'
     email = 'admin@example.com'
     raw_password = 'adminpassFteam'
-    password = hashlib.sha256(raw_password.encode()).hexdigest()
+    password = hashlib.sha256(raw_password.encode('utf-8')).hexdigest()
 
     conn = db_pool.get_conn()
     try:
@@ -23,4 +23,3 @@ def create_admin():
 
 if __name__ == '__main__':
     create_admin()
-    

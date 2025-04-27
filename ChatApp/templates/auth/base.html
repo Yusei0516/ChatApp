@@ -4,7 +4,7 @@
      <meta charset="UTF-8"> <!-- 日本語を含む文字が正しく表示される-->
      <meta http-equiv="X-UA-Compatible" content="IE=edge" /> <!-- バグが発生しないように、最新のブラウザバージョンで表示。https://www.bugbugnow.net/2020/02/X-UA-CompatibleIE-edge.html-->
      <meta name="viewport" content="width=device-width, initial-scale=1.0" /> <!--  CSSと関連している。どのようなデバイスでも画面表示を最適化する文言 https://gmotech.jp/semlabo/seo/blog/howto-viewport/ --> 
-     {% block title %}{% endblock %} <!-- flast (Jinja2) block titleとendblockの間に好きなコードを記載できる。-->
+     {% block title %}{% endblock %} <!-- flask (Jinja2) block titleとendblockの間に好きなコードを記載できる。-->
      <link rel="icon" href="../static/img/icon.png"/>
      <!-- <link rel="stylesheet" href=""> スタイルシートのリンク先を入力-->
      <link rel="preconnect" href="https://fonts.googleapis.com"> <!-- google fontを利用する文言⓵　https://www.efusion.co.jp/whatsnew/google_fonts -->
@@ -24,5 +24,6 @@
 <!-- rel : relation（関係）、href : hypertext reference（参照）-->
 <!-- relは決まった属性があり、href:URLを貼り付ける感じ。-->
 <!-- meta は METAinformation(メタ情報)の略です。英語の meta- は、後から(after)、超えて(beyond)、共に(with)、変化(change)などのニュアンスを持つ接頭語です。「それまでの機能に加えて、後から機能を追加するためのもの」といった意味でしょうか。<meta> タグは、HTML の規約で定義されているものに加えて、いろいろな目的で使用されます。-->
-<!-- Flask：Pythonで書かれた軽量なWebアプリケーションフレームワーク。-->
+<!-- Flask：Pythonで書かれた軽量なWebアプリケーションフレームワーク。webアプリの土台-->
 <!-- フレームワーク（framework）とは、ソフトウェア開発において、特定の目的を達成するための基本的な構造やルールを提供するツールやライブラリ。利点：①再利用性②効率性③一貫性-->
+<!-- jinjaはflaskの中に入っているが、使用してもしなくてもOK -->
