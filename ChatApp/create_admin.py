@@ -1,5 +1,5 @@
 import hashlib
-from ChatApp.models import db_pool
+from models import db_pool
 
 def create_admin():
     uid = 'admin123'

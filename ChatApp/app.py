@@ -23,7 +23,7 @@ def index():
     uid = session.get('uid')
     if uid is None:
         return redirect(url_for('login_view'))
-    return redirect(url_for('channels_view'))
+    return redirect(url_for('user_dashboard'))
 
 
 # サインアップページの表示
@@ -57,7 +57,7 @@ def signup_process():
             User.create(uid, name, email, password)
             UserId = str(uid)
             session['uid'] = UserId
-            return redirect(url_for('channels_view'))
+            return redirect(url_for('user_dashboard'))
     return redirect(url_for('signup_process'))
 
 
@@ -75,18 +75,38 @@ def login_process():
 
     if email =='' or password == '':
         flash('未入力の項目があります')
+        return redirect(url_for('login_view'))
+
+    user = User.find_by_email(email)
+    if user is None:
+        flash('このユーザーは存在しません')
+        return redirect(url_for('login_view'))
+    
+    hashPassword = hashlib.sha256(password.encode('utf-8')).hexdigest()
+    if hashPassword != user["password"]:
+        flash('パスワードが間違っています')
+        return redirect(url_for('login_view'))
+    
+    #正しくログインできたのでセッションに保存
+    session['uid'] = user["uid"]
+    session['email'] = user["email"]
+
+    #管理者の判定
+    if user['email'] == 'admin@example.com':
+        return redirect(url_for('admin_dashboard'))
+    #一般ユーザー
     else:
-        user = User.find_by_email(email)
-        if user is None:
-            flash('このユーザーは存在しません')
-        else:
-            hashPassword = hashlib.sha256(password.encode('utf-8')).hexdigest()
-            if hashPassword != user["password"]:
-                flash('パスワードが間違っています')
-            else:
-                session['uid'] = user["uid"]
-                return redirect(url_for('channels_view'))
-    return redirect(url_for('login_view'))
+        return redirect(url_for('user_dashboard'))
+
+#管理者用ダッシュボード
+@app.route('/admin/dashboard')
+def admin_dashboard():
+    return render_template('admin/dashboard.html')
+
+#一般ユーザー用ダッシュボード
+@app.route('/user/dashboard')
+def user_dashboard():
+    return render_template('user/dashboard.html')
 
 
 # ログアウト
@@ -95,15 +115,15 @@ def logout():
     session.clear()
     return redirect(url_for('login_view'))
 
-#グループチャット
-@app.route('/group_list', methods=['GET'])
-def group_chat():
-    uid = session.get('uid')
-    if uid is None:
-        return redirect(url_for('login_view'))
+# #グループチャット
+# @app.route('/group_list', methods=['GET'])
+# def group_chat():
+#     uid = session.get('uid')
+#     if uid is None:
+#         return redirect(url_for('login_view'))
     
-    group = Group.find_by_user_id(uid)
-    if group is None:
-        flash("グループに所属していません")
-        return redirect(url_for('user_menu_view'))
-    return redirect(url_for('group_chat,group_id=group['id']))
+#     group = Group.find_by_user_id(uid)
+#     if group is None:
+#         flash("グループに所属していません")
+#         return redirect(url_for('user_dashboard'))
+#     return redirect(url_for('group_chat,group_id=group['id']'))
