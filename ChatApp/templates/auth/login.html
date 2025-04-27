@@ -23,7 +23,7 @@
        <form class ='auth-form' method="post"> <!--「FORM」とは、入力・送信フォームを作成する際に使用する要素。入力された値はmethod属性で指定した転送方法とにてサーバへ送信される-->
           <h1 class="auth-title">ログイン</h1> <!-- 見出し：タイトル表示（ログイン)--> 
           <div>
-            <label for="email-input">Email</label> <!-- <label> は、なくても良い。inputの箱の説明分。-->
+            <!-- label for="email-input">Email</label  は、なくても良い。inputの箱の説明分。-->
             <input
               type="text"
               placeholder="メールアドレス" 
@@ -32,7 +32,7 @@
             />  <!-- 「INPUT」とは、<form>タグで作成したフォームの中でテキスト入力欄やボタンなどの部品を作成する要素--><!--type:部品の形式を指定。name:部品の名前を指定。placeholder:フォームコントロールに値がないときにユーザーにヒントを出す。id:ページ内に一つ。-->
           </div>
           <div>
-               <label for="password-input">Password</label>
+               <!--label for="password-input">Password</label-->
                <input
                   type="password"
                   placeholder="パスワード"
@@ -48,8 +48,8 @@
                {% endfor %}
             </ul>
             {% endif %} {% endwith %} <!-- fkask:endif:条件分岐。endwithが出てくるまで条件分岐する様だ。定かではない。-->
-            <button class="auth-button white">LOGIN</button>
-            <a class ="switch-auth-mode" href="{{ url for('~~~~')}}"> <!--画面登録のURLを貼り付け。ボタンにするにはどうするか確認する。-->
+            <button class="auth-button white">ログイン</button>
+            <a class ="switch-auth-mode" href="{{ url for('signup_view') }}"> <!--画面登録のURLを貼り付け。-->
                登録はこちら
             </a>
          </div>

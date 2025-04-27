@@ -1,0 +1,63 @@
+{% extends 'auth/base.html' %} {% block title %}
+<title>signup</title>
+{% endblock %} {% block body %}
+<div class="auth-wrapper">
+  <div class="auth-container">
+     <form class="auth-form signup" method="post">
+        <h1 class="auth-title">新規登録</h1>
+        <div> <!-- ニックネーム入力欄-->
+          <input
+             type="text"
+             placeholder="ニックネーム"
+             name="name"
+             id="signup-name-input"
+          />  <!-- [type]決まった属性より選択、[placeholder]薄地、name:バックエンドに送ったデータを識別する際の識別子。id要素とは異なり、すべての要素に存在するわけではない。[id]cssにて使用。対象要素をHTML内で一意に識別するための属性 -->
+        </div>
+        <div> <!--メールアドレス入力欄-->
+          <input
+             type="text" 
+             placeholder="メールアドレス"
+             name="email"
+             id="signup-email-input"
+          />
+        </div>   
+        <div> <!--パスワード入力欄-->
+          <input
+             type="password"
+             placeholder="パスワード"
+             name="password"
+             id="signup-password-input"
+          />   
+        </div>
+        <div> <!--パスワード再入力-->　
+          <input
+             type="password"
+             placeholder="パスワード（確認用)" 
+             name="password-confirmation"
+             id="signup-password-confirmation-input"
+          />
+        </div>
+        <div class="auth-button-container">
+          {% with messages = get_flashed_messages() %} <!-- flash message:ユーザーが操作をしたときに、画面にその結果を表示する機能やメッセージのこと。ログインした。投稿した。ログインできなかった。-->
+          {% if messages %} <!-- withは endwithの箇所まで、変数になりますよという文言。if:条件分岐。for ループ-->
+          <ul class="flashes">
+             {% for message in messages% } 
+             <li>{{ message }}</li>
+             {% endfor %} <!-- forのループがここで終了-->
+          </ul>
+          {% endif %} {% endwith%} <!-- if文・with変数がここで終了-->
+          <button class="auth-button white">登録</button>
+          <a class="switch-auth-mode" href="{{ url_for('login_view')　}}">
+            ログインする
+          </a> <!--ボタンはただ押すだけの機能なので、状況を見てログインするという文言が必要になると思う。-->
+        </div>
+     </form>
+  </div>
+</div>
+{%% endblock %}
+
+<!-- Flask: Pythonで書かれた軽量なWebアプリケーションフレームワークです。Webアプリを構築するための基本的な機能（ルーティング、リクエスト処理など）を提供します。アプリの土台-->
+<!-- Jinja2: Flaskに組み込まれているテンプレートエンジンです。HTMLを動的に生成するためのツールで、PythonのコードをHTMLに埋め込むことができます。HTMLを作る担当。言語ではない。使っても使わなくてもよい。-->
+<!-- HTMLに記載の%%のコードは、Flaskかと思っていたが、こちらはJinja2である。Flaskの中にJinga2が入っているから。%%のコードは、jinga2でもありFlaskでもあるということか。-->
+<!-- flashメッセージとは、クライアントからサーバへリクエストを送信したとき、そのリクエストにより実行した処理が正常に終了したか否かをユーザに伝えるメッセージのこと。-->
+<!-- java scriptは言語 -->
