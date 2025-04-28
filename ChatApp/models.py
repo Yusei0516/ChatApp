@@ -1,6 +1,6 @@
 from flask import abort
 import pymysql
-from ChatApp.util.DB import DB
+from util.DB import DB
 
 #初期起動時にコネクションプールを作成し接続を確率
 db_pool = DB.init_db_pool()
