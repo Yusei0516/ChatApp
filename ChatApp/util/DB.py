@@ -4,7 +4,7 @@ from pymysqlpool.pool import Pool
 
 
 class DB:
-    classmethod
+    @classmethod
     def init_db_pool(cls):
         pool = Pool(
             #データベースホスト
@@ -14,7 +14,7 @@ class DB:
             #データベースパスワード
             password=os.getenv('DB_PASSWORD'),
             #データベース名
-            detabase=os.getenv('DB_DATEBASE'),
+            database=os.getenv('DB_DATABASE'),
             #最大コネクション数
             max_size=5,
             #文字コード

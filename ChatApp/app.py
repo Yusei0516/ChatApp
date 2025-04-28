@@ -1,8 +1,8 @@
 from flask import Flask, request, redirect, render_template, session, flash, abort, url_for
 from datetime import timedelta
 import hashlib, uuid, re, os
-from models import User, Group, Channel, Message
-from util.assets import bundle_css_files
+from models import User, Group
+# from util.assets import bundle_css_files
  
 # 定数定義
 EMAIL_PATTERN = r"^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$"
@@ -102,12 +102,12 @@ def login_process():
         return redirect(url_for('user_dashboard'))
 
 #管理者用ダッシュボード
-@app.route('/admin/dashboard')
+@app.route('/admin_dashboard')
 def admin_dashboard():
     return render_template('admin/dashboard.html')
 
 #一般ユーザー用ダッシュボード
-@app.route('/user/dashboard')
+@app.route('/user_dashboard')
 def user_dashboard():
     return render_template('user/dashboard.html')
 

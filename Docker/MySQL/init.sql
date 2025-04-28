@@ -46,7 +46,7 @@ CREATE TABLE group_members (
     user_id VARCHAR(255) NOT NULL,
     group_chats_id INT NOT NULL,
     created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
-    FOREIGN KEY (user_id) REFERENCES users(id),
+    FOREIGN KEY (user_id) REFERENCES users(uid),
     FOREIGN KEY (group_chats_id) REFERENCES group_chats(id)
 );
 
@@ -57,7 +57,7 @@ CREATE TABLE group_messages (
     content VARCHAR(255) NOT NULL,
     created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY (group_chats_id) REFERENCES group_chats(id),
-    FOREIGN KEY (user_id) REFERENCES users(id)
+    FOREIGN KEY (user_id) REFERENCES users(uid)
 );
 
 CREATE TABLE opne_chat (
@@ -81,7 +81,7 @@ CREATE TABLE opne_chat_messages (
 
 INSERT INTO users (uid, user_name, email, password) VALUES ('admin123', '管理者', 'admin@example.com', '9d73b154738103148a0baae3bb4b0067fbbb230b9cf50c04db70d6393d324c42')
 -- INSERT INTO users(uid, user_name, email, password) VALUES('970af84c-dd40-47ff-af23-282b72b7cca8','テスト','test@gmail.com','37268335dd6931045bdcdf92623ff819a64244b53d0e746d438797349d4da578');
-INSERT INTO channels(id, uid, name, abstract) VALUES(1, 'b9ec6802-f2a2-4069-81ee-3909ec6851ad','アニメ好き集まれ','好きなアニメについて話しましょう！');
-INSERT INTO channels(id, uid, name, abstract) VALUES(2, 'b9ec6802-f2a2-4069-81ee-3909ec6851ad','ドラマ好き集まれ','好きなドラマについて話しましょう！');
-INSERT INTO channels(id, uid, name, abstract) VALUES(3, 'b9ec6802-f2a2-4069-81ee-3909ec6851ad','バンド好き集まれ','好きなバンドについて話しましょう！');
+-- INSERT INTO channels(id, uid, name, abstract) VALUES(1, 'b9ec6802-f2a2-4069-81ee-3909ec6851ad','アニメ好き集まれ','好きなアニメについて話しましょう！');
+-- INSERT INTO channels(id, uid, name, abstract) VALUES(2, 'b9ec6802-f2a2-4069-81ee-3909ec6851ad','ドラマ好き集まれ','好きなドラマについて話しましょう！');
+-- INSERT INTO channels(id, uid, name, abstract) VALUES(3, 'b9ec6802-f2a2-4069-81ee-3909ec6851ad','バンド好き集まれ','好きなバンドについて話しましょう！');
 -- INSERT INTO messages(id, uid, cid, message) VALUES(1, '970af84c-dd40-47ff-af23-282b72b7cca8', '1', '誰かかまってください、、')
