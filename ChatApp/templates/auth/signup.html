@@ -29,10 +29,10 @@
              id="signup-password-input"
           />   
         </div>
-        <div> <!--パスワード再入力-->　
+        <div> <!--パスワード再入力-->
           <input
              type="password"
-             placeholder="パスワード（確認用)" 
+             placeholder="パスワード（確認用）" 
              name="password-confirmation"
              id="signup-password-confirmation-input"
           />
@@ -47,7 +47,7 @@
           </ul>
           {% endif %} {% endwith%} <!-- if文・with変数がここで終了-->
           <button class="auth-button white">登録</button>
-          <a class="switch-auth-mode" href="{{ url_for('login_view')　}}">
+          <a class="switch-auth-mode" href="{{ url_for('login_view')}}">
             ログイン
           </a> <!--ボタンはただ押すだけの機能なので、状況を見てログインするという文言が必要になると思う。-->
         </div>
