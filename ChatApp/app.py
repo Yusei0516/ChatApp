@@ -130,3 +130,6 @@ def logout():
 #         flash("グループに所属していません")
 #         return redirect(url_for('user_dashboard'))
 #     return redirect(url_for('group_chat,group_id=group['id']'))
+
+if __name__ == '__main__': 
+    app.run(host="0.0.0.0", debug=True)
