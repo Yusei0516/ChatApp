@@ -1,0 +1,46 @@
+{% extends 'base.html' %} {% bolock title %}
+<title>home</title>
+{% endblock %} {% block body %}
+<header>
+    <div>
+      <img
+          src="{{ url_for('static' ,filename='img/hagyutto-logo.png')}}"
+          alt="logo"
+      /> 
+      <nav>
+         <ul>
+            <li><a href='@@@@@@'>サインアウト</a></li>
+         </ul>
+      </nav>　<!-- samnpleアプリはサイドバーにあるが、headerに入れたい。-->
+      </a> 
+    </div>
+  </header>
+<div class="main-container">
+    <div class="channnel-title">
+        <h1>チャットルーム一覧</h1>
+        <p class="channel-title-text">CHANNELS</p> <!--不要かも！-->
+    </div>
+    <div id="channels-list">
+      <div id="pagination-wrapper"> <!--ページネーションとは、日本語で丁付け、ページ割りという意味で、Web制作においては、検索結果一覧など、内容の多いページを複数のWebページに分割し、各ページへのリンクを並べてアクセスしやすくするために設置するもの-->
+        <div>
+          <div class="pagination-container">
+                <p id="prev">
+                < 
+                <span>PREV</span>
+                </p>
+                <ul class="pagination"></ul>　<!--ulを使用する、しないの違いが画面上ではわからなかった。-->
+                <p id="next">
+                <span>NEXT</span> 
+                >          
+                </p>
+          </div>       
+      </div>
+    </div>
+    <ul class="channel-box"></ul>
+
+
+</div>
+
+
+<!-- 「paragraph」（段落）の頭文字の「p」でHTMLで段落を表すためのタグです。 -->
+ <!-- spanタグとは、指定したテキストだけに対してCSSを適用させて、デザインを付与・変更するHTMLタグ。範囲を指定するという役割を持つだけのタグであり、spanタグ単体を使用する意味はありません。また、spanタグはインライン要素なので、ブロック要素の中で使用する必要がある。 -->

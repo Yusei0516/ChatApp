@@ -6,7 +6,7 @@
      <meta name="viewport" content="width=device-width, initial-scale=1.0" /> <!--  CSSと関連している。どのようなデバイスでも画面表示を最適化する文言 https://gmotech.jp/semlabo/seo/blog/howto-viewport/ --> 
      {% block title %}{% endblock %} <!-- flask (Jinja2) block titleとendblockの間に好きなコードを記載できる。-->
      <link rel="icon" href="../static/img/icon.png"/>
-     <!-- <link rel="stylesheet" href=""> スタイルシートのリンク先を入力-->
+     <link rel="stylesheet" href="{{ url_for('static', filename='gen/bundled.css') }}">
      <link rel="preconnect" href="https://fonts.googleapis.com"> <!-- google fontを利用する文言以下３行-->
      <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
      <link href="https://fonts.googleapis.com/css2?family=Zen+Maru+Gothic&display=swap" rel="stylesheet">

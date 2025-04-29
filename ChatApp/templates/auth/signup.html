@@ -1,6 +1,17 @@
 {% extends 'auth/base.html' %} {% block title %}
 <title>signup</title>
 {% endblock %} {% block body %}
+<header>
+  <div>
+    <img
+        src="{{ url_for('static' ,filename='img/hagyutto-logo.png')}}"
+        alt="logo"
+    /> 
+    <a class="switch-auth-mode" href="{{ url_for('ユーザーダッシュボードの名前を記入')}}">
+      ログイン
+    </a> 
+  </div>
+</header>
 <div class="auth-wrapper">
   <div class="auth-container">
      <form class="auth-form signup" method="post">
@@ -47,9 +58,9 @@
           </ul>
           {% endif %} {% endwith%} <!-- if文・with変数がここで終了-->
           <button class="auth-button white">登録</button>
-          <a class="switch-auth-mode" href="{{ url_for('login_view')}}">
+          <!-- <a class="switch-auth-mode" href="{{ url_for('login_view')}}">
             ログイン
-          </a> <!--ボタンはただ押すだけの機能なので、状況を見てログインするという文言が必要になると思う。-->
+          </a> ボタンはただ押すだけの機能。headerへ-->
         </div>
      </form>
   </div>

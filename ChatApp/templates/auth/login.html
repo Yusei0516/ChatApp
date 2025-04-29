@@ -1,24 +1,35 @@
 {% extends 'auth/base.html' %} {% block title %}  <!-- Flask:base.htmlの内容をベースに拡張(extend)する。タイトルに代入する。-->
 <title>login</title> <!-- ブラウザのタグの部分 -->
 {% endblock %} {% block body %} <!-- タイトル終了、ここからbodyに代入する。-->
+<header>
+   <div>
+     <img
+         src="{{ url_for('static' ,filename='img/hagyutto-logo.png')}}"
+         alt="logo"
+     /> 
+     <a class ="switch-auth-mode" href="{{ url for('signup_view') }}"> <!--画面登録のURLを貼り付け。-->
+       無料登録して使う
+   　</a>
+   </div>
+</header>
 <div class="auth-wrapper"> <!--wrapper:ユーザーが読みやすい様な幅にwebページを包んで表示する。全ページ同じ？ https://mightyace.co.jp/2021/09/04/column3380/ -->
  <div class = "auth-container"> <!-- container：コンテンツの横幅、余白、配置を調整する。 -->
     <img
      src="{{ url_for('static',filename='img/hagyutto-main.png') }}"   
      class="auth-main-pic"
      alt="はぎゅっとチャット"
-    /> <!-- PC版の画像を貼り付け。{{}}Flaskの書き方。バックエンド側にデータが保存されており、そちらを参照。変数のため絶対パスではないので、ディレクトリが移動しても参照できる。->
+    /> <!-- PC版の画像を貼り付け。{{}}Flaskの書き方。バックエンド側にデータが保存されており、そちらを参照。変数のため絶対パスではないので、ディレクトリが移動しても参照できる。-->
 　  <img
-     src="{{ url_for('static',filename='img/~~~~~~~~~~~~~) }}"   
+     src="{{ url_for('static',filename='img/hagyutto-main.png') }}"  
      class="auth-mobile-pic"
-     alt="はぎゅっと　チャット"
+     alt="はぎゅっとチャット"
     /> <!--モバイル版の画像を貼り付け -->
     <div class ="auth-form-wrapper"> <!-- 入力フォーム画面の横幅等の調整。-->
-       <div class="auth-logo">
+       <!-- <div class="auth-logo">
           <img
              src="{{ url_for('static' ,filename='img/hagyutto-logo.png')}}"
              alt="logo"
-          /> <!-- logoの画像-->
+          /> logoの画像は不要headerへ記載のため-->
        </div>
        <form class ='auth-form' method="post"> <!--「FORM」とは、入力・送信フォームを作成する際に使用する要素。入力された値はmethod属性で指定した転送方法とにてサーバへ送信される-->
           <h1 class="auth-title">ログイン</h1> <!-- 見出し：タイトル表示（ログイン)--> 
@@ -49,8 +60,7 @@
             </ul>
             {% endif %} {% endwith %} <!-- fkask:endif:条件分岐。endwithが出てくるまで条件分岐する様だ。定かではない。-->
             <button class="auth-button white">ログイン</button>
-            <a class ="switch-auth-mode" href="{{ url for('signup_view') }}"> <!--画面登録のURLを貼り付け。-->
-               登録はこちら
+           
             </a>
          </div>
        </form>
