@@ -7,7 +7,7 @@
         src="{{ url_for('static' ,filename='img/hagyutto-logo.png')}}"
         alt="logo"
     /> 
-    <a class="switch-auth-mode" href="{{ url_for('ユーザーダッシュボードの名前を記入')}}">
+    <a class="switch-auth-mode" href="{{ url_for('user_dashboard') }}">
       ログイン
     </a> 
   </div>
@@ -52,7 +52,7 @@
           {% with messages = get_flashed_messages() %} <!-- flash message:ユーザーが操作をしたときに、画面にその結果を表示する機能やメッセージのこと。ログインした。投稿した。ログインできなかった。-->
           {% if messages %} <!-- withは endwithの箇所まで、変数になりますよという文言。if:条件分岐。for ループ-->
           <ul class="flashes">
-             {% for message in messages% } 
+             {% for message in messages %} 
              <li>{{ message }}</li>
              {% endfor %} <!-- forのループがここで終了-->
           </ul>
@@ -65,7 +65,7 @@
      </form>
   </div>
 </div>
-{%% endblock %}
+{% endblock %}
 
 <!-- Flask: Pythonで書かれた軽量なWebアプリケーションフレームワークです。Webアプリを構築するための基本的な機能（ルーティング、リクエスト処理など）を提供します。アプリの土台-->
 <!-- Jinja2: Flaskに組み込まれているテンプレートエンジンです。HTMLを動的に生成するためのツールで、PythonのコードをHTMLに埋め込むことができます。HTMLを作る担当。言語ではない。使っても使わなくてもよい。-->

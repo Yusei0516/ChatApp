@@ -1,4 +1,4 @@
-{% extends 'base.html' %} {% bolock title %}
+{% extends 'user/base.html' %} {% block title %}
 <title>home</title>
 {% endblock %} {% block body %}
 <header>
@@ -24,22 +24,20 @@
       <div id="pagination-wrapper"> <!--ページネーションとは、日本語で丁付け、ページ割りという意味で、Web制作においては、検索結果一覧など、内容の多いページを複数のWebページに分割し、各ページへのリンクを並べてアクセスしやすくするために設置するもの-->
         <div>
           <div class="pagination-container">
-                <p id="prev">
-                < 
-                <span>PREV</span>
-                </p>
-                <ul class="pagination"></ul>　<!--ulを使用する、しないの違いが画面上ではわからなかった。-->
-                <p id="next">
-                <span>NEXT</span> 
-                >          
-                </p>
+            <p id="prev">
+              < 
+              <span>PREV</span>
+            </p>
+            <ul class="pagination"></ul> <!--ulを使用する、しないの違いが画面上ではわからなかった。-->
+            <p id="next">
+              <span>NEXT</span> 
+              >          
+            </p>
           </div>       
       </div>
     </div>
-    <ul class="channel-box"></ul>
-
-
-</div>
+    <ul class="channel-box"></ul></div>
+<div
 
 
 <!-- 「paragraph」（段落）の頭文字の「p」でHTMLで段落を表すためのタグです。 -->
