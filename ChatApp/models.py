@@ -36,10 +36,10 @@ class User:
         finally:
             db_pool.release(conn)
 
-#グループチャット
+#グループクラス
 class Group:            
     @classmethod
-    def find_by_user_id(cls, group_id):
+    def find_by_user_id(cls, user_id):
         conn = db_pool.get_conn()
         try:
             with conn.cursor() as cur:
@@ -50,9 +50,64 @@ class Group:
                 WHERE group_members.user_id = %s 
                 LIMIT 1
                 """
-                cur.execute(sql, (user_id))
+                cur.execute(sql, (user_id,))
                 group = cur.fetchone()
                 return group
+        except pymysql.Error as e:
+            print(f'エラーが発生しています: {e}')
+            abort(500)
+        finally:
+            db_pool.release(conn)
+
+    @classmethod
+    def find_by_id(cls, group_id):
+        conn = db_pool.get_conn()
+        try:
+            with conn.cursor(pymysql.cursors.DictCursor) as cur:
+                sql = "SELECT id, name FROM group_chats WHERE id = %s"
+                cur.execute(sql, (group_id,))
+                group = cur.fetchone()
+                return group
+        except pymysql.Error as e:
+            print(f'エラーが発生しています: {e}')
+            abort(500)
+        finally:
+            db_pool.release(conn)
+
+#グループメッセージクラス
+class GroupMessage:
+    @classmethod
+    def create(cls, user_id, group_id, content):
+        conn = db_pool.get_conn()
+        try:
+            with conn.cursor() as cur:
+                sql = """
+                    INSERT INTO group_messages (user_id, group_chat_id, content, created_at)
+                    VALUES (%s, %s, %s, NOW())
+                """
+                cur.execute(sql, (user_id, group_id, content))
+                conn.commit()
+        except pymysql.Error as e:
+            print(f'エラーが発生しています: {e}')
+            abort(500)
+        finally:
+            db_pool.release(conn)
+
+    @classmethod
+    def get_all(cls, group_id):
+        conn = db_pool.get_conn()
+        try:
+            with conn.cursor(pymysql.cursors.DictCursor) as cur:
+                sql = """
+                    SELECT users.user_name, group_messages.content
+                    FROM group_messages
+                    JOIN users ON group_messages.user_id = users.id
+                    WHERE group_messages.group_chat_id = %s
+                    ORDER BY group_messages.created_at ASC
+                """
+                cur.execute(sql, (group_id,))
+                messages = cur.fetchall()
+                return messages
         except pymysql.Error as e:
             print(f'エラーが発生しています: {e}')
             abort(500)
