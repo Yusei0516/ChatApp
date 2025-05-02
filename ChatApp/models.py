@@ -35,6 +35,18 @@ class User:
             abort(500)
         finally:
             db_pool.release(conn)
+    
+    @classmethod
+    def get_usr_group(cls, user_id):
+        conn = db_pool.get_conn()
+        try:
+            with conn.cursor() as cur:
+                sql ="SELECT group_chat_id FROM group_members WHERE user_id = %s"
+                cur.execute(sql, (user_id,))
+                result = cur.fetchone()
+                return result[0] if result else None
+        finally:
+            db_pool.release(conn)
 
 #グループクラス
 class Group:            
