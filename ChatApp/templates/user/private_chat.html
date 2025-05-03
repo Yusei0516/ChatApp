@@ -1,0 +1,28 @@
+{% extends 'user/base.html' %} {% block title %}
+<title>private_chatroom</title>
+{% endblock %} {% block body %}
+<header>
+    <div>
+      <img
+          src="{{ url_for('static' ,filename='img/hagyutto-logo.png')}}"
+          alt="logo"
+      /> 
+    </div>
+</header>
+<div class ="main-container">
+    <div id = "chat-header">
+        <p>お悩み相談室</p> 
+    </div>
+</div>
+<div id ="message-area">
+    {%if messages|length > 0 %} 
+    {% for message in messages %}
+    {% if message.uid == uid %} <!-- 特にわからない。バックエンドの動きを聞く。-->
+    <div class="my-messages">
+        <p class="box box-right">{{ message.message }}</p>
+        <form
+           action="/channels/{{ channel.id }}/messages/{{ message.id}}"
+           method="POST"
+        >
+        </div>
+</div>
