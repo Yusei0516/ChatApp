@@ -86,6 +86,10 @@ class Group:
         finally:
             db_pool.release(conn)
 
+    @classmethod
+    def is_admin(cls, uid):
+        return uid == "admin123"
+
 #グループメッセージクラス
 class GroupMessage:
     @classmethod
