@@ -1,0 +1,55 @@
+{% extends 'user/base.html' %} {% block title %}
+<title>home</title>
+{% endblock %} {% block body %}
+<header>
+    <div>
+      <img
+          src="{{ url_for('static' ,filename='img/hagyutto-logo.png')}}"
+          alt="logo"
+      /> 
+    </div>
+</header>
+<div class="main-container">
+    <div class="channnel-title">
+      <h1>チャットルーム一覧</h1>        
+    </div>
+    <div class="channnel_list">
+      <a href="{{ url_for('private_chat') }}"> <!--接続先再確認する。-->
+        個人チャット
+      </a> 
+      <a href="{{ url_for('group_chat') }}"> <!--接続先再確認する。-->
+        グループチャット
+      </a> 
+    </div>
+    <div id="open chat channels-list">
+      <ul class="channel-box"></ul> <!-- ul の中にオープンチャンネルが作られる。javascriptにて詳細作成。-->
+    </div> 
+</div>
+{% endblock %} {% block script%}
+<script type="text/javascript">
+  // prettier-ignore
+  const channels = JSON.parse('{{ channels|tojson }}');
+  // prettier-ignore
+  const uid = JSON.parse('{{ uid|tojson}}')
+</script>
+<script
+  src="{{url-for('static',filename='js/channels/create-channel.js')}}"
+  type="module"
+></script>
+<script
+  src="{{url_for('static',filename='js/pagination.js')}}"
+  type="module"
+  ></script>
+<script
+  src="{{url_for('static',filename='js/channels/delete-channel.js')}}"
+  type="module"
+></script>
+ {% endblock &}
+
+  
+
+
+<!-- ハンバーガーメニューは、javascriptにて作成する。-->
+<!-- 「paragraph」（段落）の頭文字の「p」でHTMLで段落を表すためのタグです。 -->
+<!-- spanタグとは、指定したテキストだけに対してCSSを適用させて、デザインを付与・変更するHTMLタグ。範囲を指定するという役割を持つだけのタグであり、spanタグ単体を使用する意味はありません。また、spanタグはインライン要素なので、ブロック要素の中で使用する必要がある。 -->
+<!-- open chat はjava scriptにて作成する。よく理解できていないが、コード記載している。 -->
