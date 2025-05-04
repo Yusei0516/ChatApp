@@ -1,11 +1,17 @@
-.zen-maru-gothic-regular {
-    font-family: "Zen Maru Gothic", serif;
-    font-weight: 400;
-    font-style: normal;
-}
-  
-
 * {
     float: none;
     position: static;
+    font-family: "Zen Maru Gothic", serif;
+    font-weight: 400;
+    font-style: normal;
+    font-size: 16px;
+    box-sizing: border-box;
+}
+
+header {
+    background-color: var(--allwhite);
+    width: 100%;
+    position: fixed;
+    right: 0;
+    top: 0;
 }
