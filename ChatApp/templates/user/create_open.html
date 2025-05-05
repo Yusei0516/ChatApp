@@ -1,0 +1,30 @@
+{% extends 'user/base.html' %} {% block title %}
+<title>create-open-channel</title>
+{% endblock %} {% block body %}
+<header>
+    <div>
+      <img
+          src="{{ url_for('static' ,filename='img/hagyutto-logo.png')}}"
+          alt="logo"
+      > 
+    </div>
+</header>
+<div class="create-open-channel-container">
+    <div class="channnel-title">
+      <h1>オープンチャット作成</h1>        
+    </div>
+    <form class ='chat-form' method="post"> 
+        <div>
+            <input
+            type="text"
+            placeholder="オープンチャット名" 
+            name="name"
+            id="create-open-channel name"
+            /> <!-- nameで良きなのか。-->
+        </div>
+
+</div>
+
+<!--「FORM」とは、入力・送信フォームを作成する際に使用する要素。入力された値はmethod属性で指定した転送方法とにてサーバへ送信される--> 
+<!-- 「INPUT」とは、<form>タグで作成したフォームの中でテキスト入力欄やボタンなどの部品を作成する要素--><!--type:部品の形式を指定。name:部品の名前を指定。placeholder:フォームコントロールに値がないときにユーザーにヒントを出す。id:ページ内に一つ。-->
+<!-- モーダル（modal）とは、ユーザーインターフェースにおいて、特定のアクションを促すために表示されるポップアップウィンドウのことです。 -->

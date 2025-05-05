@@ -11,7 +11,7 @@
 </header>
 <div class ="main-container">
     <div class = "chat-header">
-        <p>お悩み相談室</p> 
+        <!-- <p>タイトル名</p>  どのような動きになるか確認する。--> 
     </div>
     <div id ="message-area">
         {% if messages|length > 0 %} <!-- メッセージの長さが1以上だと送信可能 -->
@@ -20,9 +20,9 @@
         <div class="my-messages">
             <p class="box box-right">{{ message.message }}</p> <!-- 左のメッセージには、①UID②CID③messageが含まれており、その中のmessageを表示させる文言-->
             <form
-            action="/user/dashboard/{{ uid }}/messages/{{ message.id }}"
+            action="/user/dashboard/{{ CID }}/messages/{{ message.id }}"
             method="POST"
-            > <!-- バックエンドと相談。 message.id = 送信したメッセージとなる。 user/dashboard/private//{#{ channnel.id (例1,2,3)}#}/{#{ message.id }#}で相談-->
+            > <!-- バックエンドに報告。 message.id = 送信したメッセージとなる。 user/dashboard/private//{#{ channnel.id (例1,2,3)}#}/{#{ message.id }#}で相談-->
             </form>
             {% else %} <!-- メッセージを送信したユーザーが、ログインしているユーザーと異なる場合。-->
             <div class="messages">
@@ -31,7 +31,7 @@
             </div>
             {% endif %} {% endfor %}  <!-- if&for分の終了 --> 
             {% else %}
-            <p id="first-message">ご登録いただき有り難うございます。是非あなたの心の声をお聞かせください。</p> <!-- 内容相談する。-->
+            <p id="first-message">このメッセージには、まだ投稿はありません。</p> <!-- 内容相談する。-->
             {% endif %}
         </div>
     </div>
