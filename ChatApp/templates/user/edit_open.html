@@ -1,5 +1,5 @@
 {% extends 'user/base.html' %} {% block title %}
-<title>create-open-channel</title>
+<title>edit-open-channel</title>
 {% endblock %} {% block body %}
 <header>
     <div>
@@ -9,9 +9,9 @@
       > 
     </div>
 </header>
-<div class="create-open-channel-container">
+<div class="edit-open-channel-container">
     <div class="channnel-title">
-      <h1>オープンチャット作成</h1>        
+      <h1>オープンチャット編集</h1>        
     </div>
     <form class ='chat-form' method="post"> 
         <div>
@@ -19,7 +19,7 @@
             type="text"
             placeholder="オープンチャット名" 
             name="name"
-            id="create-open-channel-name"
+            id="edit-open-channel-name"
             /> <!-- nameタグをバックエンドへ連絡-->
         </div>
         <div>

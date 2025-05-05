@@ -1,0 +1,28 @@
+{% extends 'user/base.html' %} {% block title %}
+<title>delete-open-channel</title>
+{% endblock %} {% block body %}
+<header>
+    <div>
+      <img
+          src="{{ url_for('static' ,filename='img/hagyutto-logo.png')}}"
+          alt="logo"
+      > 
+    </div>
+</header>
+<div class="create-open-delete-container">
+    <div class="channnel-title">
+      <h1>オープンチャット削除</h1>        
+    </div>
+    <div>
+        <form
+          name="delete_channel"
+          id="delete_channel"
+          action=""
+          method="POST"
+        >
+        <button id="delete-channnel-button">削除</button>
+        </form>
+    </div>
+</div>
+
+<!-- open chatの表示方法不明。javascript作成してから変更する。-->

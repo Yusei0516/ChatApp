@@ -1,0 +1,25 @@
+{% extends 'user/base.html' %} {% block title %}
+<title>group_chat_error</title>
+{% endblock %} {% block body %}
+<header>
+    <div>
+      <img
+          src="{{ url_for('static' ,filename='img/hagyutto-logo.png')}}"
+          alt="logo"
+      > 
+    </div>
+</header>
+<div class="group_chat_error-container">
+    <div class="group_chat_error-container">
+      <h1>グループチャット</h1>        
+    </div>
+    <div>
+      <p>グループチャットは<br>ご利用いただけません。</p>
+      <p>まずは個人チャットを<br>ご利用ください。</p>
+    </div>
+    <form>
+    <div class="group_chat_error-button-container"> <!--ボタンの幅等-->
+        <button class="group_chat_error-button white">戻る</button>
+     </div>
+   </form>
+</div>
