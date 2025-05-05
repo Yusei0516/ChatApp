@@ -232,8 +232,7 @@ def group_chat(group_id):
         return redirect(url_for('group_chat', group_id=group_id))
 
     messages = GroupMessage.get_all(group_id)
-    return render_template('xxxx.html', group=group, messages=messages)    #xxxx.htmlは決まってから記
-述します
+    return render_template('xxxx.html', group=group, messages=messages)    #xxxx.htmlは決まってから記述します
 
 if __name__ == '__main__': 
     app.run(host="0.0.0.0", debug=True)

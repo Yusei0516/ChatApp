@@ -1,0 +1,33 @@
+<div class="navigation">
+    <ul>
+        <li class="page-links">
+            <a href="{{ url_for('user_dashboard') }}"
+             <span class="icon"><ion-icon="home-outline"></ion-icon></span>
+             <span class="title">チャンネル一覧</span>
+            /<a>
+        </li>
+        <li class="page-links">
+            <a href="{{ url_for('user_menu/open/create') }}"
+             <span class="icon"><ion-icon="home-outline"></ion-icon></span>
+             <span class="title">オープンチャット作成</span>
+            /<a>
+        </li>
+        <li class="page-links">
+            <a href="{{ url_for('user_menu/open/delete') }}"
+             <span class="icon"><ion-icon="home-outline"></ion-icon></span>
+             <span class="title">オープンチャンネル削除</span>
+            /<a>
+        </li>
+        <li class="pase-links">
+            <a href="{{ url_for('login_view') }}"
+            <span class="icon"><ion-icon name='log-out-outline"></ion-icon></span>
+            <span>サインアウト</span>
+            </a>
+        </li>
+    </ul>
+
+
+    </div>
+</div>
+
+<!-- <nav>タグが、メニュー表示等に使用されるので、classとして使用されていると予想。 -->
