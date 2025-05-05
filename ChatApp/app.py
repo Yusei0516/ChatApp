@@ -185,8 +185,6 @@ def user_delete_opem_view():
     return render_template('user/delete_open.html')
 
 
-
-
 #グループチャット(リダイレクト)
 @app.route('/group_chat', methods=['GET'])
 def group_chat_redirect():
@@ -201,13 +199,27 @@ def group_chat_redirect():
 
     return redirect(url_for('group_chat',group_id=group['id']))
 
+#管理者用グループチャット(リダイレクト)
+@app.route('/admin/group_list', methods=['GET'])
+def admin_group_chat_redirect():
+    uid = session.get('uid')
+    if uid is None:
+        return redirect(url_for('login_view'))
+    
+    if not User.is_admin(uid):
+        return redirect(url_for('login_view'))
+
+    groups = Group.get_all()
+    return render_template('admin/group_list.html', groups=groups)
+
+
 #グループチャット
 @app.route('/group_chat/<int:group_id>/messages', methods=['GET','POST'])
 def group_chat(group_id):
     uid = session.get('uid')
     if uid is None:
         return redirect(url_for('login_view'))
-    
+
     group = Group.find_by_id(group_id)
     if group is None:
         flash("グループが存在しません")
@@ -220,7 +232,8 @@ def group_chat(group_id):
         return redirect(url_for('group_chat', group_id=group_id))
 
     messages = GroupMessage.get_all(group_id)
-    return render_template('xxxx.html', group=group, messages=messages)    #xxxx.htmlは決まってから記述します
+    return render_template('xxxx.html', group=group, messages=messages)    #xxxx.htmlは決まってから記
+述します
 
 if __name__ == '__main__': 
     app.run(host="0.0.0.0", debug=True)
