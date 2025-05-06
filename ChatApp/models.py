@@ -85,6 +85,17 @@ class Group:
             abort(500)
         finally:
             db_pool.release(conn)
+            
+    @classmethod
+    def update(cls, group_id, name, description):
+        conn = db_pool.get_conn()
+        try:
+            with conn.cursor() as cur:
+                sql = "UPDATE group_chats SET name=%s, description=%s WHERE id=%s"
+                cur.execute(sql, (name, description, group_id))
+                conn.commit()
+        finally:
+            db_pool.release(conn)
 
     @classmethod
     def is_admin(cls, uid):
@@ -129,3 +140,23 @@ class GroupMessage:
             abort(500)
         finally:
             db_pool.release(conn)
+
+#オープンチャット
+class Opc:
+    @classmethod
+    def create(cls, name, description, is_open):
+        conn = db_pool.get_conn()
+        try:
+            with conn.cursor() as cur:
+                sql = """
+                    INSERT INTO open_chats(name, description, is_open, created_at)
+                    VALUES(%s, %s, %s, NOW())
+                """
+                cur.execute(sql, (name, description, is_open))
+                conn.commit()
+        except pymysql.Error as e:
+            print(f'エラー: {e}')
+            abort(500)
+        finally:
+            db_pool.release(conn)
+            
