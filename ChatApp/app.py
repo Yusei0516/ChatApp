@@ -1,7 +1,7 @@
 from flask import Flask, request, redirect, render_template, session, flash, abort, url_for
 from datetime import timedelta
 import hashlib, uuid, re, os
-from models import User, Group, GroupMessage
+from models import User, Group, GroupMessage, Opc
 # from util.assets import bundle_css_files
  
 # 定数定義
@@ -174,7 +174,7 @@ def enter_group_chat():
 def enter_private_chat():
     return render_template('user/private_chat.html')
 
-#ユーザーメニューまとめ(オープンチャット作成)※確認
+#ユーザーメニューまとめ(オープンチャット作成)
 @app.route('/user_menu/open/create', methods=['GET','POST'])
 def user_create_open_view():
     uid = session.get('uid')
@@ -183,18 +183,19 @@ def user_create_open_view():
     
     if request.method =='POST':
         name = request.form.get('name')
-        description = request.form.get('description')
-        
-        if not name:
-            flash("部屋名を入力してください")
-        else:
-            Opc.create(name, description, is_open=False)
+        opc_room = Opc.find_by_name(name)
+        if opc_room == None:
+            description = request.form.get('open_description')
+            Opc.create(uid, name, description, is_open=False)
             flash("オープンチャットを作成しました")
-            return redirect(url_for('/user_dashboard'))
+            return redirect(url_for('user_dashboard'))
+        else:
+            flash("既に同じ名前のチャンネルが存在しています")
+            return redirect(url_for('/user_menu/open/create'))
     
     return render_template('user/create_open.html')
 
-#ユーザーメニューまとめ(オープンチャット削除)※確認
+#ユーザーメニューまとめ(オープンチャット削除ルーム)
 @app.route('/user_menu/open/delete', methods=['GET'])
 def user_delete_open_view():
     uid = session.get('uid')
@@ -202,6 +203,21 @@ def user_delete_open_view():
         return redirect(url_for('login_view'))
     
     return render_template('user/delete_open.html')
+
+#オープンチャット削除ボタン
+@app.route('/user_menu/open/delete/<int:room_id>', methods=['POST'])
+def delete_button(room_id):
+    uid = session.get('uid')
+    if uid is None:
+        return redirect(url_for('login_view'))
+    
+    room = Opc.find_by_room_id(room_id)
+    
+    if room['create_id'] != uid:
+        flash('チャンネルは制作者のみ削除可能です')
+    else:
+        Opc.delete(room_id)
+    return redirect(url_for('/user_menu/open/delete'))
 
 #グループチャット(リダイレクト)
 @app.route('/group_view', methods=['GET'])
@@ -217,7 +233,7 @@ def group_chat_redirect():
 
     return redirect(url_for('group_view',group_id=group['id']))
 
-#管理者用グループチャット(リダイレクト)
+#管理者用グループチャット
 @app.route('/admin/group_list', methods=['GET'])
 def admin_group_chat_redirect():
     uid = session.get('uid')
