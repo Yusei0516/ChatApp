@@ -11,11 +11,19 @@
 header {
     background-color: var(--allwhite); /* ヘッダーの背景色 */
     width: 100%; /* ヘッダーの幅 */
+    height: 80px; /* ヘッダーの高さ */
     position: fixed; /* スクロールしてもヘッダーが固定される */
     right: 0; /* 右端に寄せる */
     top: 0; /* 上端に寄せる */
     box-shadow: 0 0 8px 0 rgba(0, 0, 0, .5); /* 影をつける */
 }
+
+header > img {
+    height: 72px; /* ヘッダー内の画像の高さ */
+    width: auto; /* 幅は自動 */
+    margin: 4px 0 0 8px; /* 上、右、下、左のマージンを指定 */
+    position: left; /* 左寄せ */
+}   
 
 body {
     margin: 0 auto; /* 自動でマージンを設定 */
@@ -69,5 +77,5 @@ button {
 }
 
 :hover {
-    cursor: poiter; /* ホバー時にカーソルをポインターに変更 */
+    transition: all 0.5s; /* ホバー時のトランジションを指定 */;
 }

@@ -16,11 +16,17 @@
 </header>
 <div class="auth-wrapper"> <!--wrapper:ユーザーが読みやすい様な幅にwebページを包んで表示する。-->
  <div class = "auth-container"> <!-- container：コンテンツの横幅、余白、配置を調整する。 -->
+    <!-- 
     <img
-       src="{{ url_for('static',filename='img/hagyutto-main-mobile.png') }}"  
-       class="auth-mobile-pic"
-       alt="はぎゅっとチャット"
-    /> <!--モバイル版の画像を貼り付け。-->
+     src="{{ url_for('static',filename='img/hagyutto-main.png') }}"   
+     class="auth-main-pic"
+     alt="はぎゅっとチャット"
+    /> PC版の画像を貼り付け。Flaskの書き方。バックエンド側にデータが保存されており、そちらを参照。変数のため絶対パスではないので、ディレクトリが移動しても参照できる。 -->
+    <img
+     src="{{ url_for('static',filename='img/hagyutto-main-mobile.png') }}"  
+     class="auth-mobile-pic"
+     alt="はぎゅっとチャット"
+    /> <!--モバイル版の画像を貼り付け -->
     <div class ="auth-form-wrapper"> <!-- 入力フォーム画面の横幅等の調整。-->
        <form class ='auth-form' method="post">
           <h1 class="auth-title">ログイン</h1> <!-- 見出し：タイトル表示（ログイン)--> 
@@ -48,8 +54,10 @@
                  <li>{{ message }}</li> <!-- エラーが出た分だけ、messageが表示される。-->
                {% endfor %}
             </ul>
-            {% endif %} {% endwith %} 
-            <button class="auth-button white">ログイン</button> 
+            {% endif %} {% endwith %} <!-- fkask:endif:条件分岐。endwithが出てくるまで条件分岐する様だ。定かではない。-->
+            <button class="auth-button-white">ログイン</button>
+           
+            </a>
          </div>
        </form>
     </div>
