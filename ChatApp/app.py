@@ -26,7 +26,7 @@ def index():
     if uid == 'admin123':
         return redirect(url_for('admin_dashboard'))
     else:
-        return redirect(url_for('user_dashborad'))
+        return redirect(url_for('user_dashboard'))
 
 
 # サインアップページの表示

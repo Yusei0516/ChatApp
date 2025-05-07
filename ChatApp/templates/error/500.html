@@ -1,0 +1,23 @@
+{% extends 'error/base.html' %} 
+{% block title%} error {% endblock %}
+{% block body %}
+<body class="error">
+    <div class="error-wrapper">
+        <div class="error-content">
+            <div>
+                <p class="error-num">5 0 5</p>
+            </div>
+            <div class="error-description error404or500">
+                <p>エラーが発生しました。/p>
+                <p>管理者にお問い合わせください。</p>
+                    <a class="error-button pink" href="{{ url_for('user_dashboard') }}">戻る</a>
+            </div>         
+        </div>
+    </div>
+</body>
+{% endblock %}
+
+<!-- 500エラーは、HTTPステータスコードの一つで、サーバー内部で何らかの問題が発生したことを示します -->
+<!-- サーバーがリクエストを処理できない場合に表示されます。 -->
+<!-- 主な原因、①サーバーの設定ミス②プログラムのバグ③リソースの不足 -->
+<!-- 具体的な原因はサーバーログを確認しないとわからないことが多いです。 -->

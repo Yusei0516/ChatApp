@@ -2,12 +2,12 @@
 <title>home</title>
 {% endblock %} {% block body %}
 <header>
-    <div>
-      <img
-          src="{{ url_for('static' ,filename='img/hagyutto-logo.png')}}"
-          alt="logo"
-      > 
-    </div>
+  <div>
+    <img
+        src="{{ url_for('static' ,filename='img/hagyutto-logo.png') }}"
+        alt="logo"
+    /> 
+  </div>
 </header>
 <div class="main-container">
     <div class="channnel-title">
@@ -25,7 +25,7 @@
     </div>
     <div id="open chat channels-list">
       <ul class="channel-box"></ul> <!-- ul の中にオープンチャンネルが作られる。javascriptにて詳細作成。-->
-    </div> 
+    </div>
 </div>
 {% endblock %} 
 

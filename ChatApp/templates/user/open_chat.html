@@ -1,6 +1,9 @@
-{% extends 'user/base.html' %} {% block title %}
+{% extends 'user/base.html' %} 
+{% block title %}
 <title>private_chatroom</title>
-{% endblock %} {% block body %}
+{% endblock %} 
+
+{% block body %}
 <header>
     <div>
       <img
@@ -22,7 +25,7 @@
             <form
             action="/user/dashboard/{{ CID }}/messages/{{ message.id }}"
             method="POST"
-            > <!-- バックエンドに報告。 message.id = 送信したメッセージとなる。 user/dashboard/private//{#{ channnel.id (例1,2,3)}#}/{#{ message.id }#}で相談-->
+            >
             </form>
             {% else %} <!-- メッセージを送信したユーザーが、ログインしているユーザーと異なる場合。-->
             <div class="messages">
@@ -33,6 +36,15 @@
             {% else %}
             <p id="first-message">このメッセージには、まだ投稿はありません。</p> <!-- 内容相談する。-->
             {% endif %}
+        </div>
+        <div class="tying-box-wrapper"> <!-- メッセージ入力画面 -->
+            <form class="typing-box" method="POST" name="newMessageForm">
+              <textarea name="message" id="message" autofocus></textarea>
+              <input type="hidden" name="cid" value="{{ channnel.id  }}" /> <!-- こちら間違いないか確認 -->
+              <button type="submit" id="add-message-button">
+                <ion-icon name="paper-plane"></ion-icon> <!--紙飛行機のアイコンの表示-->
+              </button>
+            </form>
         </div>
     </div>
 </div>

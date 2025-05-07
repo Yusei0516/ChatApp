@@ -1,0 +1,46 @@
+{% extends 'user/base.html' %} 
+{% block title %}
+<title>private_chatroom</title>
+{% endblock %} 
+{% block body %}
+<header>
+    <div>
+      <img
+        src="{{ url_for('static',filename='img/hagyutto-logo.png') }}"
+        alt="logo"
+      >
+    </div>
+</header>
+<div class ="main-container">
+    <div class = "chat-header">
+        <p>メニュー</p> 
+    </div>
+</div>
+
+<div class="menu-button-container">
+    <p>
+        <a  class="menu-button white" href="{{ url_for('user_dashboard') }}">
+            チャンネル一覧
+        </a>
+    </p>
+    <p>
+        <a  class="menu-button white" href="{{ url_for('user_create_open_view') }}">
+            オープンチャット作成        
+        </a>
+    </p>
+    <p>
+        <a  class="menu-button white" href="{{ url_for('user_delete_opem_view') }}">
+            オープンチャンネル削除
+        </a>
+    </p>
+    <p>
+        <a  class="menu-button white" href="{{ url_for('login_view') }}">
+            サインアウト
+        </a>
+    </p>
+</div>
+{% endblock%}
+
+
+<!-- ハンバーガーアイコン作成ページ -->
+<!-- <<ion-icon>タグは、Ionicフレームワークで使用されるカスタムHTMLタグで、アイコンを簡単に表示するためのものです。Ionicはモバイルアプリケーション開発のためのフレームワークで、ion-iconはその中でアイコンを扱うためのコンポーネントです。 -->

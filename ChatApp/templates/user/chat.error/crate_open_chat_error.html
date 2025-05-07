@@ -1,0 +1,24 @@
+{% extends 'user/base.html' %} {% block title %}
+<title>create_open_chat_error</title>
+{% endblock %} {% block body %}
+<header>
+    <div>
+      <img
+          src="{{ url_for('static' ,filename='img/hagyutto-logo.png')}}"
+          alt="logo"
+      > 
+    </div>
+</header>
+<div class="create_open_chat_error-container">
+    <div class="create_open_chat_error-container">
+      <h1>オープンチャット作成</h1>        
+    </div>
+    <div>
+      <p>このチャンネル名は<br>ご利用になりません</p>
+    </div>
+    <form>
+    <div class="open_chat_error-button-container"> <!--ボタンの幅等-->
+        <button class="open_chat_error-button white">戻る</button>
+     </div>
+   </form>
+</div>
