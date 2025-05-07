@@ -1,6 +1,9 @@
-{% extends 'user/base.html' %} {% block title %}
+{% extends 'user/base.html' %} 
+{% block title %}
 <title>create-open-channel</title>
-{% endblock %} {% block body %}
+{% endblock %} 
+
+{% block body %}
 <header>
     <div>
       <img
@@ -31,17 +34,20 @@
           />
      </div>
      <div class="open-button-container"> <!--ボタンの幅等-->
-      {% with messages = get_flashed_messages() %} {% if messages %} <!-- flash message:ユーザーが操作をしたときに、画面にその結果を表示する機能やメッセージのこと。ログインした。投稿した。ログインできなかった。-->
-      <ul class="flashes"> <!-- <ul> タグは Unordered List 順序のないリスト -->
+       {% with messages = get_flashed_messages() %} <!-- flash message:ユーザーが操作をしたときに、画面にその結果を表示する機能やメッセージのこと。ログインした。投稿した。ログインできなかった。-->
+       {% if messages %} 
+       <ul class="flashes">
          {% for message in messages %} <!-- Flask:バックエンド側にてmessagesの中に複数のエラー分が入っており、その中からmessageが出てくるようになっている。for:ループ。@がない。大文字を使用してね。等-->
            <li>{{ message }}</li> <!-- エラーが出た分だけ、messageが表示される。-->
          {% endfor %}
-      </ul>
-      {% endif %} {% endwith %} 
-      <button class="auth-button white">作成</button>
-
-
+       </ul>
+       {% endif %} {% endwith %} 
+       <button class="create-channnel-button white">作成</button>
+     </div>
+    </form>
 </div>
+{%% endblock %}
+
 
 <!-- name属性：バックエンドに送ったデータを識別する際の識別子。id要素とは異なり、すべての要素に存在するわけではない。特定の条件を除いて必ずしも一意である必要はないが、普通一意にする。要するにname属性をフロントエンド側で使用することは少なく、バックエンド側のための属性の意味合いが強い。-->
 <!-- name属性は、フォーム要素に名前を付けるための属性です。サーバーに送信されるデータのキーとして使用されます。 -->

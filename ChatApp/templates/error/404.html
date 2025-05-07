@@ -1,0 +1,21 @@
+{% extends 'error/base.html' %} 
+{% block title%} error {% endblock %}
+{% block body %}
+<body class="error">
+    <div class="error-wrapper">
+        <div class="error-content">
+            <div>
+                <p class="error-num">4 0 4</p>
+            </div>
+            <div class="error-description error404or500">
+                <p>ページが見つかりません</p>
+                    <a class="error-button pink" href="{{ url_for('user_dashboard') }}">戻る</a>
+            </div>         
+        </div>
+    </div>
+</body>
+{% endblock %}
+
+<!-- 404エラーは、HTTPステータスコードの一つで、リクエストしたページがサーバー上に存在しないことを示します。 -->
+<!-- 主な理由は、1.urlの入力ミス2.ページの削除3.リンク切れ -->
+<!-- サンプルアプリは、画像の表示があったが、ここでは使用していない -->
