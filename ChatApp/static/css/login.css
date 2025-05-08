@@ -30,12 +30,10 @@
     letter-spacing: 0.1rem; /* 文字間隔を指定 */
 }
 
-.auth-button0-white {
+.auth-button-white {
     background-color: var(--all_white); /* 背景色を指定 */
     width: 160px; /* 幅 */
     height: 64px; /* 高さ */
     border-radius: 50%; /* 角を丸くする */
     box-shadow: 0 0 8px 0 rgba(0, 0, 0, .5); /* 影をつける */
 }
-
-
