@@ -37,8 +37,10 @@ CREATE TABLE private_messages (
 CREATE TABLE group_chats (
     id INT AUTO_INCREMENT PRIMARY KEY,
     name VARCHAR(255) NOT NULL,
+    creator_id VARCHAR(255) NOT NULL,
     is_open BOOLEAN DEFAULT FALSE,
     created_at DATETIME DEFAULT CURRENT_TIMESTAMP
+    FOREIGN KEY (creator_id) REFERENCES users(uid)
 );
 
 CREATE TABLE group_members (
@@ -60,13 +62,15 @@ CREATE TABLE group_messages (
     FOREIGN KEY (user_id) REFERENCES users(uid)
 );
 
-CREATE TABLE opne_chat (
+CREATE TABLE opne_chats (
     id INT AUTO_INCREMENT PRIMARY KEY,
     uid VARCHAR(255) NOT NULL,
     name VARCHAR(255) UNIQUE NOT NULL,
+    creator_id VARCHAR(255) NOT NULL,
     is_open BOOLEAN DEFAULT True,
     abstract VARCHAR(255),
     FOREIGN KEY (uid) REFERENCES users(uid) ON DELETE CASCADE
+    FOREIGN KEY (creator_id) REFERENCES users(uid)
 );
 
 CREATE TABLE opne_chat_messages (
@@ -76,12 +80,12 @@ CREATE TABLE opne_chat_messages (
     message TEXT,
     created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY (uid) REFERENCES users(uid) ON DELETE CASCADE,
-    FOREIGN KEY (cid) REFERENCES opne_chat(id) ON DELETE CASCADE
+    FOREIGN KEY (cid) REFERENCES opne_chats(id) ON DELETE CASCADE
 );
 
 INSERT INTO users (uid, user_name, email, password) VALUES ('admin123', '管理者', 'admin@example.com', '9d73b154738103148a0baae3bb4b0067fbbb230b9cf50c04db70d6393d324c42')
 -- INSERT INTO users(uid, user_name, email, password) VALUES('970af84c-dd40-47ff-af23-282b72b7cca8','テスト','test@gmail.com','37268335dd6931045bdcdf92623ff819a64244b53d0e746d438797349d4da578');
--- -- INSERT INTO opne_chat(id, uid, name, abstract) VALUES(1, 'b9ec6802-f2a2-4069-81ee-3909ec6851ad','アニメ好き集まれ','好きなアニメについて話しましょう！');
--- INSERT INTO opne_chat(id, uid, name, abstract) VALUES(2, 'b9ec6802-f2a2-4069-81ee-3909ec6851ad','ドラマ好き集まれ','好きなドラマについて話しましょう！');
--- INSERT INTO opne_chat(id, uid, name, abstract) VALUES(3, 'b9ec6802-f2a2-4069-81ee-3909ec6851ad','バンド好き集まれ','好きなバンドについて話しましょう！');
+INSERT INTO opne_chat(id, uid, name, abstract) VALUES(1, 'b9ec6802-f2a2-4069-81ee-3909ec6851ad','アニメ好き集まれ','好きなアニメについて話しましょう！');
+INSERT INTO opne_chat(id, uid, name, abstract) VALUES(2, 'b9ec6802-f2a2-4069-81ee-3909ec6851ad','ドラマ好き集まれ','好きなドラマについて話しましょう！');
+INSERT INTO opne_chat(id, uid, name, abstract) VALUES(3, 'b9ec6802-f2a2-4069-81ee-3909ec6851ad','バンド好き集まれ','好きなバンドについて話しましょう！');
 -- INSERT INTO messages(id, uid, cid, message) VALUES(1, '970af84c-dd40-47ff-af23-282b72b7cca8', '1', '誰かかまってください、、')

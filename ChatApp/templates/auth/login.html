@@ -5,61 +5,61 @@
 {% block body %} 
 <header>
    <div>
-     <img
+      <img
          src="{{ url_for('static' ,filename='img/hagyutto-logo.png') }}"
          alt="logo"
-     /> 
-     <a class ="switch-auth-mode" href="{{ url_for('signup_view') }}"> <!--画面登録のURLを貼り付け。-->
+      /> 
+      <a class ="switch-auth-mode" href="{{ url_for('signup_view') }}"> <!--画面登録のURLを貼り付け。-->
        無料登録して使う
-     </a>
+      </a>
    </div>
 </header>
 <div class="auth-wrapper"> <!--wrapper:ユーザーが読みやすい様な幅にwebページを包んで表示する。-->
- <div class = "auth-container"> <!-- container：コンテンツの横幅、余白、配置を調整する。 -->
-    <!-- 
-    <img
-     src="{{ url_for('static',filename='img/hagyutto-main.png') }}"   
-     class="auth-main-pic"
-     alt="はぎゅっとチャット"
-    /> PC版の画像を貼り付け。Flaskの書き方。バックエンド側にデータが保存されており、そちらを参照。変数のため絶対パスではないので、ディレクトリが移動しても参照できる。 -->
-    <img
-     src="{{ url_for('static',filename='img/hagyutto-main-mobile.png') }}"  
-     class="auth-mobile-pic"
-     alt="はぎゅっとチャット"
-    /> <!--モバイル版の画像を貼り付け -->
-    <div class ="auth-form-wrapper"> <!-- 入力フォーム画面の横幅等の調整。-->
-       <form class ='auth-form' method="post">
-          <h1 class="auth-title">ログイン</h1> <!-- 見出し：タイトル表示（ログイン)--> 
-          <div>
+   <div class = "auth-container"> <!-- container：コンテンツの横幅、余白、配置を調整する。 -->
+   <!-- 
+   <img
+      src="{{ url_for('static',filename='img/hagyutto-main.png') }}"   
+      class="auth-main-pic"
+      alt="はぎゅっとチャット"
+   /> PC版の画像を貼り付け。Flaskの書き方。バックエンド側にデータが保存されており、そちらを参照。変数のため絶対パスではないので、ディレクトリが移動しても参照できる。 -->
+   <img
+      src="{{ url_for('static',filename='img/hagyutto-main-mobile.png') }}"  
+      class="auth-mobile-pic"
+      alt="はぎゅっとチャット"
+   /> <!--モバイル版の画像を貼り付け -->
+      <div class ="auth-form-wrapper"> <!-- 入力フォーム画面の横幅等の調整。-->
+         <form class ='auth-form' method="post">
+            <h1 class="auth-title">ログイン</h1> <!-- 見出し：タイトル表示（ログイン)--> 
+            <div>
                <input
                   type="text"
                   placeholder="メールアドレス" 
                   name="email"
                   id="email-input"
                />  
-          </div>
-          <div>
+            </div>
+            <div>
                <input
                   type="password"
                   placeholder="パスワード"
                   name="password"
                   id="possword-input"
                />
-          </div>
-          <div class="auth-button-container"> <!--ボタンの幅等-->
-            {% with messages = get_flashed_messages() %} <!-- flash message:ユーザーが操作をしたときに、画面にその結果を表示する機能やメッセージのこと。ログインした。投稿した。ログインできなかった。-->
-            {% if messages %} 
-            <ul class="flashes"> 
-               {% for message in messages %} <!-- Flask:バックエンド側にてmessagesの中に複数のエラー分が入っており、その中からmessageが出てくるようになっている。for:ループ。@がない。大文字を使用してね。等-->
-                 <li>{{ message }}</li> <!-- エラーが出た分だけ、messageが表示される。-->
-               {% endfor %}
-            </ul>
-            {% endif %} {% endwith %} <!-- fkask:endif:条件分岐。endwithが出てくるまで条件分岐する様だ。定かではない。-->
-            <button class="auth-button-white">ログイン</button>
-         </div>
-       </form>
-    </div>
- </div>
+            </div>
+            <div class="auth-button-container"> <!--ボタンの幅等-->
+               {% with messages = get_flashed_messages() %} <!-- flash message:ユーザーが操作をしたときに、画面にその結果を表示する機能やメッセージのこと。ログインした。投稿した。ログインできなかった。-->
+               {% if messages %} 
+               <ul class="flashes"> 
+                  {% for message in messages %} <!-- Flask:バックエンド側にてmessagesの中に複数のエラー分が入っており、その中からmessageが出てくるようになっている。for:ループ。@がない。大文字を使用してね。等-->
+                  <li>{{ message }}</li> <!-- エラーが出た分だけ、messageが表示される。-->
+                  {% endfor %}
+               </ul>
+               {% endif %} {% endwith %} <!-- fkask:endif:条件分岐。endwithが出てくるまで条件分岐する様だ。定かではない。-->
+               <button class="auth-button-white">ログイン</button>
+            </div>
+         </form>
+      </div>
+   </div>
 </div>
 {% endblock %}
 

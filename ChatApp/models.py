@@ -142,79 +142,123 @@ class GroupMessage:
             db_pool.release(conn)
 
 #オープンチャット
-class Opc:
+class OpenChat:
     @classmethod
-    def create(cls, uid, name, description, is_open):
+    def create(cls, name, description, creator_id):
         conn = db_pool.get_conn()
         try:
             with conn.cursor() as cur:
-                sql = """
-                    INSERT INTO open_chats(create_id, name, description, is_open, created_at)
-                    VALUES(%s, %s, %s, NOW())
-                """
-                cur.execute(sql, (uid, name, description, is_open))
+                sql = "INSERT INTO open_chats (name, description, creator_id) VALUES (%s, %s, %s)"
+                cur.execute(sql, (name, description, creator_id))
                 conn.commit()
         except pymysql.Error as e:
-            print(f'エラー: {e}')
+            print(f'エラーが発生しました: {e}')
             abort(500)
         finally:
             db_pool.release(conn)
-            
+
     @classmethod
-    def get_all(cls):
+    def get(cls, chat_id):
+        conn = db_pool.get_conn()
+        try:
+            with conn.cursor(pymysql.cursors.DictCursor) as cur:
+                sql = "SELECT * FROM open_chats WHERE id = %s"
+                cur.execute(sql, (chat_id,))
+                return cur.fetchone()
+        except pymysql.Error as e:
+            print(f'エラーが発生しました: {e}')
+            abort(500)
+        finally:
+            db_pool.release(conn)
+
+    @classmethod
+    def delete(cls, chat_id):
         conn = db_pool.get_conn()
         try:
             with conn.cursor() as cur:
-                sql = "SELECT * FROM open_chats;"
-                cur.execute(sql)
-                opc_room = cur.fetchall()
-                return opc_room
+                sql = "DELETE FROM open_chats WHERE id = %s"
+                cur.execute(sql, (chat_id,))
+                conn.commit()
         except pymysql.Error as e:
-            print(f'エラーが発生しています : {e}')
+            print(f'エラーが発生しました: {e}')
             abort(500)
         finally:
             db_pool.release(conn)
+
+# #オープンチャット
+# class Opc:
+#     @classmethod
+#     def create(cls, uid, name, description, is_open):
+#         conn = db_pool.get_conn()
+#         try:
+#             with conn.cursor() as cur:
+#                 sql = """
+#                     INSERT INTO open_chats(create_id, name, description, is_open, created_at)
+#                     VALUES(%s, %s, %s, NOW())
+#                 """
+#                 cur.execute(sql, (uid, name, description, is_open))
+#                 conn.commit()
+#         except pymysql.Error as e:
+#             print(f'エラー: {e}')
+#             abort(500)
+#         finally:
+#             db_pool.release(conn)
             
-    @classmethod
-    def find_by_room_id(cls, room_id):
-        conn = db_pool.get_conn()
-        try:
-            with conn.cursor() as cur:
-                sql = "SELECT * FROM open_chats WHERE id=%s;"
-                cur.execute(sql, (room_id,))
-                opc_room = cur.fetchone()
-                return opc_room
-        except pymysql.Error as e:
-            print(f'エラーが発生しています : {e}')
-            abort(500)
-        finally:
-            db_pool.release(conn)
+#     @classmethod
+#     def get_all(cls):
+#         conn = db_pool.get_conn()
+#         try:
+#             with conn.cursor() as cur:
+#                 sql = "SELECT * FROM open_chats;"
+#                 cur.execute(sql)
+#                 opc_room = cur.fetchall()
+#                 return opc_room
+#         except pymysql.Error as e:
+#             print(f'エラーが発生しています : {e}')
+#             abort(500)
+#         finally:
+#             db_pool.release(conn)
             
-    @classmethod
-    def find_by_name(cls, name):
-        conn = db_pool.get_conn()
-        try:
-            with conn.cursor() as cur:
-                sql = "SELECT * FROM open_chats WHERE name=%s:"
-                cur.execute(sql, (name,))
-                opc_room = cur.fetchone()
-                return opc_room
-        except pymysql.Error as e:
-            print(f'エラーが発生しています : {e}')
-            abort(500)
-        finally:
-            db_pool.release(conn)
+#     @classmethod
+#     def find_by_room_id(cls, room_id):
+#         conn = db_pool.get_conn()
+#         try:
+#             with conn.cursor() as cur:
+#                 sql = "SELECT * FROM open_chats WHERE id=%s;"
+#                 cur.execute(sql, (room_id,))
+#                 opc_room = cur.fetchone()
+#                 return opc_room
+#         except pymysql.Error as e:
+#             print(f'エラーが発生しています : {e}')
+#             abort(500)
+#         finally:
+#             db_pool.release(conn)
+            
+#     @classmethod
+#     def find_by_name(cls, name):
+#         conn = db_pool.get_conn()
+#         try:
+#             with conn.cursor() as cur:
+#                 sql = "SELECT * FROM open_chats WHERE name=%s:"
+#                 cur.execute(sql, (name,))
+#                 opc_room = cur.fetchone()
+#                 return opc_room
+#         except pymysql.Error as e:
+#             print(f'エラーが発生しています : {e}')
+#             abort(500)
+#         finally:
+#             db_pool.release(conn)
     
-    @classmethod
-    def delete(cls, room_id, uid):
-        conn = db_pool.get_conn()
-        try:
-            with conn.cursor() as cur:
-                sql = "DELETE FROM open_chats WHERE id = %s AND create_id = %s;"
-                cur.execute(sql, (room_id, uid))
-                conn.commit()
-        except pymysql.Error as e:
-            print(f'エラーが発生しています : {e}')
-            abort(500)
-        finally:
-            db_pool.release(conn)
+#     @classmethod
+#     def delete(cls, room_id, uid):
+#         conn = db_pool.get_conn()
+#         try:
+#             with conn.cursor() as cur:
+#                 sql = "DELETE FROM open_chats WHERE id = %s AND create_id = %s;"
+#                 cur.execute(sql, (room_id, uid))
+#                 conn.commit()
+#         except pymysql.Error as e:
+#             print(f'エラーが発生しています : {e}')
+#             abort(500)
+#         finally:
+#             db_pool.release(conn)
