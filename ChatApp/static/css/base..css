@@ -18,7 +18,7 @@ header {
     box-shadow: 0 0 8px 0 rgba(0, 0, 0, .5); /* 影をつける */
 }
 
-header > img {
+header img {
     height: 72px; /* ヘッダー内の画像の高さ */
     width: auto; /* 幅は自動 */
     margin: 4px 0 0 8px; /* 上、右、下、左のマージンを指定 */

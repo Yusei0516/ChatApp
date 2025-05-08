@@ -28,7 +28,7 @@ header {
     box-shadow: 0 0 8px 0 rgba(0, 0, 0, .5); /* 影をつける */
 }
 
-header > img {
+header img {
     height: 40px; /* ヘッダー内の画像の高さ */
     width: auto; /* 幅は自動 */
     margin: 4px 0 0 8px; /* 上、右、下、左のマージンを指定 */
@@ -112,7 +112,7 @@ button {
     gap: 48px; /* 隙間 */
 }
 
-.auth-container > img {
+.auth-container img {
     width: 100%; /* 幅を100%に設定 */
     height: auto; /* 高さを自動に設定 */
 }
