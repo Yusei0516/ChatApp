@@ -1,6 +1,7 @@
 from flask import Flask, request, redirect, render_template, session, flash, abort, url_for
 from datetime import timedelta
 import hashlib, uuid, re, os
+from models import User, Group, GroupMessage, OpenChat
 from models import User, Group, GroupMessage, Opc
 # from util.assets import bundle_css_files
  
@@ -137,15 +138,56 @@ def create_group_view():
 def delete_group_view():
     return render_template('admin/delete_group.html')
 
-#管理者メニューまとめ(オープンチャット作成)
-@app.route('/admin_menu/open/create', methods=['GET'])
+#メニューまとめ(オープンチャット作成)
+@app.route('/menu/open/create', methods=['GET'])
 def create_open_view():
-    return render_template('admin/create_open.html')
+    return render_template('menu/create_open.html')
 
-#管理者メニューまとめ(オープンチャット削除)
-@app.route('/admin_menu/open/delete', methods=['GET'])
-def delete_opem_view():
-    return render_template('admin/delete_open.html')
+#オープンチャット作成処理
+app.route('/open_chat/create', methods=['POST'])
+def create_open_chat():
+    uesr_id = session.get('uid')
+    name = request.form.get('name')
+    description = request.form.get('description')
+
+    if uesr_id:
+        try:
+            OpenChat.create(name, description, uesr_id)
+            flash('オープンチャットを作成しました。')
+        except Exception as e:
+            flash(f'エラーが発生しました： {str(e)}')
+        #遷移先を判定
+        if uesr_id == 'admin@example.com':
+            return redirect(url_for('admin_dashboard'))
+        else:
+            return redirect(url_for('user_dashboard'))
+
+
+#まとめ(オープンチャット削除)
+@app.route('/menu/open/delete', methods=['GET'])
+def delete_open_view():
+    return render_template('menu/delete_open.html')
+        
+#オープンチャットの削除
+@app.route('/open_chat/delete/<int:chat_id>', methods=['POST'])        
+def delete_open_chat(chat_id):
+    user_id = session.get('uid')
+
+    if user_id:
+        chat = OpenChat.get(chat_id)
+        if chat['creator_id'] == user_id or user_id == 'admin@example.com':
+            try:
+                OpenChat.delete(chat_id)
+                flash('チャットが削除されました')
+            except Exception as e:
+                flash(f'エラーが発生しました： {str(e)}')
+        else:
+            flash('権限がありません')
+        #遷移先を判定
+        if user_id == 'admin@example.com':
+            return redirect(url_for('admin_dashboard'))
+        else:
+            return redirect(url_for('user_dashboard'))
 
 
 
@@ -174,6 +216,15 @@ def enter_group_chat():
 def enter_private_chat():
     return render_template('user/private_chat.html')
 
+# #ユーザーメニューまとめ(オープンチャット作成)
+# @app.route('/user_menu/open/create', methods=['GET'])
+# def user_create_open_view():
+#     return render_template('user/create_open.html')
+
+# #ユーザーメニューまとめ(オープンチャット削除)
+# @app.route('/user_menu/open/delete', methods=['GET'])
+# def user_delete_opem_view():
+#     return render_template('user/delete_open.html')
 #ユーザーメニューまとめ(オープンチャット作成)
 @app.route('/user_menu/open/create', methods=['GET','POST'])
 def user_create_open_view():

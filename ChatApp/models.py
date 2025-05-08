@@ -142,6 +142,50 @@ class GroupMessage:
             db_pool.release(conn)
 
 #オープンチャット
+class OpenChat:
+    @classmethod
+    def create(cls, name, description, creator_id):
+        conn = db_pool.get_conn()
+        try:
+            with conn.cursor() as cur:
+                sql = "INSERT INTO open_chats (name, description, creator_id) VALUES (%s, %s, %s)"
+                cur.execute(sql, (name, description, creator_id))
+                conn.commit()
+        except pymysql.Error as e:
+            print(f'エラーが発生しました: {e}')
+            abort(500)
+        finally:
+            db_pool.release(conn)
+
+    @classmethod
+    def get(cls, chat_id):
+        conn = db_pool.get_conn()
+        try:
+            with conn.cursor(pymysql.cursors.DictCursor) as cur:
+                sql = "SELECT * FROM open_chats WHERE id = %s"
+                cur.execute(sql, (chat_id,))
+                return cur.fetchone()
+        except pymysql.Error as e:
+            print(f'エラーが発生しました: {e}')
+            abort(500)
+        finally:
+            db_pool.release(conn)
+
+    @classmethod
+    def delete(cls, chat_id):
+        conn = db_pool.get_conn()
+        try:
+            with conn.cursor() as cur:
+                sql = "DELETE FROM open_chats WHERE id = %s"
+                cur.execute(sql, (chat_id,))
+                conn.commit()
+        except pymysql.Error as e:
+            print(f'エラーが発生しました: {e}')
+            abort(500)
+        finally:
+            db_pool.release(conn)
+
+#オープンチャット
 class Opc:
     @classmethod
     def create(cls, uid, name, description, is_open):
