@@ -122,7 +122,7 @@ button {
     letter-spacing: 0.1rem; /* 文字間隔を指定 */
 }
 
-.auth-button0-white {
+.auth-button-white {
     background-color: var(--all_white); /* 背景色を指定 */
     width: 160px; /* 幅 */
     height: 64px; /* 高さ */
