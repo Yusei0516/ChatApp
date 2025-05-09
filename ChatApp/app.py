@@ -113,10 +113,10 @@ def logout():
 def admin_dashboard():
     return render_template('admin/dashboard.html')
 
-#管理者：グループチャット一覧へ
-@app.route('/admin/group/list', methods=['GET'])
-def group_list_view():
-    return render_template('admin/group_list.html')
+# #管理者：グループチャット一覧へ
+# @app.route('/admin/group/list', methods=['GET'])
+# def group_list_view():
+#     return render_template('admin/group_list.html')
 
 #管理者：オープンチャット一覧へ
 @app.route('/admin/open/list', methods=['GET'])
@@ -225,50 +225,51 @@ def enter_private_chat():
 # @app.route('/user_menu/open/delete', methods=['GET'])
 # def user_delete_opem_view():
 #     return render_template('user/delete_open.html')
-#ユーザーメニューまとめ(オープンチャット作成)
-@app.route('/user_menu/open/create', methods=['GET','POST'])
-def user_create_open_view():
-    uid = session.get('uid')
-    if uid is None:
-        return redirect(url_for('login_view'))
-    
-    if request.method =='POST':
-        name = request.form.get('name')
-        opc_room = Opc.find_by_name(name)
-        if opc_room == None:
-            description = request.form.get('open_description')
-            Opc.create(uid, name, description, is_open=False)
-            flash("オープンチャットを作成しました")
-            return redirect(url_for('user_dashboard'))
-        else:
-            flash("既に同じ名前のチャンネルが存在しています")
-            return redirect(url_for('/user_menu/open/create'))
-    
-    return render_template('user/create_open.html')
 
-#ユーザーメニューまとめ(オープンチャット削除ルーム)
-@app.route('/user_menu/open/delete', methods=['GET'])
-def user_delete_open_view():
-    uid = session.get('uid')
-    if uid is None:
-        return redirect(url_for('login_view'))
+# #ユーザーメニューまとめ(オープンチャット作成)
+# @app.route('/user_menu/open/create', methods=['GET','POST'])
+# def user_create_open_view():
+#     uid = session.get('uid')
+#     if uid is None:
+#         return redirect(url_for('login_view'))
     
-    return render_template('user/delete_open.html')
+#     if request.method =='POST':
+#         name = request.form.get('name')
+#         opc_room = Opc.find_by_name(name)
+#         if opc_room == None:
+#             description = request.form.get('open_description')
+#             Opc.create(uid, name, description, is_open=False)
+#             flash("オープンチャットを作成しました")
+#             return redirect(url_for('user_dashboard'))
+#         else:
+#             flash("既に同じ名前のチャンネルが存在しています")
+#             return redirect(url_for('/user_menu/open/create'))
+    
+#     return render_template('user/create_open.html')
 
-#オープンチャット削除ボタン
-@app.route('/user_menu/open/delete/<int:room_id>', methods=['POST'])
-def delete_button(room_id):
-    uid = session.get('uid')
-    if uid is None:
-        return redirect(url_for('login_view'))
+# #ユーザーメニューまとめ(オープンチャット削除ルーム)
+# @app.route('/user_menu/open/delete', methods=['GET'])
+# def user_delete_open_view():
+#     uid = session.get('uid')
+#     if uid is None:
+#         return redirect(url_for('login_view'))
     
-    room = Opc.find_by_room_id(room_id)
+#     return render_template('user/delete_open.html')
+
+# #オープンチャット削除ボタン
+# @app.route('/user_menu/open/delete/<int:room_id>', methods=['POST'])
+# def delete_button(room_id):
+#     uid = session.get('uid')
+#     if uid is None:
+#         return redirect(url_for('login_view'))
     
-    if room['create_id'] != uid:
-        flash('チャンネルは制作者のみ削除可能です')
-    else:
-        Opc.delete(room_id)
-    return redirect(url_for('/user_menu/open/delete'))
+#     room = Opc.find_by_room_id(room_id)
+    
+#     if room['create_id'] != uid:
+#         flash('チャンネルは制作者のみ削除可能です')
+#     else:
+#         Opc.delete(room_id)
+#     return redirect(url_for('/user_menu/open/delete'))
 
 #グループチャット(リダイレクト)
 @app.route('/group_view', methods=['GET'])
