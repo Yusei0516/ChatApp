@@ -68,7 +68,7 @@ input:focus,
 textarea:focus,
 button:focus {
     outline: 2px solid var(--sub_blue); /* フォーカス時のアウトラインを指定 */
-    outline-offset: 4px; /* アウトラインのオフセットを指定 */
+    outline-offset: 1px; /* アウトラインのオフセットを指定 */
 }
 
 textarea {
