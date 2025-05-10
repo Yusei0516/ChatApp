@@ -113,10 +113,10 @@ def logout():
 def admin_dashboard():
     return render_template('admin/dashboard.html')
 
-#管理者：グループチャット一覧へ
-@app.route('/admin/group/list', methods=['GET'])
-def group_list_view():
-    return render_template('admin/group_list.html')
+# #管理者：グループチャット一覧へ
+# @app.route('/admin/group/list', methods=['GET'])
+# def group_list_view():
+#     return render_template('admin/group_list.html')
 
 #管理者：オープンチャット一覧へ
 @app.route('/admin/open/list', methods=['GET'])
