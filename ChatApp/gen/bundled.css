@@ -22,7 +22,7 @@ header {
     background-color: var(--all_white); /* ヘッダーの背景色 */
     width: 100%; /* ヘッダーの幅 */
     height: 64px; /* ヘッダーの高さ */
-    padding: 0 4px; /* ヘッダーのパディング */
+    padding: 0 16px; /* ヘッダーのパディング */
     position: fixed; /* スクロールしてもヘッダーが固定される */
     left: 0; /* 左端に寄せる */
     top: 0; /* 上端に寄せる */
@@ -38,7 +38,7 @@ header div {
     justify-content: space-between; /* 左右に要素を配置 */
     align-items: center; /* 縦方向に中央寄せ */
     width: 100%; /* 幅を100%に設定 */
-  }
+}
 
 header img {
     height: 56px; /* ヘッダー内の画像の高さ */
@@ -123,7 +123,7 @@ button {
     display: flex; /* フレックスボックス */
     justify-content: center; /* 中央寄せ */
     align-items: center; /* 中央寄せ */
-    margin-top: 100px; /* 上マージン */
+    margin-top: 64px; /* 上マージン */
     text-align: center; /* テキストを中央寄せ */    
 }
 
