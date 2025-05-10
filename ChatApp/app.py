@@ -78,29 +78,26 @@ def login_process():
 
     if email =='' or password == '':
         flash('未入力の項目があります')
-        return redirect(url_for('login_view'))
-
-    user = User.find_by_email(email)
-    if user is None:
-        flash('このユーザーは存在しません')
-        return redirect(url_for('login_view'))
-    
-    hashPassword = hashlib.sha256(password.encode('utf-8')).hexdigest()
-    if hashPassword != user["password"]:
-        flash('パスワードが間違っています')
-        return redirect(url_for('login_view'))
-    
-    #正しくログインできたのでセッションに保存
-    session['uid'] = user["uid"]
-    session['email'] = user["email"]
-
-    #管理者の判定
-    if user['email'] == 'admin@example.com':
-        return redirect(url_for('admin_dashboard'))
-    #一般ユーザー
     else:
-        return redirect(url_for('user_dashboard'))
-    
+        user = User.find_by_email(email)
+        if user is None:
+            flash('このユーザーは存在しません')
+        else:
+            hashPassword = hashlib.sha256(password.encode('utf-8')).hexdigest()
+            if hashPassword != user["password"]:
+                flash('パスワードが間違っています')
+            else:
+                #正しくログインできたのでセッションに保存
+                session['uid'] = user["uid"]
+                session['is_admin'] = user["is_admin"]
+                #管理者の判定
+                if user['is_admin'] == 1:
+                    return redirect(url_for('admin_dashboard'))
+                #一般ユーザー
+                else:
+                    return redirect(url_for('user_dashboard'))
+    return redirect(url_for('login_view'))
+
 # ログアウト
 @app.route('/logout')
 def logout():
@@ -110,6 +107,9 @@ def logout():
 #管理者用ダッシュボード
 @app.route('/admin_dashboard')
 def admin_dashboard():
+    if not session.get('is_admin'):
+        flash('権限がありません')
+        return redirect(url_for('user_dashboard'))
     return render_template('admin/dashboard.html')
 
 # #管理者：グループチャット一覧へ
@@ -146,20 +146,31 @@ def create_open_view():
 app.route('/open_chat/create', methods=['POST'])
 def create_open_chat():
     uesr_id = session.get('uid')
+    is_admin = session.get('is_admin')
     name = request.form.get('name')
     description = request.form.get('description')
 
-    if uesr_id:
-        try:
-            OpenChat.create(name, description, uesr_id)
-            flash('オープンチャットを作成しました。')
-        except Exception as e:
-            flash(f'エラーが発生しました： {str(e)}')
-        #遷移先を判定
-        if uesr_id == 'admin@example.com':
-            return redirect(url_for('admin_dashboard'))
-        else:
-            return redirect(url_for('user_dashboard'))
+    if not uesr_id:
+        flash('ログインしてください')
+        return redirect(url_for('login_view'))
+
+    if not name:
+        flash('チャットルーム名を入力してください')
+        return redirect(url_for('login_view'))
+    
+    if not description:
+        flash('チャットルームの説明を入力してください')
+        return redirect(url_for('login_view'))
+    
+    try:
+        OpenChat.create(name, description, uesr_id)
+        flash('オープンチャットを作成しました。')
+    except Exception as e:
+        flash(f'エラーが発生しました： {str(e)}')
+    #遷移先を判定
+    if is_admin:
+        return redirect(url_for('admin_dashboard'))
+    return redirect(url_for('user_dashboard'))
 
 
 #まとめ(オープンチャット削除)
@@ -171,22 +182,25 @@ def delete_open_view():
 @app.route('/open_chat/delete/<int:chat_id>', methods=['POST'])        
 def delete_open_chat(chat_id):
     user_id = session.get('uid')
+    is_admin = session.get('is_admin')
 
-    if user_id:
-        chat = OpenChat.get(chat_id)
-        if chat['creator_id'] == user_id or user_id == 'admin@example.com':
-            try:
-                OpenChat.delete(chat_id)
-                flash('チャットが削除されました')
-            except Exception as e:
-                flash(f'エラーが発生しました： {str(e)}')
+    if not user_id:
+        flash('ログインしてください')
+        return redirect(url_for('login_view'))
+
+    try:
+        success = OpenChat.delete(chat_id, user_id)
+        if success:
+            flash('チャットが削除されました')
         else:
-            flash('権限がありません')
-        #遷移先を判定
-        if user_id == 'admin@example.com':
-            return redirect(url_for('admin_dashboard'))
-        else:
-            return redirect(url_for('user_dashboard'))
+            flash('削除権限がありません')
+    except Exception as e:
+        flash(f'エラーが発生しました： {str(e)}')
+
+    #遷移先を判定
+    if is_admin:
+        return redirect(url_for('admin_dashboard'))
+    return redirect(url_for('user_dashboard'))
 
 
 
