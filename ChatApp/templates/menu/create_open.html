@@ -1,4 +1,4 @@
-{% extends 'user/base.html' %} 
+{% extends 'menu/base.html' %} 
 {% block title %}
 <title>create-open-channel</title>
 {% endblock %} 
@@ -32,21 +32,21 @@
              name="open_description"
              id="possword-input"
           />
-     </div>
-     <div class="open-button-container"> <!--ボタンの幅等-->
-       {% with messages = get_flashed_messages() %} <!-- flash message:ユーザーが操作をしたときに、画面にその結果を表示する機能やメッセージのこと。ログインした。投稿した。ログインできなかった。-->
-       {% if messages %} 
-       <ul class="flashes">
-         {% for message in messages %} <!-- Flask:バックエンド側にてmessagesの中に複数のエラー分が入っており、その中からmessageが出てくるようになっている。for:ループ。@がない。大文字を使用してね。等-->
-           <li>{{ message }}</li> <!-- エラーが出た分だけ、messageが表示される。-->
-         {% endfor %}
-       </ul>
-       {% endif %} {% endwith %} 
-       <button class="create-channnel-button white">作成</button>
-     </div>
+        </div>
+        <div class="open-button-container"> <!--ボタンの幅等-->
+          {% with messages = get_flashed_messages() %} <!-- flash message:ユーザーが操作をしたときに、画面にその結果を表示する機能やメッセージのこと。ログインした。投稿した。ログインできなかった。-->
+          {% if messages %} 
+          <ul class="flashes">
+            {% for message in messages %} <!-- Flask:バックエンド側にてmessagesの中に複数のエラー分が入っており、その中からmessageが出てくるようになっている。for:ループ。@がない。大文字を使用してね。等-->
+              <li>{{ message }}</li> <!-- エラーが出た分だけ、messageが表示される。-->
+            {% endfor %}
+          </ul>
+          {% endif %} {% endwith %} 
+          <button class="create-channnel-button white">作成</button>
+        </div>
     </form>
 </div>
-{%% endblock %}
+{% endblock %}
 
 
 <!-- name属性：バックエンドに送ったデータを識別する際の識別子。id要素とは異なり、すべての要素に存在するわけではない。特定の条件を除いて必ずしも一意である必要はないが、普通一意にする。要するにname属性をフロントエンド側で使用することは少なく、バックエンド側のための属性の意味合いが強い。-->
