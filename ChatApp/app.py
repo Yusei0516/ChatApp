@@ -2,7 +2,6 @@ from flask import Flask, request, redirect, render_template, session, flash, abo
 from datetime import timedelta
 import hashlib, uuid, re, os
 from models import User, Group, GroupMessage, OpenChat
-# from models import User, Group, GroupMessage, Opc
 # from util.assets import bundle_css_files
  
 # 定数定義
