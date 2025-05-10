@@ -12,7 +12,7 @@ header {
     background-color: var(--all_white); /* ヘッダーの背景色 */
     width: 100%; /* ヘッダーの幅 */
     height: 64px; /* ヘッダーの高さ */
-    padding: 0 16px; /* ヘッダーのパディング */
+    padding: 0 4px; /* ヘッダーのパディング */
     position: fixed; /* スクロールしてもヘッダーが固定される */
     right: 0; /* 右端に寄せる */
     top: 0; /* 上端に寄せる */

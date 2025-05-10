@@ -22,7 +22,7 @@ header {
     background-color: var(--all_white); /* ヘッダーの背景色 */
     width: 100%; /* ヘッダーの幅 */
     height: 64px; /* ヘッダーの高さ */
-    padding: 0 16px; /* ヘッダーのパディング */
+    padding: 0 4px; /* ヘッダーのパディング */
     position: fixed; /* スクロールしてもヘッダーが固定される */
     left: 0; /* 左端に寄せる */
     top: 0; /* 上端に寄せる */
@@ -106,7 +106,7 @@ button {
 
 .switch-auth-mode {
     display: block; /* スイッチボタン */
-    width: 152px; /* 幅 */
+    width: 96px; /* 幅 */
     height: 32px; /* 高さ */
     margin: 0; /* マージンを0に設定 */
     background-color: var(--button_pink); /* 背景色 */
