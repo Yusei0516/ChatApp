@@ -1,23 +1,23 @@
 .switch-auth-mode {
     display: block; /* スイッチボタン */
-    width: 160px; /* 幅 */
-    height: 64px; /* 高さ */
-    margin: 16px 8px 0 0; /* マージン */
-    padding: 16px; /* パディング */
+    width: 152px; /* 幅 */
+    height: 32px; /* 高さ */
+    margin: 0; /* マージンを0に設定 */
     background-color: var(--button_pink); /* 背景色 */
-    border-radius: 50%; /* 角を丸くする */
-    text-align: right; /* 右寄せ */
-    color: var(--white); /* 文字色 */
-    box-shadow: 0 0 8px 0 rgba(0, 0, 0, .5); /* 影をつける */
+    border-radius: 64px; /* 角を丸くする */
+    color: var(--all_white); /* 文字色 */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5); /* 影をつける */
+    text-align: center; /* テキストを中央寄せ */
+    text-decoration: none; /* テキストの装飾をなしにする */
+    line-height: 32px; /* 行の高さ */
 }
-
 
 .auth-wrapper {
     display: flex; /* フレックスボックス */
     justify-content: center; /* 中央寄せ */
     align-items: center; /* 中央寄せ */
-    flex-direction: column; /* 縦並び */
-    gap: 48px; /* 隙間 */
+    margin-top: 100px; /* 上マージン */
+    text-align: center; /* テキストを中央寄せ */    
 }
 
 .auth-container img {
@@ -32,8 +32,10 @@
 
 .auth-button-white {
     background-color: var(--all_white); /* 背景色を指定 */
-    width: 160px; /* 幅 */
-    height: 64px; /* 高さ */
-    border-radius: 50%; /* 角を丸くする */
-    box-shadow: 0 0 8px 0 rgba(0, 0, 0, .5); /* 影をつける */
+    width: 152px; /* 幅 */
+    height: 32px; /* 高さ */
+    border-radius: 64px; /* 角を丸くする */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5); /* 影をつける */
+    white-space: nowrap; /* テキストを折り返さない */
+    line-height: 0px; /* 行の高さ */
 }
