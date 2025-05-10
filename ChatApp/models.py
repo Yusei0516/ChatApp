@@ -8,12 +8,13 @@ db_pool = DB.init_db_pool()
 #ユーザークラス
 class User:
     @classmethod
-    def create(cls, uid, name, email, password):
+    def create(cls, uid, name, email, password, is_admin=0):
+        #ユーザー作成
         conn = db_pool.get_conn()
         try:
             with conn.cursor() as cur:
-                sql = "INSERT INTO users (uid, user_name, email, password) VALUES (%s, %s, %s, %s)"
-                cur.execute(sql, (uid, name, email, password,))
+                sql = "INSERT INTO users (uid, user_name, email, password, is_admin) VALUES (%s, %s, %s, %s, %s)"
+                cur.execute(sql, (uid, name, email, password, is_admin))
                 conn.commit()
         except pymysql.Error as e:
             print(f'エラーが発生しています：{e}')
@@ -23,6 +24,7 @@ class User:
 
     @classmethod
     def find_by_email(cls, email):
+        #メールアドレスでユーザー検索
         conn = db_pool.get_conn()
         try:
                 with conn.cursor() as cur:
@@ -35,6 +37,14 @@ class User:
             abort(500)
         finally:
             db_pool.release(conn)
+    
+    @classmethod
+    def is_admin(cls, email):
+        # 管理者判定
+        user = cls.find_by_email(email)
+        if user:
+            return user['is_admin'] == 1
+        return False
     
     @classmethod
     def get_usr_group(cls, user_id):
@@ -141,15 +151,16 @@ class GroupMessage:
         finally:
             db_pool.release(conn)
 
-#オープンチャット
+#オープンチャットクラス
 class OpenChat:
     @classmethod
-    def create(cls, name, description, creator_id):
+    def create(cls, name, description, creator_id, is_open=True):
+        #オープンチャットの作成
         conn = db_pool.get_conn()
         try:
             with conn.cursor() as cur:
-                sql = "INSERT INTO open_chats (name, description, creator_id) VALUES (%s, %s, %s)"
-                cur.execute(sql, (name, description, creator_id))
+                sql = "INSERT INTO open_chats (name, description, is_open, creator_id) VALUES (%s, %s, %s, %s)"
+                cur.execute(sql, (name, description, is_open, creator_id))
                 conn.commit()
         except pymysql.Error as e:
             print(f'エラーが発生しました: {e}')
@@ -172,13 +183,28 @@ class OpenChat:
             db_pool.release(conn)
 
     @classmethod
-    def delete(cls, chat_id):
+    def delete(cls, chat_id, user_id):
+        #オープンチャットの削除
         conn = db_pool.get_conn()
         try:
             with conn.cursor() as cur:
-                sql = "DELETE FROM open_chats WHERE id = %s"
+                #チャットルームの情報取得
+                sql = "SELECT create_id FROM group_chats WHERE id = %s"
                 cur.execute(sql, (chat_id,))
-                conn.commit()
+                chat = cur.fetchone()
+
+                #チャットルームが存在しない場合
+                if not chat:
+                    return False
+                
+                #管理者または作成者のみが削除可能
+                if chat['creator_id'] == user_id or User.is_admin(user_id):
+                    sql = "DELETE FROM open_chats WHERE id = %s"
+                    cur.execute(sql, (chat_id,))
+                    conn.commit()
+                    return True
+                else:
+                    return False
         except pymysql.Error as e:
             print(f'エラーが発生しました: {e}')
             abort(500)
