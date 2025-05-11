@@ -1,6 +1,8 @@
 {% extends 'user/base.html' %} {% block title %}
 <title>home</title>
-{% endblock %} {% block body %}
+{% endblock %}
+
+{% block body %}
 <header>
   <div>
     <img
@@ -9,24 +11,25 @@
     /> 
   </div>
 </header>
-<div class="main-container">
-    <div class="channnel-title">
-      <h1>チャットルーム一覧</h1>        
-    </div>
-    <div class="private_chat_group_chat">
-      <div id="private_chat">
-        <a href="{{ url_for('enter_private_chat') }}" class="chat-btn chat-private-btn"> 
-          個人<br>チャット
-        </a> 
-      </div>
-      <div id="group_chat">
-        <a href="{{ url_for('group_chat_redirect') }}" class="chat-btn chat-group-btn"> 
-          グループ<br>チャット
-        </a> 
-      </div>
-    </div>
-    <div id="open chat channels-list">
-      <ul class="channel-box"></ul> <!-- ul の中にオープンチャンネルが作られる。javascriptにて詳細作成。-->
+
+<div class="main-wrapper">
+    <div class="main-container">
+        <div class="page-title">
+          <h1>チャットルーム一覧</h1>        
+        </div>
+        <div id="private_chat_group_chat">
+          <a href="{{ url_for('enter_private_chat') }}" class="chat-btn chat-private-btn"> 
+            個人<br>チャット
+          </a> 
+        </div>
+        <div id="group_chat">
+          <a href="{{ url_for('group_chat_redirect') }}" class="chat-btn chat-group-btn"> 
+            グループ<br>チャット
+          </a> 
+        </div>
+        <div id="open chat channels-list">
+          <ul class="channel-box"></ul> <!-- ul の中にオープンチャンネルが作られる。javascriptにて詳細作成。-->
+        </div>
     </div>
 </div>
 {% endblock %} 
