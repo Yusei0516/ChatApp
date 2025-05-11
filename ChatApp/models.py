@@ -58,6 +58,18 @@ class User:
         finally:
             db_pool.release(conn)
 
+#個人チャットクラス
+class Private_chats:
+    @classmethod
+    def get_user_by_id(user_id):
+        #指定したユーザーの情報を取得する
+        conn = db_pool.get_conn()
+        with conn.cursor() as cursor:
+            cursor.execute("SELECT uid, user_name, email, is_admin FROM user WHERE uid = %s", (user_id))
+            user = cursor.fetchone()
+        conn.close()
+        return user
+
 #グループクラス
 class Group:            
     @classmethod
