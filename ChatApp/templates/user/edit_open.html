@@ -27,13 +27,13 @@
         </div>
         <div>
           <input
-             type="text"
-             placeholder="オープンチャット説明文"
-             name="open_description"
-             id="possword-input"
+            type="text"
+            placeholder="オープンチャット説明文"
+            name="open_description"
+            id="possword-input"
           />
-     </div>
-       <div class="open-button-container"> <!--ボタンの幅等-->
+        </div>
+      <div class="open-button-container"> <!--ボタンの幅等-->
           {% with messages = get_flashed_messages() %} <!-- flash message:ユーザーが操作をしたときに、画面にその結果を表示する機能やメッセージのこと。ログインした。投稿した。ログインできなかった。-->
           {% if messages %} 
           <ul class="flashes"> 
@@ -43,7 +43,7 @@
           </ul>
           {% endif %} {% endwith %} 
           <button class="edit-channel-button white">作成</button>
-       </div>
+      </div>
     </form>
   </div>
   {% endblock %}

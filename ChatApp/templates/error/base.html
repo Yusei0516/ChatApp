@@ -1,15 +1,15 @@
 <!DOCTYPE html>
 <html lang="ja">
-  <head>
-        <meta charset="UTF-8" />
-        <meta http-equiv="X-UA-Compatible" content="IE-edge" />
-        <meta name="viewport" content="width=device-width, initial-scale=1.0" /> <!--viewportとは、PCやモバイル（スマホ、タブレット）といったデバイスごとにコンテンツの表示領域を設定するためのHTML属性値（meta要素のname属性の属性値）のこと-->
-        <title>{% block title %}{% endblock %}</title>
-        <link
-        rel="stylesheet"
-        href="{{ url_for('static', filename='gen/bundled.css') }}"  
-        />
-        <link rel="icon" href="../static/img/icon.png"/>
-  </head>
- {% block body %} {% endblock %}
+      <head>
+            <meta charset="UTF-8" />
+            <meta http-equiv="X-UA-Compatible" content="IE-edge" />
+            <meta name="viewport" content="width=device-width, initial-scale=1.0" /> <!--viewportとは、PCやモバイル（スマホ、タブレット）といったデバイスごとにコンテンツの表示領域を設定するためのHTML属性値（meta要素のname属性の属性値）のこと-->
+            <title>{% block title %}{% endblock %}</title>
+            <link
+            rel="stylesheet"
+            href="{{ url_for('static', filename='gen/bundled.css') }}"  
+            />
+            <link rel="icon" href="../static/img/icon.png"/>
+      </head>
+      {% block body %} {% endblock %}
 </html>
