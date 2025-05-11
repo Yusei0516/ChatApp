@@ -17,52 +17,52 @@
 </header>
 <div class="auth-wrapper">
   <div class="auth-container">
-     <form class="auth-form signup" method="post">
+      <form class="auth-form signup" method="post">
         <h1 class="auth-title">新規登録</h1>
         <div> <!-- ニックネーム入力欄-->
           <input
-             type="text"
-             placeholder="ニックネーム"
-             name="name"
-             id="signup-name-input"
+            type="text"
+            placeholder="ニックネーム"
+            name="name"
+            id="signup-name-input"
           />  
         </div>
         <div> <!--メールアドレス入力欄-->
           <input
-             type="text" 
-             placeholder="メールアドレス"
-             name="email"
-             id="signup-email-input"
+            type="text" 
+            placeholder="メールアドレス"
+            name="email"
+            id="signup-email-input"
           />
         </div>   
         <div> <!--パスワード入力欄-->
           <input
-             type="password"
-             placeholder="パスワード"
-             name="password"
-             id="signup-password-input"
+            type="password"
+            placeholder="パスワード"
+            name="password"
+            id="signup-password-input"
           />   
         </div>
         <div> <!--パスワード再入力-->
           <input
-             type="password"
-             placeholder="パスワード（確認用）" 
-             name="password-confirmation"
-             id="signup-password-confirmation-input"
+            type="password"
+            placeholder="パスワード（確認用）" 
+            name="password-confirmation"
+            id="signup-password-confirmation-input"
           />
         </div>
         <div class="auth-button-container">
           {% with messages = get_flashed_messages() %} <!-- flash message:ユーザーが操作をしたときに、画面にその結果を表示する機能やメッセージのこと。ログインした。投稿した。ログインできなかった。-->
           {% if messages %} <!-- withは endwithの箇所まで、変数になりますよという文言。if:条件分岐。for ループ-->
           <ul class="flashes">
-             {% for message in messages %} 
-             <li>{{ message }}</li>
-             {% endfor %} <!-- forのループがここで終了-->
+            {% for message in messages %} 
+            <li>{{ message }}</li>
+            {% endfor %} <!-- forのループがここで終了-->
           </ul>
           {% endif %} {% endwith%} <!-- if文・with変数がここで終了-->
           <button class="auth-button-white">登録</button>
         </div>
-     </form>
+    </form>
   </div>
 </div>
 {% endblock %}

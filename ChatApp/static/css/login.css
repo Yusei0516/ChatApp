@@ -16,7 +16,7 @@
     display: flex; /* フレックスボックス */
     justify-content: center; /* 中央寄せ */
     align-items: center; /* 中央寄せ */
-    margin-top: 100px; /* 上マージン */
+    margin-top: 64px; /* 上マージン */
     text-align: center; /* テキストを中央寄せ */    
 }
 

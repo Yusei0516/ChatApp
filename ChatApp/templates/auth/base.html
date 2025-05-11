@@ -1,22 +1,22 @@
 <!DOCTYPE html>     <!-- doctype宣言。hmtl5で記載されいていることをブラウザへ伝える。-->
 <html lang ="ja">  <!-- documentの言語を日本語へ-->
-  <head><!--  head ページのメタ情報や外部リソース（スタイルシート、スクリプトなど）を含める部分。ユーザーはみれないが、ブラウザや検索エンジンがこの情報を使用-->
-     <meta charset="UTF-8"> <!-- 日本語を含む文字が正しく表示される-->
-     <meta http-equiv="X-UA-Compatible" content="IE=edge" /> <!-- バグが発生しないように、最新のブラウザバージョンで表示。https://www.bugbugnow.net/2020/02/X-UA-CompatibleIE-edge.html-->
-     <meta name="viewport" content="width=device-width, initial-scale=1.0" /> <!--  CSSと関連している。どのようなデバイスでも画面表示を最適化する文言 https://gmotech.jp/semlabo/seo/blog/howto-viewport/ --> 
-     {% block title %}{% endblock %} <!-- flask (Jinja2) block titleとendblockの間に好きなコードを記載できる。-->
-     <link rel="icon" href="../static/img/icon.png"/>
-     <link rel="stylesheet" href="{{ url_for('static', filename='gen/bundled.css') }}">
-     <link rel="preconnect" href="https://fonts.googleapis.com"> <!-- google fontを利用する文言以下３行-->
-     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-     <link href="https://fonts.googleapis.com/css2?family=Zen+Maru+Gothic&display=swap" rel="stylesheet">
-  </head>
-  <body>
-     <div>
-     {% block body %}{% endblock %}
-     </div>
-  </body>
- </html>
+   <head><!--  head ページのメタ情報や外部リソース（スタイルシート、スクリプトなど）を含める部分。ユーザーはみれないが、ブラウザや検索エンジンがこの情報を使用-->
+      <meta charset="UTF-8"> <!-- 日本語を含む文字が正しく表示される-->
+      <meta http-equiv="X-UA-Compatible" content="IE=edge" /> <!-- バグが発生しないように、最新のブラウザバージョンで表示。https://www.bugbugnow.net/2020/02/X-UA-CompatibleIE-edge.html-->
+      <meta name="viewport" content="width=device-width, initial-scale=1.0" /> <!--  CSSと関連している。どのようなデバイスでも画面表示を最適化する文言 https://gmotech.jp/semlabo/seo/blog/howto-viewport/ --> 
+      {% block title %}{% endblock %} <!-- flask (Jinja2) block titleとendblockの間に好きなコードを記載できる。-->
+      <link rel="icon" href="../static/img/icon.png"/>
+      <link rel="stylesheet" href="{{ url_for('static', filename='gen/bundled.css') }}">
+      <link rel="preconnect" href="https://fonts.googleapis.com"> <!-- google fontを利用する文言以下３行-->
+      <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+      <link href="https://fonts.googleapis.com/css2?family=Zen+Maru+Gothic&display=swap" rel="stylesheet">
+   </head>
+   <body>
+      <div>
+      {% block body %}{% endblock %}
+      </div>
+   </body>
+</html>
 
 <!-- メモ　-->
 <!-- preconnectは外部リンクのネットワーク接続を事前に行う指定-->
