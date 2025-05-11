@@ -12,6 +12,11 @@
     line-height: 32px; /* 行の高さ */
 }
 
+.switch-auth-mode:hover {
+    transform: scale(1.05); /* 少し拡大 */
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.6); /* 影を強調 */
+}
+
 .auth-wrapper {
     display: flex; /* フレックスボックス */
     justify-content: center; /* 中央寄せ */
@@ -38,4 +43,9 @@
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5); /* 影をつける */
     white-space: nowrap; /* テキストを折り返さない */
     line-height: 0px; /* 行の高さ */
+}
+
+.auth-button-white:hover {
+  transform: scale(1.05); /* 少し拡大 */
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.6); /* 影を強調 */
 }

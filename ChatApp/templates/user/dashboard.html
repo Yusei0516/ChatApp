@@ -17,14 +17,14 @@
         <div class="page-title">
           <h1>チャットルーム一覧</h1>        
         </div>
-        <div id="private_chat">
-          <a href="{{ url_for('enter_private_chat') }}"> 
-            個人チャット
+        <div id="private_chat_group_chat">
+          <a href="{{ url_for('enter_private_chat') }}" class="chat-btn chat-private-btn"> 
+            個人<br>チャット
           </a> 
         </div>
         <div id="group_chat">
-          <a href="{{ url_for('group_chat_redirect') }}"> 
-            グループチャット
+          <a href="{{ url_for('group_chat_redirect') }}" class="chat-btn chat-group-btn"> 
+            グループ<br>チャット
           </a> 
         </div>
         <div id="open chat channels-list">

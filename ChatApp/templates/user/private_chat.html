@@ -6,10 +6,10 @@
 {% block body %}
 <header>
     <div>
-      <img
-          src="{{ url_for('static' ,filename='img/hagyutto-logo.png')}}"
-          alt="logo"
-      /> 
+        <img
+            src="{{ url_for('static' ,filename='img/hagyutto-logo.png')}}"
+            alt="logo"
+        /> 
     </div>
 </header>
 
@@ -57,7 +57,7 @@
 {% block script%}
 <script type="text/javascript">
    // prettier-ignore 
-   const uid = JSON.parse('{{ uid|tojson }}');
+    const uid = JSON.parse('{{ uid|tojson }}');
 </script>
 <script 
    src="{{ url_for('static','filename='js/scroll-message.js') }}"
@@ -68,8 +68,8 @@
 <!-- 以下コメントアウト -->
 {#
 <script
-   src="{{ url_for,filename='@@@@@@@'}}"
-   type="text/javascript"
+    src="{{ url_for,filename='@@@@@@@'}}"
+    type="text/javascript"
 ></script> <!-- urlは後日要確認-->
 {% endblock %}
 #}
