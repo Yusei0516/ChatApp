@@ -1,7 +1,7 @@
 from flask import Flask, request, redirect, render_template, session, flash, abort, url_for
 from datetime import timedelta
 import hashlib, uuid, re, os
-from models import User, Group, GroupMessage, OpenChat
+from models import User, Group, GroupMessage, OpenChat, OpenChatMessage
 # from util.assets import bundle_css_files
  
 # 定数定義
@@ -296,11 +296,11 @@ def group_chat_redirect():
         flash("グループに所属していません")    
         return redirect(url_for('user_dashboard'))
 
-    return redirect(url_for('group_view',group_id=group['id']))
+    return redirect(url_for('group_view',id=group['id']))
 
 #管理者用グループチャット
 @app.route('/admin/group_list', methods=['GET'])
-def admin_group_chat_redirect():
+def admin_group_list():
     uid = session.get('uid')
     if uid is None:
         return redirect(url_for('login_view'))
@@ -312,59 +312,109 @@ def admin_group_chat_redirect():
     return render_template('admin/group_list.html', groups=groups)
 
 #グループチャット(管理者、一般ユーザ共通)
-@app.route('/group_view/<int:group_id>/messages', methods=['GET','POST'])
-def group_view(group_id):
+@app.route('/group_view/<int:id>/messages', methods=['GET','POST'])
+def group_view(id):
     uid = session.get('uid')
     if uid is None:
         return redirect(url_for('login_view'))
 
-    group = Group.find_by_id(group_id)
+    group = Group.find_by_id(id)
     if request.method == 'POST':
         message = request.form.get('message')
         if message:
-            GroupMessage.create(uid, group_id, message)
-        return redirect(url_for('group_view', group_id=group_id))
+            GroupMessage.create(uid, id, message)
+        return redirect(url_for('group_view', id=id))
 
-    messages = GroupMessage.get_all(group_id)
+    messages = GroupMessage.get_all(id)
     return render_template('user/group_chat.html', group=group, messages=messages)
 
 #管理者用グループチャット右上編集ボタン→管理者用チャンネル編集
-@app.route('/admin/create_group/<int:group_id>', methods=['GET','POST'])
-def create_group(group_id):
+@app.route('/admin/create_group/<int:id>', methods=['GET','POST'])
+def create_group(id):
     uid = session.get('uid')
     if uid is None or not Group.is_admin(uid):
         flash("管理者専用ページです")
         return redirect(url_for('login_view'))
     
-    group = Group.find_by_id(group_id)
+    group = Group.find_by_id(id)
     if request.method == 'POST':
         name = request.form.get('name')
         description = request.form.get('description')
         if name:
-            Group.update(group_id, name, description)
+            Group.update(id, name, description)
             flash("グループ情報を更新しました")
-            return redirect(url_for('create_group', group_id=group_id))
+            return redirect(url_for('create_group', id=id))
     
     return render_template('admin/create_group.html', group=group)
 
 #管理者用メンバー登録、削除(ページ遷移のみ)
-@app.route('/admin/member_create/<int:group_id>', methods=['GET'])
-def member_create(group_id):
+@app.route('/admin/member_create/<int:id>', methods=['GET'])
+def member_create(id):
     uid = session.get('uid')
     if uid is None or not Group.is_admin(uid):
         flash("管理者専用ページです")
         return redirect(url_for('login_view'))
     
-    group = Group.find_by_id(group_id)
+    group = Group.find_by_id(id)
     return render_template('admin/member_create.html', group=group)
 
 #グループ一覧→オープンチャット(ページ遷移のみ)
-@app.route('/open_chat/<int:opc_id>', methods=['GET'])
-def open_chat(opc_id):
+@app.route('/open_chat/<int:id>', methods=['GET'])
+def open_chat(id):
     uid = session.get('uid')
     if uid is None:
         return redirect(url_for('login_view'))
-    return render_template('user/open_chat.html',opc_id=opc_id)
+    return render_template('user/open_chat.html',id=id)
+
+#管理者用オープンチャット一覧
+@app.route('/admin/open_list', methods=['GET'])
+def admin_open_list():
+    uid = session.get('uid')
+    if uid is None:
+        return redirect(url_for('login_view'))
+    
+    if not Group.is_admin(uid):
+        return redirect(url_for('login_view'))
+
+    open_room = OpenChat.get_all()
+    return render_template('admin/open_list.html', open_room = open_room)
+
+#オープンチャット(管理者、一般ユーザ共通)
+@app.route('/open_view/<int:id>/messages', methods=['GET','POST'])
+def open_view(id):
+    uid = session.get('uid')
+    if uid is None:
+        return redirect(url_for('login_view'))
+
+    opens = OpenChat.find_by_id(id)
+    if request.method == 'POST':
+        message = request.form.get('message')
+        if message:
+            OpenChatMessage.create(uid, id, message)
+        return redirect(url_for('open_view', id=id))
+
+    messages = OpenChatMessage.get_all(id)
+    return render_template('user/open_chat.html', opens=opens, messages=messages)
+
+#管理者用オープンチャット右上編集ボタン→管理者用チャンネル編集
+@app.route('/admin/create_open/<int:id>', methods=['GET','POST'])
+def create_open(id):
+    uid = session.get('uid')
+    if uid is None or not Group.is_admin(uid):
+        flash("管理者専用ページです")
+        return redirect(url_for('login_view'))
+    
+    open = OpenChat.find_by_id(id)
+    if request.method == 'POST':
+        name = request.form.get('name')
+        description = request.form.get('description')
+        if name:
+            OpenChat.update(id, name, description)
+            flash("グループ情報を更新しました")
+            return redirect(url_for('create_open', id=id))
+    
+    return render_template('admin/create_open.html', open=open)
+
 
 if __name__ == '__main__': 
     app.run(host="0.0.0.0", debug=True)
