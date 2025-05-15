@@ -88,7 +88,7 @@ def login_process():
                 flash('パスワードが間違っています')
             else:
                 #正しくログインできたのでセッションに保存
-                session['uid'] = user["uid"]
+                session['user_id'] = user["uid"]
                 session['is_admin'] = user["is_admin"]
                 #管理者の判定
                 if user['is_admin'] == 1:
