@@ -88,7 +88,7 @@ def login_process():
                 flash('パスワードが間違っています')
             else:
                 #正しくログインできたのでセッションに保存
-                session['uid'] = user["uid"]
+                session['user_id'] = user["uid"]
                 session['is_admin'] = user["is_admin"]
                 #管理者の判定
                 if user['is_admin'] == 1:
@@ -133,20 +133,20 @@ def open_list_view():
 #管理者：個人チャット一覧へ
 @app.route('/admin/private/list', methods=['GET'])
 def private_list_view():
-    if not is_admin():
+    if not session.get('is_admin'):
         return redirect(url_for("login_view"))
-    users = User.get_all_users()
+    users = Private_chats.get_all_users()
     return render_template('admin/private_list.html', users=users)
 
 #個人チャット画面
 @app.route("/private_chat/<user_id>")
 def private_chat(user_id):
-    admin = User.get_admin()
+    admin = Private_chats.get_admin()
     if not admin:
         return redirect(url_for("login_view"))
     
     #チャットIDの取得
-    chat_id = Private_chats.get_chat_id(admin["uid"], user_id)
+    chat_id = Private_chat_message.get_chat_id(admin["uid"], user_id)
 
     #チャットが存在しない場合
     if not chat_id:
@@ -248,12 +248,12 @@ def enter_private_chat():
     if not user_id:
         return redirect(url_for("login_view"))
     
-    admin = User.get_admin()
+    admin = Private_chats.get_admin()
     if not admin:
         return "管理者が存在しません"
     
     #チャットID取得
-    chat_id = Private_chats.get_chat_id(admin["uid"], user_id)
+    chat_id = Private_chat_message.get_chat_id(admin["uid"], user_id)
 
     #チャットが存在しない場合
     if not chat_id:
