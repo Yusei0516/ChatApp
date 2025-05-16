@@ -1,4 +1,4 @@
-{% extends 'user/base.html' %} 
+{% extends 'admin/base.html' %} 
 {% block title %}
 <title>group_chatroom</title>
 {% endblock %} 
@@ -10,6 +10,11 @@
             src="{{ url_for('static' ,filename='img/hagyutto-logo.png')}}"
             alt="logo"
         > 
+    </div>
+    <div>
+        <form>
+             <button class="button-white">編集</button>
+        </form>
     </div>
 </header>
 

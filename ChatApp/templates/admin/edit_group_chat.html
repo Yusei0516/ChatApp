@@ -1,6 +1,6 @@
-{% extends 'user/base.html' %} 
+{% extends 'admin/base.html' %} 
 {% block title %}
-<title>edit-open-channel</title>
+<title>edit-group-channel</title>
 {% endblock %} 
 
 {% block body %}
@@ -15,31 +15,31 @@
 <div class="main-wrapper">
     <div class="main-container">
         <div class="page-title">
-          <h1>オープンチャット編集</h1>        
+          <h1>グループチャット編集</h1>        
         </div>
         <form class ='chat-form' method="post"> 
             <div>
                 <input
                 type="text"
-                placeholder="オープンチャット名" 
+                placeholder="グループチャット名" 
                 name="name"
-                id="edit-open-channel-name"
-                /> <!-- nameタグをバックエンドへ連絡-->
+                id="edit-group-channel-name"
+                /> 
             </div>
             <div>
               <input
                 type="text"
-                placeholder="オープンチャット説明文"
-                name="open_description"
-                id="possword-input"
+                placeholder="グループチャット説明文"
+                name="group_description"
+                id="group_description"
               />
         </div>
-          <div class="button-container"> <!--ボタンの幅等-->
-              {% with messages = get_flashed_messages() %} <!-- flash message:ユーザーが操作をしたときに、画面にその結果を表示する機能やメッセージのこと。ログインした。投稿した。ログインできなかった。-->
+          <div class="button-container"> 
+              {% with messages = get_flashed_messages() %} 
               {% if messages %} 
               <ul class="flashes"> 
-                {% for message in messages %} <!-- Flask:バックエンド側にてmessagesの中に複数のエラー分が入っており、その中からmessageが出てくるようになっている。for:ループ。@がない。大文字を使用してね。等-->
-                  <li>{{ message }}</li> <!-- エラーが出た分だけ、messageが表示される。-->
+                {% for message in messages %} 
+                  <li>{{ message }}</li>
                 {% endfor %}
               </ul>
               {% endif %} {% endwith %} 
