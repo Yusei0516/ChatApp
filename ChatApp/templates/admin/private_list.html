@@ -1,6 +1,6 @@
 {% extends 'admin/base.html' %} 
 {% block title %}
-<title>admin home</title>
+<title>admin_private_chat_list</title>
 {% endblock %}
 
 {% block body %}
@@ -21,9 +21,15 @@
         <div id="admin_private_chat_list">
           <ul>
               <div>
-                 {% for user in users %}
-                  <li>{{ user }}</li> <!-- user_name?-->
-                 {% endfor %}
+                  {% for user in users %}
+                    <form>
+                        <a calss="private_name_list" href="{{ url_for('private_chat') }}">
+                          <button>
+                          <li>{{ user.user_name }}</li> 
+                          </button>
+                        </a>
+                    </form>
+                  {% endfor %}
               </div>    
           </ul>
         </div> 
