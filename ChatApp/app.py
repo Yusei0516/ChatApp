@@ -154,7 +154,7 @@ def private_chat(user_id):
     
     #メッセージ取得
     messages = Private_chat_message.get_message(chat_id)
-    return render_template("HTMLファイル名", messages=messages, chat_id=chat_id, user_id=user_id)
+    return render_template("chat/private_chat.html", messages=messages, chat_id=chat_id, user_id=user_id)
 
 #管理者メニューまとめ(グループチャット作成)
 @app.route('/admin_menu/group/create', methods=['GET'])
@@ -261,7 +261,7 @@ def enter_private_chat():
     
     #メッセージ取得
     messages = Private_chat_message.get_message(chat_id)
-    return render_template("HTMLファイル名", messages=messages, chat_id=chat_id, user_id=user_id)
+    return render_template("chat/private_chat.html", messages=messages, chat_id=chat_id, user_id=user_id)
 
 #メッセージ送信
 @app.route("/send_message", methods=["POST"])
