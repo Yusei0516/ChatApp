@@ -263,12 +263,13 @@ button {
     padding-left: 4px; /* 左パディング */
 }
 
-.admin-chat{
+.admin-chat {
     display: flex; /* フレックスボックス */
-    gap: 16px;
-    margin: auto;
-    padding-top: 16px;
-
+    flex-direction: column; /* 縦方向に配置 */
+    justify-content: space-evenly; /* 均等配置 */
+    align-items: center; /* 横中央寄せ */
+    height: 60vh; /* 必要に応じて調整 */
+    margin-top: 32px; /* 上マージン */
 }
 
 .admin-chat-btn a {
