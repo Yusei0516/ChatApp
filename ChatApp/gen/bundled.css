@@ -19,6 +19,10 @@
     box-sizing: border-box; /* ボックスモデルを指定 */
 }
 
+li {
+    list-style: none; /* リストスタイルをなしにする */
+}
+
 header {
     background-color: var(--all_white); /* ヘッダーの背景色 */
     width: 100%; /* ヘッダーの幅 */
