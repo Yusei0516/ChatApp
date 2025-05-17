@@ -73,16 +73,6 @@ CREATE TABLE open_chats (
 
 CREATE TABLE open_chat_messages (
     id INT AUTO_INCREMENT PRIMARY KEY,
-<<<<<<< HEAD
-    open_chat_id INT NOT NULL,
-    user_id  VARCHAR(255) NOT NULL,
-    content TEXT,
-    created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    FOREIGN KEY (open_chat_id) REFERENCES open_chats(id) ON DELETE CASCADE,
-    FOREIGN KEY (user_id) REFERENCES users(uid) ON DELETE CASCADE
-);
-
-=======
     opne_chat_id INT NOT NULL,
     user_id  VARCHAR(255) NOT NULL,
     content TEXT,
@@ -96,7 +86,6 @@ INSERT INTO users (uid, user_name, email, password, is_admin) VALUES ('admin123'
 INSERT INTO open_chat(creator_id, name, description, is_open) VALUES('b9ec6802-f2a2-4069-81ee-3909ec6851ad', 'アニメ好き集まれ', '好きなアニメについて話しましょう！', TRUE);
 INSERT INTO open_chat(creator_id, name, description, is_open) VALUES('b9ec6802-f2a2-4069-81ee-3909ec6851ad', 'ドラマ好き集まれ', '好きなドラマについて話しましょう！', TRUE);
 INSERT INTO open_chat(creator_id, name, description, is_open) VALUES('b9ec6802-f2a2-4069-81ee-3909ec6851ad', 'バンド好き集まれ', '好きなバンドについて話しましょう！', TRUE);
->>>>>>> 30e96e3a66b04a45a46acc86337dea9495afc6de
 INSERT INTO users(uid, user_name, email, password, is_admin) VALUES ('admin123456789', '管理者', 'adminFteam@example.com', '9d73b154738103148a0baae3bb4b0067fbbb230b9cf50c04db70d6393d324c42', TRUE);
 INSERT INTO users(uid, user_name, email, password, is_admin) VALUES('b9ec6802-f2a2-4069-81ee-3909ec685','たなかまき','test@gmail.com','ae5deb822e0d71992900471a7199d0d95b8e7c9d05c40a8245a281fd2c1d6684', FALSE);
 INSERT INTO group_chats(name, creator_id, is_open) VALUES('開発者グループ', 'admin123456789', FALSE);

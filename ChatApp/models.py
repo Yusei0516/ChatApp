@@ -58,8 +58,19 @@ class User:
         finally:
             db_pool.release(conn)
 
-#ユーザー関連のデータ操作をまとめたクラス
-class UserModel:
+
+    @classmethod
+    def get_all(cls):
+        conn = db_pool.get_conn()
+        try:
+            with conn.cursor(pymysql.cursors.DictCursor) as cur:
+                cur.execute("SELECT uid, user_name FROM users")
+                return cur.fetchall()
+        finally:
+            db_pool.release(conn)
+
+#個人チャットクラス
+class Private_chats:
     @staticmethod
     def get_user_by_id(user_id):
         #指定したユーザーの情報を取得する
