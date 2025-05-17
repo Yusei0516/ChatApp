@@ -69,8 +69,8 @@ class User:
         finally:
             db_pool.release(conn)
 
-#個人チャットクラス
-class Private_chats:
+#ユーザー関連のデータ操作をまとめたクラス
+class UserModel:
     @staticmethod
     def get_user_by_id(user_id):
         #指定したユーザーの情報を取得する
