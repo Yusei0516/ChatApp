@@ -1,7 +1,7 @@
 from flask import Flask, request, redirect, render_template, session, flash, abort, url_for
 from datetime import timedelta
 import hashlib, uuid, re, os
-from models import User, Group, GroupMessage, OpenChat, OpenChatMessage
+from models import User, Group, GroupMessage, OpenChat, OpenChatMessage, Private_chats, Private_chat_message
 # from util.assets import bundle_css_files
  
 # 定数定義
@@ -88,7 +88,7 @@ def login_process():
                 flash('パスワードが間違っています')
             else:
                 #正しくログインできたのでセッションに保存
-                session['uid'] = user["uid"]
+                session['user_id'] = user["uid"]
                 session['is_admin'] = user["is_admin"]
                 #管理者の判定
                 if user['is_admin'] == 1:
@@ -104,12 +104,20 @@ def logout():
     session.clear()
     return redirect(url_for('login_view'))
 
+#管理者判定
+def is_admin():
+    user_id = session.get("user_id")
+    if not user_id:
+        return False
+    user = User.get_user_by_id(user_id)
+    return user["is_admin"]
+
 #管理者用ダッシュボード
 @app.route('/admin_dashboard')
 def admin_dashboard():
     if not session.get('is_admin'):
         flash('権限がありません')
-        return redirect(url_for('user_dashboard'))
+        return redirect(url_for('login_view'))
     return render_template('admin/dashboard.html')
 
 # #管理者：グループチャット一覧へ
@@ -125,7 +133,28 @@ def open_list_view():
 #管理者：個人チャット一覧へ
 @app.route('/admin/private/list', methods=['GET'])
 def private_list_view():
-    return render_template('admin/private_list.html')
+    if not session.get('is_admin'):
+        return redirect(url_for("login_view"))
+    users = Private_chats.get_all_users()
+    return render_template('admin/private_list.html', users=users)
+
+#個人チャット画面
+@app.route("/private_chat/<user_id>")
+def private_chat(user_id):
+    admin = Private_chats.get_admin()
+    if not admin:
+        return redirect(url_for("login_view"))
+    
+    #チャットIDの取得
+    chat_id = Private_chat_message.get_chat_id(admin["uid"], user_id)
+
+    #チャットが存在しない場合
+    if not chat_id:
+        return "チャットが存在しません"
+    
+    #メッセージ取得
+    messages = Private_chat_message.get_message(chat_id)
+    return render_template("chat/private_chat.html", messages=messages, chat_id=chat_id, user_id=user_id)
 
 #管理者メニューまとめ(グループチャット作成)
 @app.route('/admin_menu/group/create', methods=['GET'])
@@ -207,7 +236,46 @@ def delete_open_chat(chat_id):
 #一般ユーザー用ダッシュボード
 @app.route('/user_dashboard')
 def user_dashboard():
+    user_id = session.get("user_id")
+    if not user_id:
+        return redirect(url_for("login_view"))
     return render_template('user/dashboard.html')
+
+#ユーザー：個人チャットへ
+@app.route('/user/private/chat', methods=['GET'])
+def enter_private_chat():
+    user_id = session.get("user_id")
+    if not user_id:
+        return redirect(url_for("login_view"))
+    
+    admin = Private_chats.get_admin()
+    if not admin:
+        return "管理者が存在しません"
+    
+    #チャットID取得
+    chat_id = Private_chat_message.get_chat_id(admin["uid"], user_id)
+
+    #チャットが存在しない場合
+    if not chat_id:
+        return "チャットが存在しません"
+    
+    #メッセージ取得
+    messages = Private_chat_message.get_message(chat_id)
+    return render_template("chat/private_chat.html", messages=messages, chat_id=chat_id, user_id=user_id)
+
+#メッセージ送信
+@app.route("/send_message", methods=["POST"])
+def send_message():
+    user_id = session("user_id")
+    chat_id = request.form("chat_id")
+    content = request.form("content")
+
+    if not user_id or not content:
+        return "無効なリクエストです"
+    
+    Private_chat_message.insert_message(chat_id, user_id, content)
+    return redirect(url_for("enter_private_chat") if not is_admin() else url_for("private_chat", user_id=request.form["user_id"]))
+
 
 #ユーザー：グループチャットへ
 @app.route('/user/group/chat', methods=['GET'])
@@ -223,11 +291,6 @@ def enter_group_chat():
     else:
         flash('あなたはまだグループに招待されていません。')
         return redirect(url_for('user_dashboard'))
-
-#ユーザー：個人チャットへ
-@app.route('/user/private/chat', methods=['GET'])
-def enter_private_chat():
-    return render_template('user/private_chat.html')
 
 # #ユーザーメニューまとめ(オープンチャット作成)
 # @app.route('/user_menu/open/create', methods=['GET'])

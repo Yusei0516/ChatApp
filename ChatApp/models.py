@@ -70,15 +70,76 @@ class User:
 
 #個人チャットクラス
 class Private_chats:
-    @classmethod
+    @staticmethod
     def get_user_by_id(user_id):
         #指定したユーザーの情報を取得する
+        sql = "SELECT uid, user_name, email, is_admin FROM user WHERE uid = %s"
         conn = db_pool.get_conn()
         with conn.cursor() as cursor:
-            cursor.execute("SELECT uid, user_name, email, is_admin FROM user WHERE uid = %s", (user_id))
+            cursor.execute(sql, (user_id))
             user = cursor.fetchone()
         conn.close()
         return user
+
+    @staticmethod
+    def get_admin():
+        #管理者ユーザーの取得('is_admin'カラムで判定)
+        sql = "SELECT uid, user_name FROM users WHERE is_admin = TRUE"
+        conn = db_pool.get_conn()
+        with conn.cursor() as cursor:
+            cursor.execute(sql)
+            admin = cursor.fetchone()
+        conn.close()
+        return admin
+    
+    @staticmethod
+    def get_all_users():
+        #一般ユーザーのリストを取得（管理者を除く）
+        sql = "SELECT uid, user_name FROM users WHERE is_admin = FALSE"
+        conn = db_pool.get_conn()
+        with conn.cursor() as cursor:
+            cursor.execute(sql)
+            users = cursor.fetchall()
+        conn.close()
+        return users
+
+#個別チャットメッセージ
+class Private_chat_message:
+    @staticmethod
+    def get_chat_id(user1_id, user2_id):
+        #チャットIDを取得する。ユーザーが登録された時点でチャットが存在する前提で、
+        #チャットIDがない場合はNoneを返す。
+        sql = "SELECT id FROM private_chats WHERE (user1_id = %s AND user2_id = %s) OR (user1_id = %s AND user2_id = %s)"
+        conn = db_pool.get_conn()
+        with conn.cursor() as cursor:
+            cursor.execute(sql, (user1_id, user2_id, user2_id, user1_id))
+            chat = cursor.fetchone()
+        conn.close()
+        return chat['id'] if chat else None
+    
+    @staticmethod
+    def insert_message(privates_chat_id, user_id, content):
+        #メッセージを送信する
+        sql = "INSERT INTO private_messages (private_chats_id, user_id, content) VALUES (%s, %s, %s)"
+        conn = db_pool.get_conn()
+        with conn.cursor() as cursor:
+            cursor.execute(sql, (privates_chat_id, user_id, content))
+        conn.commit()
+        conn.close()
+    
+    @staticmethod
+    def get_message(privates_chats_id):
+        #指定したチャットIDのメッセージを取得する
+        sql = """
+        SELECT pm.id, pm.user_id, pm.content, pm.created_at, u.user_name FROM private_messages pm JOIN users u 
+        ON pm.user_id = u.uid WHERE pm.private_chats_id = %s ORDER BY pm.created_at ASC
+        """
+        conn = db_pool.get_conn()
+        with conn.cursor() as cursor:
+            cursor.execute(sql, (privates_chats_id,))
+            messages = cursor.fetchall()
+        conn.close()
+        return messages
 
 #グループクラス
 class Group:            

@@ -27,14 +27,18 @@
             グループ<br>チャット
           </a> 
         </div>
-        <div id="open chat channels-list">
-          <ul class="channel-box"></ul> <!-- ul の中にオープンチャンネルが作られる。javascriptにて詳細作成。-->
-        </div>
+        <div id="open_chat_channels-list">
+          <ul class="channel-box"> 
+              <a href="#" >
+                1.chat room
+              </a> 
+          </ul>
+        </div> 
     </div>
 </div>
 {% endblock %} 
 
-<!-- 以下コメントアウト -->
+<!-- 以下不要かと。後日削除 -->
 {#
 {% block script%}
 <script type="text/javascript">
@@ -44,7 +48,7 @@
   const uid = JSON.parse('{{ uid|tojson}}')
 </script>
 <script
-  src="{{url-for('static',filename='js/channels/create-channel.js')}}"
+  src="{{url_for('static',filename='js/channels/create-channel.js')}}"
   type="module"
 ></script>
 <script
@@ -55,9 +59,8 @@
   src="{{url_for('static',filename='js/channels/delete-channel.js')}}"
   type="module"
 ></script> 
-  {% endblock %}
+{% endblock %}
 #}
-  
 
 
 <!-- ハンバーガーメニューは、javascriptにて作成する。-->

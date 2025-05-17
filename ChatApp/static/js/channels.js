@@ -1,4 +1,4 @@
-// open chat 要素の作成
+// open chat 要素の作成 不要のため削除
 
 const ul = document.querySelector(".channel-box");
 channels.forEach(channel) 
