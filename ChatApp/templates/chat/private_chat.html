@@ -1,0 +1,79 @@
+{% extends 'user/base.html' %} 
+{% block title %}
+<title>private_chatroom</title>
+{% endblock %} 
+
+{% block body %}
+<header>
+    <div>
+        <img
+            src="{{ url_for('static' ,filename='img/hagyutto-logo.png')}}"
+            alt="logo"
+        /> 
+    </div>
+</header>
+
+<div class="main-wrapper">
+    <div class ="main-container">
+        <div class = "page-title">
+            <p>お悩み相談室</p> 
+        </div>
+        <div id ="message-area">
+            {% if messages|length > 0 %} <!-- メッセージの長さが1以上だと送信可能 -->
+            {% for message in messages %} <!-- 複数メッセージの中から、順に一つだけ選択し20行目以降のループをする。このmessageには、バックエンドに記載している①UID②CID③messageが含まれている-->
+            {% if message.uid == uid %} <!-- メッセージを送信したユーザーが、ログインしているユーザーと同じ場合、以下適用する。-->
+            <div class="my-messages">
+                <p class="box box-right">{{ message.message }}</p> <!-- 左のメッセージには、①UID②CID③messageが含まれており、その中のmessageを表示させる文言-->
+                <form
+                action="/user/dashboard/{{ uid }}/messages/{{ message.id }}"
+                method="POST"
+                > <!-- url。message.id = 送信したメッセージとなる。 例：user/dashboard/private//{#{ channnel.id (例1,2,3)}#}/{#{ message.id }#}-->
+                </form>
+                {% else %} <!-- メッセージを送信したユーザーが、ログインしているユーザーと異なる場合。-->
+                <div class="messages">
+                <p class="user-name">{{ message.user_name }}</p> <!--メッセージには、①UID②CID③messageが含まれており、その中のuserを表示させる文言-->
+                <p class="box box-left">{{ message.message }}</p> <!--メッセージには、①UID②CID③messageが含まれており、その中のメッセージを表示させる文言 -->
+                </div>
+                {% endif %} {% endfor %}  <!-- if&for分の終了 --> 
+                {% else %}
+                <p id="no-message">まだメッセージはありません</p> <!-- 内容相談する。-->
+                {% endif %}
+            </div>
+            <div class="tying-box-wrapper"> <!-- メッセージ入力画面 -->
+                <form class="typing-box" method="POST" name="newMessageForm">
+                <textarea name="message" id="message" autofocus></textarea>
+                <input type="hidden" name="cid" value="{{ private_chat_id  }}" />
+                <button type="submit" id="add-message-button">
+                    <ion-icon name="paper-plane"></ion-icon> <!--紙飛行機のアイコンの表示-->
+                </button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+
+
+{% block script%}
+<script 
+   src="{{ url_for('static', filename='js/scroll-message.js') }}"
+   type="text/javascript"
+>
+</script> 
+{% endblock %}
+
+
+<!-- <form>タグは、ユーザーからの入力を受け取るためのHTML要素です。主に、データをサーバーに送信するために使用されます。 -->
+<!-- <form>タグにおける”action”は送信先を指定するためのものです。 -->
+<!-- action自体は何のセキュリティも有していないため、フォームの情報をそのまま送信してしまうと第三者に全ての情報が見られてしまうことからこれは絶対に禁止です。-->
+<!-- action:ページのURLになる。-->
+<!-- method 属性は、どのようにデータを送信するかを定義します。  -->
+<!-- <textarea>タグは、複数行のテキスト入力を受け付けるためのHTML要素です。ユーザーが自由にテキストを入力できる領域を提供します。 -->
+<!-- <textarea>タグのname属性は、フォームが送信されたときにサーバーに送信されるデータのキーを指定します-->
+<!-- <textarea>タグにautofocus属性を追加すると、ページが読み込まれたときに自動的にフォーカスが当たります。これにより、ユーザーはすぐに入力を開始できます。 -->
+<!-- input type="hidden">は、ユーザーに表示されない隠しフィールドを作成するためのHTML要素です。主に、フォームデータをサーバーに送信する際に使用されます。 -->
+<!-- <button type="submit">は、フォームを送信するためのボタンを作成します。このボタンがクリックされると、フォーム内のデータが指定されたaction属性のURLに送信されます -->
+<!-- <ion-icon name="paper-plane">は、Ionicフレームワークで使用されるアイコンを表示するためのタグです。name属性には表示したいアイコンの名前を指定します。この場合、paper-planeアイコンが表示されます。 -->
+<!-- // prettier-ignore 特定のコードブロックを一時的に無視するのに適しています。 -->
+<!-- <script type="text/javascript">は、JavaScriptコードをHTML文書に埋め込むためのタグです。type属性は、スクリプトの種類を指定しますが、HTML5ではデフォルトでJavaScriptが使用されるため、type属性は省略可能です。 -->
