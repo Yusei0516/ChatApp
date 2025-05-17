@@ -83,10 +83,6 @@ CREATE TABLE open_chat_messages (
 
 INSERT INTO users (uid, user_name, email, password, is_admin) VALUES ('admin123', '管理者', 'admin@example.com', '9d73b154738103148a0baae3bb4b0067fbbb230b9cf50c04db70d6393d324c42', FALSE);
 -- INSERT INTO users(uid, user_name, email, password) VALUES('970af84c-dd40-47ff-af23-282b72b7cca8','テスト','test@gmail.com','37268335dd6931045bdcdf92623ff819a64244b53d0e746d438797349d4da578');
-INSERT INTO open_chat(creator_id, name, description, is_open) VALUES('b9ec6802-f2a2-4069-81ee-3909ec6851ad', 'アニメ好き集まれ', '好きなアニメについて話しましょう！', TRUE);
-INSERT INTO open_chat(creator_id, name, description, is_open) VALUES('b9ec6802-f2a2-4069-81ee-3909ec6851ad', 'ドラマ好き集まれ', '好きなドラマについて話しましょう！', TRUE);
-INSERT INTO open_chat(creator_id, name, description, is_open) VALUES('b9ec6802-f2a2-4069-81ee-3909ec6851ad', 'バンド好き集まれ', '好きなバンドについて話しましょう！', TRUE);
-INSERT INTO users(uid, user_name, email, password, is_admin) VALUES ('admin123456789', '管理者', 'adminFteam@example.com', '9d73b154738103148a0baae3bb4b0067fbbb230b9cf50c04db70d6393d324c42', TRUE);
 INSERT INTO users(uid, user_name, email, password, is_admin) VALUES('b9ec6802-f2a2-4069-81ee-3909ec685','たなかまき','test@gmail.com','ae5deb822e0d71992900471a7199d0d95b8e7c9d05c40a8245a281fd2c1d6684', FALSE);
 INSERT INTO group_chats(name, creator_id, is_open) VALUES('開発者グループ', 'admin123456789', FALSE);
 INSERT INTO open_chats(name, creator_id, is_open, description) VALUES('アニメ好き集まれ', 'b9ec6802-f2a2-4069-81ee-3909ec6851ad', TRUE, '好きなアニメについて話しましょう！');
