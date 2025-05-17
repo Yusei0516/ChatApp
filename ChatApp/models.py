@@ -27,7 +27,7 @@ class User:
         #メールアドレスでユーザー検索
         conn = db_pool.get_conn()
         try:
-                with conn.cursor() as cur:
+                with conn.cursor(pymysql.cursors.DictCursor) as cur:
                     sql = "SELECT * FROM users WHERE email=%s"
                     cur.execute(sql, (email,))
                     user = cur.fetchone()
@@ -55,6 +55,16 @@ class User:
                 cur.execute(sql, (user_id,))
                 result = cur.fetchone()
                 return result[0] if result else None
+        finally:
+            db_pool.release(conn)
+
+    @classmethod
+    def get_all(cls):
+        conn = db_pool.get_conn()
+        try:
+            with conn.cursor(pymysql.cursors.DictCursor) as cur:
+                cur.execute("SELECT uid, user_name FROM users")
+                return cur.fetchall()
         finally:
             db_pool.release(conn)
 
@@ -155,12 +165,12 @@ class Group:
             db_pool.release(conn)
 
     @classmethod
-    def find_by_id(cls, id):
+    def find_by_id(cls, group_chat_id):
         conn = db_pool.get_conn()
         try:
             with conn.cursor(pymysql.cursors.DictCursor) as cur:
                 sql = "SELECT id, name FROM group_chats WHERE id = %s"
-                cur.execute(sql, (id,))
+                cur.execute(sql, (group_chat_id,))
                 group = cur.fetchone()
                 return group
         except pymysql.Error as e:
@@ -170,12 +180,12 @@ class Group:
             db_pool.release(conn)
             
     @classmethod
-    def update(cls, id, name, description):
+    def update(cls, group_chat_id, name, description):
         conn = db_pool.get_conn()
         try:
             with conn.cursor() as cur:
                 sql = "UPDATE group_chats SET name=%s, description=%s WHERE id=%s"
-                cur.execute(sql, (name, description, id))
+                cur.execute(sql, (name, description, group_chat_id))
                 conn.commit()
         finally:
             db_pool.release(conn)
@@ -199,10 +209,36 @@ class Group:
     def is_admin(cls, uid):
         return uid == "admin123"
 
+    @classmethod
+    def get_member_ids(cls, group_chat_id):
+        conn = db_pool.get_conn()
+        try:
+            with conn.cursor(pymysql.cursors.DictCursor) as cur:
+                sql = ("SELECT user_id FROM group_members WHERE group_chat_id = %s")
+                cur.execute(sql, (group_chat_id,))
+                result = cur.fetchall()
+                return [row['user_id'] for row in result]
+        finally:
+            db_pool.release(conn)
+
+    @classmethod
+    def update_members(cls, group_chat_id, user_ids):
+        conn = db_pool.get_conn()
+        try:
+            with conn.cursor() as cur:
+                sql_delete = "DELETE FROM group_members WHERE group_chat_id = %s"
+                cur.execute(sql_delete, (group_chat_id,))
+                sql_insert = "INSERT INTO group_members (group_chat_id, user_id, created_at) VALUES (%s, %s, NOW())"
+                for uid in user_ids:
+                    cur.execute(sql_insert, (group_chat_id, uid))
+            conn.commit()
+        finally:
+            db_pool.release(conn)
+
 #グループメッセージクラス
 class GroupMessage:
     @classmethod
-    def create(cls, user_id, id, content):
+    def create(cls, user_id, group_chat_id, content):
         conn = db_pool.get_conn()
         try:
             with conn.cursor() as cur:
@@ -210,7 +246,7 @@ class GroupMessage:
                     INSERT INTO group_messages (user_id, group_chat_id, content, created_at)
                     VALUES (%s, %s, %s, NOW())
                 """
-                cur.execute(sql, (user_id, id, content))
+                cur.execute(sql, (user_id, group_chat_id, content))
                 conn.commit()
         except pymysql.Error as e:
             print(f'エラーが発生しています: {e}')
@@ -219,7 +255,7 @@ class GroupMessage:
             db_pool.release(conn)
 
     @classmethod
-    def get_all(cls, id):
+    def get_all(cls, group_chat_id):
         conn = db_pool.get_conn()
         try:
             with conn.cursor(pymysql.cursors.DictCursor) as cur:
@@ -230,7 +266,7 @@ class GroupMessage:
                     WHERE group_messages.group_chat_id = %s
                     ORDER BY group_messages.created_at ASC
                 """
-                cur.execute(sql, (id,))
+                cur.execute(sql, (group_chat_id,))
                 messages = cur.fetchall()
                 return messages
         except pymysql.Error as e:
@@ -315,12 +351,12 @@ class OpenChat:
             db_pool.release(conn)
             
     @classmethod
-    def find_by_id(cls, id):
+    def find_by_id(cls, chat_id):
         conn = db_pool.get_conn()
         try:
             with conn.cursor(pymysql.cursors.DictCursor) as cur:
                 sql = "SELECT * FROM open_chats WHERE id=%s;"
-                cur.execute(sql, (id,))
+                cur.execute(sql, (chat_id,))
                 opc_room = cur.fetchone()
                 return opc_room
         except pymysql.Error as e:
@@ -330,12 +366,12 @@ class OpenChat:
             db_pool.release(conn)
 
     @classmethod
-    def update(cls, id, name, description):
+    def update(cls, chat_id, name, description):
         conn = db_pool.get_conn()
         try:
             with conn.cursor() as cur:
                 sql = "UPDATE open_chats SET name=%s, description=%s WHERE id=%s"
-                cur.execute(sql, (name, description, id))
+                cur.execute(sql, (name, description, chat_id))
                 conn.commit()
         finally:
             db_pool.release(conn)
@@ -343,7 +379,7 @@ class OpenChat:
 #オープンチャットメッセージクラス
 class OpenChatMessage:
     @classmethod
-    def create(cls, user_id, id, content):
+    def create(cls, user_id, chat_id, content):
         conn = db_pool.get_conn()
         try:
             with conn.cursor() as cur:
@@ -351,7 +387,7 @@ class OpenChatMessage:
                     INSERT INTO open_chat_messages (open_chat_id, user_id, content, created_at)
                     VALUES (%s, %s, %s, NOW())
                 """
-                cur.execute(sql, (user_id, id, content))
+                cur.execute(sql, (user_id, chat_id, content))
                 conn.commit()
         except pymysql.Error as e:
             print(f"エラー(create) : {e}")
@@ -360,7 +396,7 @@ class OpenChatMessage:
             db_pool.release(conn)
 
     @classmethod
-    def get_all(cls, room_id):
+    def get_all(cls, chat_id):
         conn = db_pool.get_conn()
         try:
             with conn.cursor(pymysql.cursors.DictCursor) as cur:
@@ -371,7 +407,7 @@ class OpenChatMessage:
                     WHERE open_chat_messages.open_chat_id = %s
                     ORDER BY open_chat_messages.created_at ASC
                 """
-                cur.execute(sql, (room_id,))
+                cur.execute(sql, (chat_id,))
                 return cur.fetchall()
         except pymysql.Error as e:
             print(f"エラー（get_all）: {e}")
