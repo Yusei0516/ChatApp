@@ -1,0 +1,48 @@
+/* mobile-header */
+#mobile-header {
+    display: flex; /* フレックスボックス */
+    margin-top: 80px;
+    flex-direction: column; /* 縦方向に配置 */
+}
+
+#mobile-header ul {
+    text-align: center;
+    padding: 0;
+    margin: 0;
+}
+
+#mobile-header .page-links {
+    display: block;
+    float: none;
+    margin: 64px 0;
+    padding: 0;
+}
+
+.page-links {
+    gap: 16px;
+    margin: auto;
+    padding-top: 16px;
+    
+}
+
+.page-links a {
+    text-decoration: none;
+    color: inherit; /* ボタンの文字色を継承 */
+    display: block; /* aタグ全体をクリック可能に */
+    width: 240px;
+    height: 56px;
+    font-size: 24px;
+    border-radius: 32px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
+    text-align: center;  
+    line-height: 2;
+    transition: all 0.5s ease; /* スムーズなトランジション */
+    cursor: pointer; /* カーソルが手のひらになるように設定 */
+    margin: 24px auto;
+    background-color: var(--all_white);
+}
+
+.page-links a:hover {
+  transform: scale(1.05); /* 少し拡大 */
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.6); /* 影を強調 */
+}
