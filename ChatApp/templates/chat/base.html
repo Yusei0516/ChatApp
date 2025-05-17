@@ -7,7 +7,7 @@
     {% block title %}{% endblock %}
     <link
       rel="stylesheet"
-      href="{{ url_for('static', filename='gen/bundled.css') }}"
+      href="{{ url_for('static', filename='css/dashboard.css') }}"  
     />
     <link rel="preconnect" href="https://fonts.googleapis.com" /> <!-- google fontを利用する文言以下３行-->
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -19,6 +19,10 @@
       rel="icon"
       href="../static/img/icon.png" 
     />
+    <!-- 絵文字の機能追加 -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Color+Emoji&family=Zen+Maru+Gothic&display=swap" rel="stylesheet">
   </head>
   <body>
     {% include 'util/mobile-header.html' %}
@@ -35,7 +39,11 @@
     <script
       src="{{ url_for('static' ,filename='js/sidebar.js') }}"
       type="text/javascript"
-    ></script>  
+    ></script>
+    <script
+      src="{{ url_for('static' ,filename='js/emoji-message.js')  }}"
+      type="text/javascript"
+    ></script>
   </body>
 </html>
 

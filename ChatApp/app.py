@@ -1,7 +1,7 @@
 from flask import Flask, request, redirect, render_template, session, flash, abort, url_for
 from datetime import timedelta
 import hashlib, uuid, re, os
-from models import User, Group, GroupMessage, OpenChat
+from models import User, Group, GroupMessage, OpenChat, OpenChatMessage, Private_chats, Private_chat_message
 # from util.assets import bundle_css_files
  
 # 定数定義
@@ -78,38 +78,46 @@ def login_process():
 
     if email =='' or password == '':
         flash('未入力の項目があります')
-        return redirect(url_for('login_view'))
-
-    user = User.find_by_email(email)
-    if user is None:
-        flash('このユーザーは存在しません')
-        return redirect(url_for('login_view'))
-    
-    hashPassword = hashlib.sha256(password.encode('utf-8')).hexdigest()
-    if hashPassword != user["password"]:
-        flash('パスワードが間違っています')
-        return redirect(url_for('login_view'))
-    
-    #正しくログインできたのでセッションに保存
-    session['uid'] = user["uid"]
-    session['email'] = user["email"]
-
-    #管理者の判定
-    if user['email'] == 'admin@example.com':
-        return redirect(url_for('admin_dashboard'))
-    #一般ユーザー
     else:
-        return redirect(url_for('user_dashboard'))
-    
+        user = User.find_by_email(email)
+        if user is None:
+            flash('このユーザーは存在しません')
+        else:
+            hashPassword = hashlib.sha256(password.encode('utf-8')).hexdigest()
+            if hashPassword != user["password"]:
+                flash('パスワードが間違っています')
+            else:
+                #正しくログインできたのでセッションに保存
+                session['user_id'] = user["uid"]
+                session['is_admin'] = user["is_admin"]
+                #管理者の判定
+                if user['is_admin'] == 1:
+                    return redirect(url_for('admin_dashboard'))
+                #一般ユーザー
+                else:
+                    return redirect(url_for('user_dashboard'))
+    return redirect(url_for('login_view'))
+
 # ログアウト
 @app.route('/logout')
 def logout():
     session.clear()
     return redirect(url_for('login_view'))
 
+#管理者判定
+def is_admin():
+    user_id = session.get("user_id")
+    if not user_id:
+        return False
+    user = User.get_user_by_id(user_id)
+    return user["is_admin"]
+
 #管理者用ダッシュボード
 @app.route('/admin_dashboard')
 def admin_dashboard():
+    if not session.get('is_admin'):
+        flash('権限がありません')
+        return redirect(url_for('login_view'))
     return render_template('admin/dashboard.html')
 
 # #管理者：グループチャット一覧へ
@@ -125,7 +133,28 @@ def open_list_view():
 #管理者：個人チャット一覧へ
 @app.route('/admin/private/list', methods=['GET'])
 def private_list_view():
-    return render_template('admin/private_list.html')
+    if not session.get('is_admin'):
+        return redirect(url_for("login_view"))
+    users = Private_chats.get_all_users()
+    return render_template('admin/private_list.html', users=users)
+
+#個人チャット画面
+@app.route("/private_chat/<user_id>")
+def private_chat(user_id):
+    admin = Private_chats.get_admin()
+    if not admin:
+        return redirect(url_for("login_view"))
+    
+    #チャットIDの取得
+    chat_id = Private_chat_message.get_chat_id(admin["uid"], user_id)
+
+    #チャットが存在しない場合
+    if not chat_id:
+        return "チャットが存在しません"
+    
+    #メッセージ取得
+    messages = Private_chat_message.get_message(chat_id)
+    return render_template("chat/private_chat.html", messages=messages, chat_id=chat_id, user_id=user_id)
 
 #管理者メニューまとめ(グループチャット作成)
 @app.route('/admin_menu/group/create', methods=['GET'])
@@ -146,20 +175,31 @@ def create_open_view():
 app.route('/open_chat/create', methods=['POST'])
 def create_open_chat():
     uesr_id = session.get('uid')
+    is_admin = session.get('is_admin')
     name = request.form.get('name')
     description = request.form.get('description')
 
-    if uesr_id:
-        try:
-            OpenChat.create(name, description, uesr_id)
-            flash('オープンチャットを作成しました。')
-        except Exception as e:
-            flash(f'エラーが発生しました： {str(e)}')
-        #遷移先を判定
-        if uesr_id == 'admin@example.com':
-            return redirect(url_for('admin_dashboard'))
-        else:
-            return redirect(url_for('user_dashboard'))
+    if not uesr_id:
+        flash('ログインしてください')
+        return redirect(url_for('login_view'))
+
+    if not name:
+        flash('チャットルーム名を入力してください')
+        return redirect(url_for('login_view'))
+    
+    if not description:
+        flash('チャットルームの説明を入力してください')
+        return redirect(url_for('login_view'))
+    
+    try:
+        OpenChat.create(name, description, uesr_id)
+        flash('オープンチャットを作成しました。')
+    except Exception as e:
+        flash(f'エラーが発生しました： {str(e)}')
+    #遷移先を判定
+    if is_admin:
+        return redirect(url_for('admin_dashboard'))
+    return redirect(url_for('user_dashboard'))
 
 
 #まとめ(オープンチャット削除)
@@ -171,29 +211,71 @@ def delete_open_view():
 @app.route('/open_chat/delete/<int:chat_id>', methods=['POST'])        
 def delete_open_chat(chat_id):
     user_id = session.get('uid')
+    is_admin = session.get('is_admin')
 
-    if user_id:
-        chat = OpenChat.get(chat_id)
-        if chat['creator_id'] == user_id or user_id == 'admin@example.com':
-            try:
-                OpenChat.delete(chat_id)
-                flash('チャットが削除されました')
-            except Exception as e:
-                flash(f'エラーが発生しました： {str(e)}')
+    if not user_id:
+        flash('ログインしてください')
+        return redirect(url_for('login_view'))
+
+    try:
+        success = OpenChat.delete(chat_id, user_id)
+        if success:
+            flash('チャットが削除されました')
         else:
-            flash('権限がありません')
-        #遷移先を判定
-        if user_id == 'admin@example.com':
-            return redirect(url_for('admin_dashboard'))
-        else:
-            return redirect(url_for('user_dashboard'))
+            flash('削除権限がありません')
+    except Exception as e:
+        flash(f'エラーが発生しました： {str(e)}')
+
+    #遷移先を判定
+    if is_admin:
+        return redirect(url_for('admin_dashboard'))
+    return redirect(url_for('user_dashboard'))
 
 
 
 #一般ユーザー用ダッシュボード
 @app.route('/user_dashboard')
 def user_dashboard():
+    user_id = session.get("user_id")
+    if not user_id:
+        return redirect(url_for("login_view"))
     return render_template('user/dashboard.html')
+
+#ユーザー：個人チャットへ
+@app.route('/user/private/chat', methods=['GET'])
+def enter_private_chat():
+    user_id = session.get("user_id")
+    if not user_id:
+        return redirect(url_for("login_view"))
+    
+    admin = Private_chats.get_admin()
+    if not admin:
+        return "管理者が存在しません"
+    
+    #チャットID取得
+    chat_id = Private_chat_message.get_chat_id(admin["uid"], user_id)
+
+    #チャットが存在しない場合
+    if not chat_id:
+        return "チャットが存在しません"
+    
+    #メッセージ取得
+    messages = Private_chat_message.get_message(chat_id)
+    return render_template("chat/private_chat.html", messages=messages, chat_id=chat_id, user_id=user_id)
+
+#メッセージ送信
+@app.route("/send_message", methods=["POST"])
+def send_message():
+    user_id = session("user_id")
+    chat_id = request.form("chat_id")
+    content = request.form("content")
+
+    if not user_id or not content:
+        return "無効なリクエストです"
+    
+    Private_chat_message.insert_message(chat_id, user_id, content)
+    return redirect(url_for("enter_private_chat") if not is_admin() else url_for("private_chat", user_id=request.form["user_id"]))
+
 
 #ユーザー：グループチャットへ
 @app.route('/user/group/chat', methods=['GET'])
@@ -209,11 +291,6 @@ def enter_group_chat():
     else:
         flash('あなたはまだグループに招待されていません。')
         return redirect(url_for('user_dashboard'))
-
-#ユーザー：個人チャットへ
-@app.route('/user/private/chat', methods=['GET'])
-def enter_private_chat():
-    return render_template('user/private_chat.html')
 
 # #ユーザーメニューまとめ(オープンチャット作成)
 # @app.route('/user_menu/open/create', methods=['GET'])
@@ -282,11 +359,11 @@ def group_chat_redirect():
         flash("グループに所属していません")    
         return redirect(url_for('user_dashboard'))
 
-    return redirect(url_for('group_view',group_id=group['id']))
+    return redirect(url_for('group_view',group_chat_id=group['id']))
 
 #管理者用グループチャット
 @app.route('/admin/group_list', methods=['GET'])
-def admin_group_chat_redirect():
+def admin_group_list():
     uid = session.get('uid')
     if uid is None:
         return redirect(url_for('login_view'))
@@ -298,59 +375,118 @@ def admin_group_chat_redirect():
     return render_template('admin/group_list.html', groups=groups)
 
 #グループチャット(管理者、一般ユーザ共通)
-@app.route('/group_view/<int:group_id>/messages', methods=['GET','POST'])
-def group_view(group_id):
+@app.route('/group_view/<int:group_chat_id>/messages', methods=['GET','POST'])
+def group_view(group_chat_id):
     uid = session.get('uid')
     if uid is None:
         return redirect(url_for('login_view'))
 
-    group = Group.find_by_id(group_id)
+    group = Group.find_by_id(group_chat_id)
     if request.method == 'POST':
         message = request.form.get('message')
         if message:
-            GroupMessage.create(uid, group_id, message)
-        return redirect(url_for('group_view', group_id=group_id))
+            GroupMessage.create(uid, group_chat_id, message)
+        return redirect(url_for('group_view', group_chat_id=group_chat_id))
 
-    messages = GroupMessage.get_all(group_id)
+    messages = GroupMessage.get_all(group_chat_id)
     return render_template('user/group_chat.html', group=group, messages=messages)
 
 #管理者用グループチャット右上編集ボタン→管理者用チャンネル編集
-@app.route('/admin/create_group/<int:group_id>', methods=['GET','POST'])
-def create_group(group_id):
+@app.route('/admin/create_group/<int:group_chat_id>', methods=['GET','POST'])
+def create_group(group_chat_id):
     uid = session.get('uid')
     if uid is None or not Group.is_admin(uid):
         flash("管理者専用ページです")
         return redirect(url_for('login_view'))
     
-    group = Group.find_by_id(group_id)
+    group = Group.find_by_id(group_chat_id)
     if request.method == 'POST':
         name = request.form.get('name')
         description = request.form.get('description')
         if name:
-            Group.update(group_id, name, description)
+            Group.update(group_chat_id, name, description)
             flash("グループ情報を更新しました")
-            return redirect(url_for('create_group', group_id=group_id))
+            return redirect(url_for('create_group', group_chat_id=group_chat_id))
     
     return render_template('admin/create_group.html', group=group)
 
-#管理者用メンバー登録、削除(ページ遷移のみ)
-@app.route('/admin/member_create/<int:group_id>', methods=['GET'])
-def member_create(group_id):
+#管理者用メンバー登録、削除
+@app.route('/admin/member_edit/<int:group_chat_id>', methods=['GET', 'POST'])
+def member_edit(group_chat_id):
+    uid = session.get('uid')
+    if uid is None or not User.is_admin(uid):
+        flash("管理者専用ページです")
+        return redirect(url_for('login_view'))
+
+    if request.method == 'POST':
+        selected_user_ids = request.form.getlist('user_ids')
+        Group.update_members(group_chat_id, selected_user_ids)
+        flash("メンバーを更新しました")
+        return redirect(url_for('member_edit', group_chat_id=group_chat_id))
+
+    all_users = User.get_all()
+    current_member_ids = Group.get_member_ids(group_chat_id)
+    return render_template('admin/member_edit.html',
+                           users=all_users,
+                           member_ids=current_member_ids,
+                           group_chat_id=group_chat_id)
+
+#管理者用オープンチャット一覧
+@app.route('/admin/open_list', methods=['GET'])
+def admin_open_list():
+    uid = session.get('uid')
+    if uid is None:
+        return redirect(url_for('login_view'))
+    
+    if not Group.is_admin(uid):
+        return redirect(url_for('login_view'))
+
+    open_room = OpenChat.get_all()
+    return render_template('admin/open_list.html', open_room = open_room)
+
+#オープンチャット(管理者、一般ユーザ共通)
+@app.route('/open_view/<int:id>/messages', methods=['GET','POST'])
+def open_view(chat_id):
+    uid = session.get('uid')
+    if uid is None:
+        return redirect(url_for('login_view'))
+
+    opens = OpenChat.find_by_id(chat_id)
+    if request.method == 'POST':
+        message = request.form.get('message')
+        if message:
+            OpenChatMessage.create(uid, chat_id, message)
+        return redirect(url_for('open_view', chat_id=chat_id))
+
+    messages = OpenChatMessage.get_all(chat_id)
+    return render_template('user/open_chat.html', opens=opens, messages=messages)
+
+#管理者用オープンチャット右上編集ボタン→管理者用チャンネル編集
+@app.route('/admin/create_open/<int:id>', methods=['GET','POST'])
+def create_open(chat_id):
     uid = session.get('uid')
     if uid is None or not Group.is_admin(uid):
         flash("管理者専用ページです")
         return redirect(url_for('login_view'))
     
-    group = Group.find_by_id(group_id)
-    return render_template('admin/member_create.html', group=group)
+    open = OpenChat.find_by_id(chat_id)
+    if request.method == 'POST':
+        name = request.form.get('name')
+        description = request.form.get('description')
+        if name:
+            OpenChat.update(chat_id, name, description)
+            flash("グループ情報を更新しました")
+            return redirect(url_for('create_open', chat_id=chat_id))
+    
+    return render_template('admin/create_open.html', open=open)
 
-#グループ一覧→オープンチャット(ページ遷移のみ)
-@app.route('/open_chat/<int:opc_id>', methods=['GET'])
-def open_chat(opc_id):
-    uid = session.get('uid')
-    if uid is None:
-        return redirect(url_for('login_view'))
-    return render_template('user/open_chat.html',opc_id=opc_id)
+@app.errorhandler(404)
+def page_not_found(error):
+    return render_template('error/404.html'),404
+
+@app.errorhandler(500)
+def internal_server_error(error):
+    return render_template('error/500.html'),500
 
 if __name__ == '__main__': 
     app.run(host="0.0.0.0", debug=True)

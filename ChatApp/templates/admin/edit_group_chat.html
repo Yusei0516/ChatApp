@@ -1,6 +1,6 @@
-{% extends 'menu/base.html' %} 
+{% extends 'admin/base.html' %} 
 {% block title %}
-<title>create-open-channel</title>
+<title>edit-group-channel</title>
 {% endblock %} 
 
 {% block body %}
@@ -13,43 +13,49 @@
     </div>
 </header>
 <div class="main-wrapper">
-  <div class="main-container">
-      <div class="page-title">
-        <h1>オープンチャット作成</h1>        
-      </div>
-      <form class ='chat-form' method="post"> 
-          <div>
+    <div class="main-container">
+        <div class="page-title">
+          <h1>グループチャット編集</h1>        
+        </div>
+        <form class ='chat-form' method="post"> 
+            <div>
+                <input
+                type="text"
+                placeholder="グループチャット名" 
+                name="name"
+                id="edit-group-channel-name"
+                /> 
+            </div>
+            <div>
               <input
-              type="text"
-              placeholder="オープンチャット名" 
-              name="name"
-              id="create-open-channel-name"
-              /> <!-- nameタグをバックエンドへ連絡-->
+                type="text"
+                placeholder="グループチャット説明文"
+                name="group_description"
+                id="group_description"
+              />
+        </div>
+          <div class="button-container"> 
+              {% with messages = get_flashed_messages() %} 
+              {% if messages %} 
+              <ul class="flashes"> 
+                {% for message in messages %} 
+                  <li>{{ message }}</li>
+                {% endfor %}
+              </ul>
+              {% endif %} {% endwith %} 
+              <button class="button-white">作成</button>
           </div>
-          <div>
-            <input
-              type="text"
-              placeholder="オープンチャット説明文"
-              name="open_description"
-              id="possword-input"
-            />
-          </div>
-          <div class="button-container"> <!--ボタンの幅等-->
-            {% with messages = get_flashed_messages() %} <!-- flash message:ユーザーが操作をしたときに、画面にその結果を表示する機能やメッセージのこと。ログインした。投稿した。ログインできなかった。-->
-            {% if messages %} 
-            <ul class="flashes">
-              {% for message in messages %} <!-- Flask:バックエンド側にてmessagesの中に複数のエラー分が入っており、その中からmessageが出てくるようになっている。for:ループ。@がない。大文字を使用してね。等-->
-                <li>{{ message }}</li> <!-- エラーが出た分だけ、messageが表示される。-->
-              {% endfor %}
-            </ul>
-            {% endif %} {% endwith %} 
-            <button class="button-white">作成</button>
-          </div>
-      </form>
-  </div>
+        </form>
+      </div>
 </div>
-{% endblock %}
+  {% endblock %}
 
+
+
+
+
+
+</div>
 
 <!-- name属性：バックエンドに送ったデータを識別する際の識別子。id要素とは異なり、すべての要素に存在するわけではない。特定の条件を除いて必ずしも一意である必要はないが、普通一意にする。要するにname属性をフロントエンド側で使用することは少なく、バックエンド側のための属性の意味合いが強い。-->
 <!-- name属性は、フォーム要素に名前を付けるための属性です。サーバーに送信されるデータのキーとして使用されます。 -->

@@ -8,12 +8,13 @@ db_pool = DB.init_db_pool()
 #ユーザークラス
 class User:
     @classmethod
-    def create(cls, uid, name, email, password):
+    def create(cls, uid, name, email, password, is_admin=0):
+        #ユーザー作成
         conn = db_pool.get_conn()
         try:
             with conn.cursor() as cur:
-                sql = "INSERT INTO users (uid, user_name, email, password) VALUES (%s, %s, %s, %s)"
-                cur.execute(sql, (uid, name, email, password,))
+                sql = "INSERT INTO users (uid, user_name, email, password, is_admin) VALUES (%s, %s, %s, %s, %s)"
+                cur.execute(sql, (uid, name, email, password, is_admin))
                 conn.commit()
         except pymysql.Error as e:
             print(f'エラーが発生しています：{e}')
@@ -23,9 +24,10 @@ class User:
 
     @classmethod
     def find_by_email(cls, email):
+        #メールアドレスでユーザー検索
         conn = db_pool.get_conn()
         try:
-                with conn.cursor() as cur:
+                with conn.cursor(pymysql.cursors.DictCursor) as cur:
                     sql = "SELECT * FROM users WHERE email=%s"
                     cur.execute(sql, (email,))
                     user = cur.fetchone()
@@ -35,6 +37,14 @@ class User:
             abort(500)
         finally:
             db_pool.release(conn)
+    
+    @classmethod
+    def is_admin(cls, email):
+        # 管理者判定
+        user = cls.find_by_email(email)
+        if user:
+            return user['is_admin'] == 1
+        return False
     
     @classmethod
     def get_usr_group(cls, user_id):
@@ -47,6 +57,89 @@ class User:
                 return result[0] if result else None
         finally:
             db_pool.release(conn)
+
+    @classmethod
+    def get_all(cls):
+        conn = db_pool.get_conn()
+        try:
+            with conn.cursor(pymysql.cursors.DictCursor) as cur:
+                cur.execute("SELECT uid, user_name FROM users")
+                return cur.fetchall()
+        finally:
+            db_pool.release(conn)
+
+#個人チャットクラス
+class Private_chats:
+    @staticmethod
+    def get_user_by_id(user_id):
+        #指定したユーザーの情報を取得する
+        sql = "SELECT uid, user_name, email, is_admin FROM user WHERE uid = %s"
+        conn = db_pool.get_conn()
+        with conn.cursor() as cursor:
+            cursor.execute(sql, (user_id))
+            user = cursor.fetchone()
+        conn.close()
+        return user
+
+    @staticmethod
+    def get_admin():
+        #管理者ユーザーの取得('is_admin'カラムで判定)
+        sql = "SELECT uid, user_name FROM users WHERE is_admin = TRUE"
+        conn = db_pool.get_conn()
+        with conn.cursor() as cursor:
+            cursor.execute(sql)
+            admin = cursor.fetchone()
+        conn.close()
+        return admin
+    
+    @staticmethod
+    def get_all_users():
+        #一般ユーザーのリストを取得（管理者を除く）
+        sql = "SELECT uid, user_name FROM users WHERE is_admin = FALSE"
+        conn = db_pool.get_conn()
+        with conn.cursor() as cursor:
+            cursor.execute(sql)
+            users = cursor.fetchall()
+        conn.close()
+        return users
+
+#個別チャットメッセージ
+class Private_chat_message:
+    @staticmethod
+    def get_chat_id(user1_id, user2_id):
+        #チャットIDを取得する。ユーザーが登録された時点でチャットが存在する前提で、
+        #チャットIDがない場合はNoneを返す。
+        sql = "SELECT id FROM private_chats WHERE (user1_id = %s AND user2_id = %s) OR (user1_id = %s AND user2_id = %s)"
+        conn = db_pool.get_conn()
+        with conn.cursor() as cursor:
+            cursor.execute(sql, (user1_id, user2_id, user2_id, user1_id))
+            chat = cursor.fetchone()
+        conn.close()
+        return chat['id'] if chat else None
+    
+    @staticmethod
+    def insert_message(privates_chat_id, user_id, content):
+        #メッセージを送信する
+        sql = "INSERT INTO private_messages (private_chats_id, user_id, content) VALUES (%s, %s, %s)"
+        conn = db_pool.get_conn()
+        with conn.cursor() as cursor:
+            cursor.execute(sql, (privates_chat_id, user_id, content))
+        conn.commit()
+        conn.close()
+    
+    @staticmethod
+    def get_message(privates_chats_id):
+        #指定したチャットIDのメッセージを取得する
+        sql = """
+        SELECT pm.id, pm.user_id, pm.content, pm.created_at, u.user_name FROM private_messages pm JOIN users u 
+        ON pm.user_id = u.uid WHERE pm.private_chats_id = %s ORDER BY pm.created_at ASC
+        """
+        conn = db_pool.get_conn()
+        with conn.cursor() as cursor:
+            cursor.execute(sql, (privates_chats_id,))
+            messages = cursor.fetchall()
+        conn.close()
+        return messages
 
 #グループクラス
 class Group:            
@@ -72,12 +165,12 @@ class Group:
             db_pool.release(conn)
 
     @classmethod
-    def find_by_id(cls, group_id):
+    def find_by_id(cls, group_chat_id):
         conn = db_pool.get_conn()
         try:
             with conn.cursor(pymysql.cursors.DictCursor) as cur:
                 sql = "SELECT id, name FROM group_chats WHERE id = %s"
-                cur.execute(sql, (group_id,))
+                cur.execute(sql, (group_chat_id,))
                 group = cur.fetchone()
                 return group
         except pymysql.Error as e:
@@ -87,13 +180,28 @@ class Group:
             db_pool.release(conn)
             
     @classmethod
-    def update(cls, group_id, name, description):
+    def update(cls, group_chat_id, name, description):
         conn = db_pool.get_conn()
         try:
             with conn.cursor() as cur:
                 sql = "UPDATE group_chats SET name=%s, description=%s WHERE id=%s"
-                cur.execute(sql, (name, description, group_id))
+                cur.execute(sql, (name, description, group_chat_id))
                 conn.commit()
+        finally:
+            db_pool.release(conn)
+            
+    @classmethod
+    def get_all(cls):
+        conn = db_pool.get_conn()
+        try:
+            with conn.cursor(pymysql.cursors.DictCursor) as cur:
+                sql = "SELECT id, name FROM group_chats;"
+                cur.execute(sql)
+                groups = cur.fetchall()
+                return groups
+        except pymysql.Error as e:
+            print(f'エラーが発生しています : {e}')
+            abort(500)
         finally:
             db_pool.release(conn)
 
@@ -101,10 +209,36 @@ class Group:
     def is_admin(cls, uid):
         return uid == "admin123"
 
+    @classmethod
+    def get_member_ids(cls, group_chat_id):
+        conn = db_pool.get_conn()
+        try:
+            with conn.cursor(pymysql.cursors.DictCursor) as cur:
+                sql = ("SELECT user_id FROM group_members WHERE group_chat_id = %s")
+                cur.execute(sql, (group_chat_id,))
+                result = cur.fetchall()
+                return [row['user_id'] for row in result]
+        finally:
+            db_pool.release(conn)
+
+    @classmethod
+    def update_members(cls, group_chat_id, user_ids):
+        conn = db_pool.get_conn()
+        try:
+            with conn.cursor() as cur:
+                sql_delete = "DELETE FROM group_members WHERE group_chat_id = %s"
+                cur.execute(sql_delete, (group_chat_id,))
+                sql_insert = "INSERT INTO group_members (group_chat_id, user_id, created_at) VALUES (%s, %s, NOW())"
+                for uid in user_ids:
+                    cur.execute(sql_insert, (group_chat_id, uid))
+            conn.commit()
+        finally:
+            db_pool.release(conn)
+
 #グループメッセージクラス
 class GroupMessage:
     @classmethod
-    def create(cls, user_id, group_id, content):
+    def create(cls, user_id, group_chat_id, content):
         conn = db_pool.get_conn()
         try:
             with conn.cursor() as cur:
@@ -112,7 +246,7 @@ class GroupMessage:
                     INSERT INTO group_messages (user_id, group_chat_id, content, created_at)
                     VALUES (%s, %s, %s, NOW())
                 """
-                cur.execute(sql, (user_id, group_id, content))
+                cur.execute(sql, (user_id, group_chat_id, content))
                 conn.commit()
         except pymysql.Error as e:
             print(f'エラーが発生しています: {e}')
@@ -121,18 +255,18 @@ class GroupMessage:
             db_pool.release(conn)
 
     @classmethod
-    def get_all(cls, group_id):
+    def get_all(cls, group_chat_id):
         conn = db_pool.get_conn()
         try:
             with conn.cursor(pymysql.cursors.DictCursor) as cur:
                 sql = """
                     SELECT users.user_name, group_messages.content
                     FROM group_messages
-                    JOIN users ON group_messages.user_id = users.id
+                    JOIN users ON group_messages.user_id = users.uid
                     WHERE group_messages.group_chat_id = %s
                     ORDER BY group_messages.created_at ASC
                 """
-                cur.execute(sql, (group_id,))
+                cur.execute(sql, (group_chat_id,))
                 messages = cur.fetchall()
                 return messages
         except pymysql.Error as e:
@@ -141,15 +275,16 @@ class GroupMessage:
         finally:
             db_pool.release(conn)
 
-#オープンチャット
+#オープンチャットクラス
 class OpenChat:
     @classmethod
-    def create(cls, name, description, creator_id):
+    def create(cls, name, description, creator_id, is_open=True):
+        #オープンチャットの作成
         conn = db_pool.get_conn()
         try:
             with conn.cursor() as cur:
-                sql = "INSERT INTO open_chats (name, description, creator_id) VALUES (%s, %s, %s)"
-                cur.execute(sql, (name, description, creator_id))
+                sql = "INSERT INTO open_chats (name, description, is_open, creator_id) VALUES (%s, %s, %s, %s)"
+                cur.execute(sql, (name, description, is_open, creator_id))
                 conn.commit()
         except pymysql.Error as e:
             print(f'エラーが発生しました: {e}')
@@ -172,18 +307,114 @@ class OpenChat:
             db_pool.release(conn)
 
     @classmethod
-    def delete(cls, chat_id):
+    def delete(cls, chat_id, user_id):
+        #オープンチャットの削除
         conn = db_pool.get_conn()
         try:
             with conn.cursor() as cur:
-                sql = "DELETE FROM open_chats WHERE id = %s"
+                #チャットルームの情報取得
+                sql = "SELECT create_id FROM group_chats WHERE id = %s"
                 cur.execute(sql, (chat_id,))
-                conn.commit()
+                chat = cur.fetchone()
+
+                #チャットルームが存在しない場合
+                if not chat:
+                    return False
+                
+                #管理者または作成者のみが削除可能
+                if chat['creator_id'] == user_id or User.is_admin(user_id):
+                    sql = "DELETE FROM open_chats WHERE id = %s"
+                    cur.execute(sql, (chat_id,))
+                    conn.commit()
+                    return True
+                else:
+                    return False
         except pymysql.Error as e:
             print(f'エラーが発生しました: {e}')
             abort(500)
         finally:
             db_pool.release(conn)
+            
+    @classmethod
+    def get_all(cls):
+        conn = db_pool.get_conn()
+        try:
+            with conn.cursor(pymysql.cursors.DictCursor) as cur:
+                sql = "SELECT * FROM open_chats;"
+                cur.execute(sql)
+                opc_room = cur.fetchall()
+                return opc_room
+        except pymysql.Error as e:
+            print(f'エラーが発生しています : {e}')
+            abort(500)
+        finally:
+            db_pool.release(conn)
+            
+    @classmethod
+    def find_by_id(cls, chat_id):
+        conn = db_pool.get_conn()
+        try:
+            with conn.cursor(pymysql.cursors.DictCursor) as cur:
+                sql = "SELECT * FROM open_chats WHERE id=%s;"
+                cur.execute(sql, (chat_id,))
+                opc_room = cur.fetchone()
+                return opc_room
+        except pymysql.Error as e:
+            print(f'エラーが発生しています : {e}')
+            abort(500)
+        finally:
+            db_pool.release(conn)
+
+    @classmethod
+    def update(cls, chat_id, name, description):
+        conn = db_pool.get_conn()
+        try:
+            with conn.cursor() as cur:
+                sql = "UPDATE open_chats SET name=%s, description=%s WHERE id=%s"
+                cur.execute(sql, (name, description, chat_id))
+                conn.commit()
+        finally:
+            db_pool.release(conn)
+
+#オープンチャットメッセージクラス
+class OpenChatMessage:
+    @classmethod
+    def create(cls, user_id, chat_id, content):
+        conn = db_pool.get_conn()
+        try:
+            with conn.cursor() as cur:
+                sql = """
+                    INSERT INTO open_chat_messages (open_chat_id, user_id, content, created_at)
+                    VALUES (%s, %s, %s, NOW())
+                """
+                cur.execute(sql, (user_id, chat_id, content))
+                conn.commit()
+        except pymysql.Error as e:
+            print(f"エラー(create) : {e}")
+            abort(500)
+        finally:
+            db_pool.release(conn)
+
+    @classmethod
+    def get_all(cls, chat_id):
+        conn = db_pool.get_conn()
+        try:
+            with conn.cursor(pymysql.cursors.DictCursor) as cur:
+                sql = """
+                    SELECT users.user_name, open_chat_messages.content
+                    FROM open_chat_messages
+                    JOIN users ON open_chat_messages.user_id = users.uid
+                    WHERE open_chat_messages.open_chat_id = %s
+                    ORDER BY open_chat_messages.created_at ASC
+                """
+                cur.execute(sql, (chat_id,))
+                return cur.fetchall()
+        except pymysql.Error as e:
+            print(f"エラー（get_all）: {e}")
+            abort(500)
+        finally:
+            db_pool.release(conn)    
+
 
 # #オープンチャット
 # class Opc:
@@ -200,36 +431,6 @@ class OpenChat:
 #                 conn.commit()
 #         except pymysql.Error as e:
 #             print(f'エラー: {e}')
-#             abort(500)
-#         finally:
-#             db_pool.release(conn)
-            
-#     @classmethod
-#     def get_all(cls):
-#         conn = db_pool.get_conn()
-#         try:
-#             with conn.cursor() as cur:
-#                 sql = "SELECT * FROM open_chats;"
-#                 cur.execute(sql)
-#                 opc_room = cur.fetchall()
-#                 return opc_room
-#         except pymysql.Error as e:
-#             print(f'エラーが発生しています : {e}')
-#             abort(500)
-#         finally:
-#             db_pool.release(conn)
-            
-#     @classmethod
-#     def find_by_room_id(cls, room_id):
-#         conn = db_pool.get_conn()
-#         try:
-#             with conn.cursor() as cur:
-#                 sql = "SELECT * FROM open_chats WHERE id=%s;"
-#                 cur.execute(sql, (room_id,))
-#                 opc_room = cur.fetchone()
-#                 return opc_room
-#         except pymysql.Error as e:
-#             print(f'エラーが発生しています : {e}')
 #             abort(500)
 #         finally:
 #             db_pool.release(conn)
