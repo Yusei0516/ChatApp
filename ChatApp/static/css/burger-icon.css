@@ -1,0 +1,6 @@
+#burger-icon,
+#burger-close-icon{
+    width: 80px;
+    height: 80px;
+    cursor: pointer; /* カーソルが手のひらになるように設定 */
+}
