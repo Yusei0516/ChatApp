@@ -16,20 +16,22 @@
     <div class="admin-channnel-title">
         <h1>管理者用チャットルーム一覧</h1>        
     </div>
-    <div id="admin-private_chat">
-        <a href="{{ url_for('private_list_view') }}"> 
+    <div class="admin-chat">
+      <div id="admin-private_chat" class="admin-chat-btn chat-private-btn">
+          <a href="{{ url_for('private_list_view') }}"> 
             個人チャット一覧
-        </a> 
-    </div>
-    <div id="admin-group_chat">
-        <a href="{{ url_for('admin_group_list') }}"> 
+          </a> 
+      </div>
+      <div id="admin-group_chat" class="admin-chat-btn chat-group-btn">
+          <a href="{{ url_for('admin_group_list') }}"> 
             グループチャット一覧
-        </a>  
-    </div>
-    <div id="open chat channels-list">
-        <a href="{{ url_for('open_list_view') }}"> 
-        オープンチャット一覧
-        </a>
+          </a>  
+      </div>
+      <div id="open chat channels-list" class="admin-chat-btn chat-open-btn">
+          <a href="{{ url_for('open_list_view') }}"> 
+            オープンチャット一覧
+          </a>
+      </div>
     </div>
 </div>
 {% endblock %} 
