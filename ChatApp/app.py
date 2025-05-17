@@ -1,7 +1,7 @@
 from flask import Flask, request, redirect, render_template, session, flash, abort, url_for
 from datetime import timedelta
 import hashlib, uuid, re, os
-from models import User, Group, GroupMessage, OpenChat, OpenChatMessage, Private_chats, Private_chat_message
+from models import User, Group, GroupMessage, OpenChat, OpenChatMessage, UserModel, Private_chats, Private_chat_message
 # from util.assets import bundle_css_files
  
 # 定数定義
@@ -104,13 +104,6 @@ def logout():
     session.clear()
     return redirect(url_for('login_view'))
 
-#管理者判定
-def is_admin():
-    user_id = session.get("user_id")
-    if not user_id:
-        return False
-    user = User.get_user_by_id(user_id)
-    return user["is_admin"]
 
 #管理者用ダッシュボード
 @app.route('/admin_dashboard')
@@ -130,25 +123,43 @@ def admin_dashboard():
 def open_list_view():
     return render_template('admin/open_list.html')
 
+#管理者判定
+def is_admin():
+    user_id = session.get("user_id")
+    if not user_id:
+        return False
+    user = User.get_user_by_id(user_id)
+    return user["is_admin"]
+
 #管理者：個人チャット一覧へ
 @app.route('/admin/private/list', methods=['GET'])
 def private_list_view():
-    if not session.get('is_admin'):
+    if not is_admin:
         return redirect(url_for("login_view"))
     users = Private_chats.get_all_users()
     return render_template('admin/private_list.html', users=users)
 
 #個人チャット画面
-@app.route("/private_chat/<user_id>")
+@app.route("/private_chat/<user_id>", methods=['GET'])
 def private_chat(user_id):
+    current_user_id = session.get("user_id")
+    if not current_user_id:
+        return redirect(url_for("login_view"))
+
     admin = Private_chats.get_admin()
     if not admin:
-        return redirect(url_for("login_view"))
+        return "管理者が存在しません"
     
-    #チャットIDの取得
-    chat_id = Private_chat_message.get_chat_id(admin["uid"], user_id)
-
-    #チャットが存在しない場合
+    #ログインユーザーが管理者かどうか
+    if is_admin():
+        #管理者がユーザーのチャットを閲覧
+        chat_id = Private_chat_message.get_chat_id(admin["uid"], user_id)
+    else:
+        #一般ユーザーは管理者とのチャットのみ可能
+        if user_id != admin["uid"]:
+            return "アクセス権限がありません"
+        chat_id = Private_chat_message.get_chat_id(user_id, admin["uid"])
+    
     if not chat_id:
         return "チャットが存在しません"
     
@@ -261,21 +272,28 @@ def enter_private_chat():
     
     #メッセージ取得
     messages = Private_chat_message.get_message(chat_id)
-    return render_template("chat/private_chat.html", messages=messages, chat_id=chat_id, user_id=user_id)
+    return render_template("chat/private_chat.html", messages=messages, chat_id=chat_id, user_id=admin["uid"])
 
 #メッセージ送信
 @app.route("/send_message", methods=["POST"])
 def send_message():
     user_id = session("user_id")
+    if not user_id:
+        return redirect(url_for("login_view"))
+    
     chat_id = request.form("chat_id")
     content = request.form("content")
+    target_user_id = request.form.get("user_id")
 
     if not user_id or not content:
         return "無効なリクエストです"
     
     Private_chat_message.insert_message(chat_id, user_id, content)
-    return redirect(url_for("enter_private_chat") if not is_admin() else url_for("private_chat", user_id=request.form["user_id"]))
 
+    if is_admin():
+        return redirect(url_for("private_chat", user_id=target_user_id))
+    else:
+        return redirect(url_for("enter_private_chat"))
 
 #ユーザー：グループチャットへ
 @app.route('/user/group/chat', methods=['GET'])

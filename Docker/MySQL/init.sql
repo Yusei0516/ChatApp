@@ -29,37 +29,33 @@ CREATE TABLE private_messages (
     id INT AUTO_INCREMENT PRIMARY KEY,
     private_chats_id INT NOT NULL,
     user_id VARCHAR(255) NOT NULL,
-    content TEXT NOT NULL,
+    content VARCHAR(255) NOT NULL,
     created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY (private_chats_id) REFERENCES private_chats(id) ON DELETE CASCADE,
     FOREIGN KEY (user_id) REFERENCES users(uid) ON DELETE CASCADE
 );
 
-CREATE TABLE chat_rooms (
+CREATE TABLE group_chats (
     id INT AUTO_INCREMENT PRIMARY KEY,
-    name VARCHAR(255) UNIQUE NOT NULL,
-    type ENUM('group', 'open') NOT NULL,
-    creator_id VARCHAR(255) NOT NULL,
+    name VARCHAR(255) NOT NULL,
     is_open BOOLEAN DEFAULT FALSE,
-    description TEXT NULL,
-    created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
-    FOREIGN KEY (creator_id) REFERENCES users(uid) ON DELETE CASCADE
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP
 );
 
 CREATE TABLE group_members (
     id INT AUTO_INCREMENT PRIMARY KEY,
     user_id VARCHAR(255) NOT NULL,
-    chat_rooms_id INT NOT NULL,
+    group_chats_id INT NOT NULL,
     created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY (user_id) REFERENCES users(uid) ON DELETE CASCADE,
-    FOREIGN KEY (chat_rooms_id) REFERENCES chat_rooms(id) ON DELETE CASCADE
+    FOREIGN KEY (group_chats_id) REFERENCES group_chats(id) ON DELETE CASCADE
 );
 
-CREATE TABLE chat_messages (
+CREATE TABLE group_messages (
     id INT AUTO_INCREMENT PRIMARY KEY,
-    chat_rooms_id INT NULL,
+    group_chats_id INT NULL,
     user_id VARCHAR(255) NOT NULL,
-    content TEXT NOT NULL,
+    content VARCHAR(255) NOT NULL,
     created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY (group_chats_id) REFERENCES group_chats(id) ON DELETE CASCADE,
     FOREIGN KEY (user_id) REFERENCES users(uid) ON DELETE CASCADE
@@ -92,8 +88,12 @@ INSERT INTO open_chat(creator_id, name, description, is_open) VALUES('b9ec6802-f
 INSERT INTO open_chat(creator_id, name, description, is_open) VALUES('b9ec6802-f2a2-4069-81ee-3909ec6851ad', 'バンド好き集まれ', '好きなバンドについて話しましょう！', TRUE);
 INSERT INTO users(uid, user_name, email, password, is_admin) VALUES ('admin123456789', '管理者', 'adminFteam@example.com', '9d73b154738103148a0baae3bb4b0067fbbb230b9cf50c04db70d6393d324c42', TRUE);
 INSERT INTO users(uid, user_name, email, password, is_admin) VALUES('b9ec6802-f2a2-4069-81ee-3909ec685','たなかまき','test@gmail.com','ae5deb822e0d71992900471a7199d0d95b8e7c9d05c40a8245a281fd2c1d6684', FALSE);
-INSERT INTO chat_rooms(name, type, creator_id, is_open) VALUES('開発者グループ', 'group', 'admin123456789', FALSE);
-INSERT INTO chat_rooms(name, type, creator_id, is_open, description) VALUES('アニメ好き集まれ', 'open', 'b9ec6802-f2a2-4069-81ee-3909ec6851ad', TRUE, '好きなアニメについて話しましょう！');
-INSERT INTO chat_rooms(name, type, creator_id, is_open, description) VALUES('ドラマ好き集まれ', 'open', 'b9ec6802-f2a2-4069-81ee-3909ec6851ad', TRUE, '好きなドラマについて話しましょう！');
-INSERT INTO chat_rooms(name, type, creator_id, is_open, description) VALUES('バンド好き集まれ', 'open', 'b9ec6802-f2a2-4069-81ee-3909ec6851ad', TRUE, '好きなバンドについて話しましょう！');
+INSERT INTO group_chats(name, creator_id, is_open) VALUES('開発者グループ', 'admin123456789', FALSE);
+INSERT INTO open_chats(name, creator_id, is_open, description) VALUES('アニメ好き集まれ', 'b9ec6802-f2a2-4069-81ee-3909ec6851ad', TRUE, '好きなアニメについて話しましょう！');
+INSERT INTO open_chats(name, creator_id, is_open, description) VALUES('ドラマ好き集まれ', 'b9ec6802-f2a2-4069-81ee-3909ec6851ad', TRUE, '好きなドラマについて話しましょう！');
+INSERT INTO open_chats(name, creator_id, is_open, description) VALUES('バンド好き集まれ', 'b9ec6802-f2a2-4069-81ee-3909ec6851ad', TRUE, '好きなバンドについて話しましょう！');
+-- INSERT INTO chat_rooms(name, type, creator_id, is_open) VALUES('開発者グループ', 'group', 'admin123456789', FALSE);
+-- INSERT INTO chat_rooms(name, type, creator_id, is_open, description) VALUES('アニメ好き集まれ', 'open', 'b9ec6802-f2a2-4069-81ee-3909ec6851ad', TRUE, '好きなアニメについて話しましょう！');
+-- INSERT INTO chat_rooms(name, type, creator_id, is_open, description) VALUES('ドラマ好き集まれ', 'open', 'b9ec6802-f2a2-4069-81ee-3909ec6851ad', TRUE, '好きなドラマについて話しましょう！');
+-- INSERT INTO chat_rooms(name, type, creator_id, is_open, description) VALUES('バンド好き集まれ', 'open', 'b9ec6802-f2a2-4069-81ee-3909ec6851ad', TRUE, '好きなバンドについて話しましょう！');
 -- INSERT INTO messages(id, uid, cid, message) VALUES(1, '970af84c-dd40-47ff-af23-282b72b7cca8', '1', '誰かかまってください、、')
