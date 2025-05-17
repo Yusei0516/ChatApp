@@ -58,6 +58,7 @@ class User:
         finally:
             db_pool.release(conn)
 
+
     @classmethod
     def get_all(cls):
         conn = db_pool.get_conn()
@@ -73,10 +74,10 @@ class Private_chats:
     @staticmethod
     def get_user_by_id(user_id):
         #指定したユーザーの情報を取得する
-        sql = "SELECT uid, user_name, email, is_admin FROM user WHERE uid = %s"
+        sql = "SELECT uid, user_name, email, is_admin FROM users WHERE uid = %s"
         conn = db_pool.get_conn()
         with conn.cursor() as cursor:
-            cursor.execute(sql, (user_id))
+            cursor.execute(sql, (user_id,))
             user = cursor.fetchone()
         conn.close()
         return user
@@ -102,33 +103,35 @@ class Private_chats:
             users = cursor.fetchall()
         conn.close()
         return users
-
-#個別チャットメッセージ
-class Private_chat_message:
+    
+#個人チャットクラス
+class Private_chats:
     @staticmethod
     def get_chat_id(user1_id, user2_id):
-        #チャットIDを取得する。ユーザーが登録された時点でチャットが存在する前提で、
-        #チャットIDがない場合はNoneを返す。
+        #チャットIDを取得する。存在しない場合はNoneを返す
         sql = "SELECT id FROM private_chats WHERE (user1_id = %s AND user2_id = %s) OR (user1_id = %s AND user2_id = %s)"
         conn = db_pool.get_conn()
         with conn.cursor() as cursor:
             cursor.execute(sql, (user1_id, user2_id, user2_id, user1_id))
-            chat = cursor.fetchone()
-        conn.close()
-        return chat['id'] if chat else None
-    
+            chat = cursor.ferchone()
+            return chat['id'] if chat else None
+
+        
+
+#個別チャットメッセージ
+class Private_chat_message:    
     @staticmethod
-    def insert_message(privates_chat_id, user_id, content):
+    def insert_message(private_chats_id, user_id, content):
         #メッセージを送信する
         sql = "INSERT INTO private_messages (private_chats_id, user_id, content) VALUES (%s, %s, %s)"
         conn = db_pool.get_conn()
         with conn.cursor() as cursor:
-            cursor.execute(sql, (privates_chat_id, user_id, content))
+            cursor.execute(sql, (private_chats_id, user_id, content))
         conn.commit()
         conn.close()
     
     @staticmethod
-    def get_message(privates_chats_id):
+    def get_message(chat_id):
         #指定したチャットIDのメッセージを取得する
         sql = """
         SELECT pm.id, pm.user_id, pm.content, pm.created_at, u.user_name FROM private_messages pm JOIN users u 
@@ -136,7 +139,7 @@ class Private_chat_message:
         """
         conn = db_pool.get_conn()
         with conn.cursor() as cursor:
-            cursor.execute(sql, (privates_chats_id,))
+            cursor.execute(sql, (chat_id,))
             messages = cursor.fetchall()
         conn.close()
         return messages
