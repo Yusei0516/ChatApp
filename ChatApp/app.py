@@ -417,6 +417,13 @@ def create_open(chat_id):
     
     return render_template('admin/create_open.html', open=open)
 
+@app.errorhandler(404)
+def page_not_found(error):
+    return render_template('error/404.html'),404
+
+@app.errorhandler(500)
+def internal_server_error(error):
+    return render_template('error/500.html'),500
 
 if __name__ == '__main__': 
     app.run(host="0.0.0.0", debug=True)
