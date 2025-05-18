@@ -238,6 +238,39 @@ class Group:
         finally:
             db_pool.release(conn)
 
+    @classmethod
+    def create_group(cls, name, creator_id):
+        #グループチャットの作成（管理者のみ）
+        if not cls.is_admin(creator_id):
+            return {"error": "権限がありません"}
+        
+        conn = db_pool.get_conn()
+        try:
+            with conn.cursor() as cur:
+                sql = "INSERT INTO group_chats (name, is_open, created_at) VALUES (%s, FALSE, NOW())"
+                cur.execute(sql, (name,))
+                conn.commit()
+                return {"success": "グループチャット作成されました"}
+        finally:
+            db_pool.release(conn)
+
+    @classmethod
+    def delete_group(cls, group_id, deleter_id):
+        #グループチャットの削除（管理者のみ）
+        if not cls.is_admin(deleter_id):
+            return {"error": "権限がありません"}
+        
+        conn = db_pool.get_conn()
+        try:
+            with conn.cursor() as cur:
+                sql = "DELETE FROM group_chats WHERE id = %s"
+                cur.execute(sql, (group_id,))
+
+                conn.commit()
+                return {"success": "グループチャットが削除されました"}
+        finally:
+            db_pool.release(conn)
+
 #グループメッセージクラス
 class GroupMessage:
     @classmethod
