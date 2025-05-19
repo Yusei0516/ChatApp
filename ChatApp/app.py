@@ -171,41 +171,58 @@ def private_chat(user_id):
     return render_template("chat/private_chat.html", messages=messages, chat_id=chat_id, user_id=user_id)
 
 #管理者メニューまとめ(グループチャット作成)
-@app.route('/admin_menu/group/create', methods=['GET', 'POST'])
+@app.route('/admin_menu/group/create', methods=['GET'])
 def create_group_view():
-    if 'user_id' not in session:
-        return redirect(url_for('login_view'))
-    user_id = session['user_id']
-    if request.method == 'POST':
-        name = request.form.get('name')
-        if not name:
-            return "グループ名を入力してください"
-        result = Group.create_group(name, user_id)
-        if "success" in result:
-            return redirect(url_for('admin_group_list'))
-        else:
-            return result["error"]
     return render_template('admin/create_group.html')
 
-#管理者メニューまとめ(グループチャット削除)
-@app.route('/admin_menu/group/delete/<int:group_id>', methods=['GET', 'POST'])
-def delete_group_view(group_id):
-    if 'user_id' not in session:
+#管理者メニューまとめ(グループチャットの作成処理)
+@app.route('/group_chat/create', methods=['POST'])
+def create_group_chat():
+    user_id = session.get('uid')
+    is_admin = session.get('is_admin')
+    name = request.form.get('name')
+
+    if not user_id:
+        flash('ログインしてください')
         return redirect(url_for('login_view'))
-    user_id = session['user_id']
-    if request.method == 'POST':
-        result = Group.delete_group(group_id, user_id)
-        if "success" in result:
-            return redirect(url_for("admin_group_list"))
-        else:
-            return result["error"]
-        
-    group = Group.find_by_id(group_id)
-    if not group:
-        print(f"グループが見つかりません: group_id={group_id}")
-        return "グループが見つかりません"
     
-    return render_template('admin/delete_group.html', group=group)
+    if not name:
+        flash('グループチャット名を入力してください')
+        return redirect(url_for('login_view'))
+    try:
+        Group.create_group(name, user_id)
+        flash('グループチャットを作成しました。')
+    except Exception as e:
+        flash(f'エラーが発生しました： {str(e)}')
+    if not is_admin:
+        return redirect(url_for('login_view'))
+    return redirect(url_for('admin_dashboard'))
+
+#管理者メニューまとめ(グループチャット削除)
+@app.route('/admin_menu/group/delete', methods=['GET'])
+def delete_group_view():
+    return render_template('admin/delete_group.html')
+
+#管理者メニューまとめ(グループチャット削除処理)
+@app.route('/group_chat/delete/<int:group_id', method=['POST'])
+def delete_group_chat(group_id):
+    user_id = session.get('uid')
+    is_admin = session.get('is_admin')
+
+    if not user_id:
+        flash('ログインしてください')
+        return redirect(url_for('login_view'))
+    try:
+        success = Group.delete_group(group_id, user_id)
+        if success:
+            flash('グループチャットが削除されました')
+        else:
+            flash('削除権限がありません')
+    except Exception as e:
+        flash(f'エラーが発生しました： {str(e)}')
+    if not is_admin:
+        return redirect(url_for('login_view'))
+    return redirect(url_for('admin_dashboard'))
 
 #メニューまとめ(オープンチャット作成)
 @app.route('/menu/open/create', methods=['GET'])
