@@ -156,12 +156,12 @@ def private_chat(user_id):
     #ログインユーザーが管理者かどうか
     if is_admin():
         #管理者がユーザーのチャットを閲覧
-        chat_id = Private_chats.get_chat_id(admin["uid"], user_id)
+        chat_id = Private_chats.get_or_create_chat(admin["uid"], user_id)
     else:
         #一般ユーザーは管理者とのチャットのみ可能
         if user_id != admin["uid"]:
             return "アクセス権限がありません"
-        chat_id = Private_chats.get_chat_id(user_id, admin["uid"])
+        chat_id = Private_chats.get_or_create_chat(user_id, admin["uid"])
     
     if not chat_id:
         return "チャットが存在しません"
