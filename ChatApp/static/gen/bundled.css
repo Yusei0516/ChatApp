@@ -412,3 +412,16 @@ button {
     overflow-y: auto;
     background-color: var(--main_blue);
 }
+
+#admin_menu {
+    display: none; /* ハンバーガーメニューが開いているときに表示 */
+    position: fixed;
+    top: 32px; /* ヘッダーの高さ分だけ下げる */
+    left: 0;
+    width: 100vw;
+    height: calc(100vh - 64px); /* ヘッダーを除いた高さ */
+    z-index: 500;
+    flex-direction: column;
+    overflow-y: auto;
+    background-color: var(--main_blue);
+}
