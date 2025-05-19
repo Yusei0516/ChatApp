@@ -24,6 +24,10 @@ body::-webkit-scrollbar {
     scrollbar-width: none; /* Firefoxのスクロールバーを非表示 */
 }
 
+ul {
+    list-style: none; /* リストスタイルをなしにする */
+}
+
 header {
     background-color: var(--all_white); /* ヘッダーの背景色 */
     width: 100%; /* ヘッダーの幅 */
@@ -55,9 +59,8 @@ header img {
 
 /* ハンバーガメニュー */
 #burger-icon {
-    display: block;
+    display: none;
     position: fixed;
-    top: 16px;
     right: 24px;
     width: 40px;
     height: 40px;
@@ -65,9 +68,8 @@ header img {
     cursor: pointer;
 }
 #burger-close-icon {
-    display: none;
+    display: block;
     position: fixed;
-    top: 16px;
     right: 24px;
     width: 40px;
     height: 40px;
@@ -83,10 +85,10 @@ header img {
     width: 100vw;
     height: calc(100vh - 64px); /* ヘッダーを除いた高さ */
     background: var(--all_white);
-    z-index: 1500;
+    z-index: 500;
     flex-direction: column;
-    /* 必要に応じてスクロールも */
     overflow-y: auto;
+    background-color: var(--main_blue);
 }
 
 body {
