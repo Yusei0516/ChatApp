@@ -22,13 +22,11 @@
           <ul>
               <div>
                   {% for user in users %}
-                    <form>
                         <button>
-                          <a calss="private_name_list" href="{{ url_for('private_chat') }}">
-                            <li>{{ user.user_name }}</li> 
-                          </a>
+                         <a class="private_name_list" href="{{ url_for('private_chat',user_id=user.uid ) }}">
+                           <li>{{ user.user_name }}</li> 
+                         </a>
                         </button>
-                    </form>
                   {% endfor %}
               </div>    
           </ul>
