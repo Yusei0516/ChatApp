@@ -128,7 +128,7 @@ def is_admin():
     user_id = session.get("user_id")
     if not user_id:
         return False
-    user = User.get_user_by_id(user_id)
+    user = UserModel.get_user_by_id(user_id)
     return user["is_admin"]
 
 #管理者：個人チャット一覧へ
@@ -149,19 +149,19 @@ def private_chat(user_id):
     if not current_user_id:
         return redirect(url_for("login_view"))
 
-    admin = Private_chats.get_admin()
+    admin = UserModel.get_admin()
     if not admin:
         return "管理者が存在しません"
     
     #ログインユーザーが管理者かどうか
     if is_admin():
         #管理者がユーザーのチャットを閲覧
-        chat_id = Private_chat_message.get_chat_id(admin["uid"], user_id)
+        chat_id = Private_chats.get_or_create_chat(admin["uid"], user_id)
     else:
         #一般ユーザーは管理者とのチャットのみ可能
         if user_id != admin["uid"]:
             return "アクセス権限がありません"
-        chat_id = Private_chat_message.get_chat_id(user_id, admin["uid"])
+        chat_id = Private_chats.get_or_create_chat(user_id, admin["uid"])
     
     if not chat_id:
         return "チャットが存在しません"
@@ -204,7 +204,7 @@ def delete_group_view():
     return render_template('admin/delete_group.html')
 
 #管理者メニューまとめ(グループチャット削除処理)
-@app.route('/group_chat/delete/<int:group_id', method=['POST'])
+@app.route('/group_chat/delete/<int:group_id>', methods=['POST'])
 def delete_group_chat(group_id):
     user_id = session.get('uid')
     is_admin = session.get('is_admin')

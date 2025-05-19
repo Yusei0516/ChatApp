@@ -107,13 +107,31 @@ class UserModel:
 #個人チャットクラス
 class Private_chats:
     @staticmethod
+    def create_chat(user1_id, user2_id):
+        sql = "INSERT INTO private_chats (user1_id, user2_id) VALUES (%s, %s)"
+        conn = db_pool.get_conn()
+        with conn.cursor() as cursor:
+            cursor.execute(sql, (user1_id, user2_id))
+            chat_id = cursor.lastrowid
+        conn.commit()
+        conn.close
+        return chat_id
+    
+    @staticmethod
+    def get_or_create_chat(user1_id, user2_id):
+        chat_id = Private_chats.get_chat_id(user1_id, user2_id)
+        if chat_id is None:
+            chat_id = Private_chats.create_chat(user1_id, user2_id)
+        return chat_id
+        
+    @staticmethod
     def get_chat_id(user1_id, user2_id):
         #チャットIDを取得する。存在しない場合はNoneを返す
         sql = "SELECT id FROM private_chats WHERE (user1_id = %s AND user2_id = %s) OR (user1_id = %s AND user2_id = %s)"
         conn = db_pool.get_conn()
         with conn.cursor() as cursor:
             cursor.execute(sql, (user1_id, user2_id, user2_id, user1_id))
-            chat = cursor.ferchone()
+            chat = cursor.fetchone()
             return chat['id'] if chat else None
 
         
