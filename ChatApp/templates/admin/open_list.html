@@ -22,11 +22,7 @@
           <ul>
               <div>
                   {% for open_chat in open_chats %}
-                        <button>
-                         <a class="openchat_name_list" href="{{ url_for('open_view(chat_id)',user_id=user.uid ) }}">
-                           <li>{{ open_chat.name }}</li>
-                         </a>
-                        </button>
+                  <li>{{ open_chat }}</li>
                   {% endfor %}
               </div>   
           </ul>
