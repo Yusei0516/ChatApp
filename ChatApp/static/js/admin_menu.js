@@ -16,8 +16,8 @@ list.forEach((item) => {
 
 //バーガーメニュー用(モバイルサイズ)
 //メニューを開く
-const openBurgerButton = document.getElementById("burger-icon")
-const closeBurgerButton = document.getElementById("burger-close-icon");
+const openBurgerButton = document.getElementById("admin-burger-icon")
+const closeBurgerButton = document.getElementById("admin-burger-close-icon");
 const menu = document.getElementById("admin_menu");
 
 openBurgerButton.addEventListener("click", openMenu);

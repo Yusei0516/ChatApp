@@ -413,6 +413,25 @@ button {
     background-color: var(--main_blue);
 }
 
+#admin-burger-icon {
+    display: block; 
+    position: fixed;
+    right: 24px;
+    width: 40px;
+    height: 40px;
+    z-index: 2000;
+    cursor: pointer;
+}
+#admin-burger-close-icon {
+    display: none;
+    position: fixed;
+    right: 24px;
+    width: 40px;
+    height: 40px;
+    z-index: 2000;
+    cursor: pointer;
+}
+
 #admin_menu {
     display: none; /* ハンバーガーメニューが開いているときに表示 */
     position: fixed;
@@ -425,3 +444,5 @@ button {
     overflow-y: auto;
     background-color: var(--main_blue);
 }
+
+
