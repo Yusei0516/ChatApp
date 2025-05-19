@@ -16,7 +16,7 @@
 <div class="main-wrapper">
     <div class="main-container">
         <div class="page-title">
-          <h1>個人チャット一覧</h1>        
+          <h1>個人チャット一覧</h1>
         </div>
         <div id="admin_private_chat_list">
           <ul>
@@ -24,10 +24,10 @@
                   {% for user in users %}
                     <form>
                         <button>
-                         <a calss="private_name_list" href="{{ url_for('private_chat') }}">
-                           <li>{{ user.user_name }}</li> 
-                         </a>
-                       </button>
+                          <a calss="private_name_list" href="{{ url_for('private_chat') }}">
+                            <li>{{ user.user_name }}</li> 
+                          </a>
+                        </button>
                     </form>
                   {% endfor %}
               </div>    
