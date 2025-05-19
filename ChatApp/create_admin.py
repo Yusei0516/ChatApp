@@ -4,7 +4,7 @@ from models import User
 def create_admin():
     uid = 'admin123'
     name = '管理者'
-    email = 'admin@example.com'
+    email = 'adminFteam@example.com'
     raw_password = 'adminpassFteam'
     password = hashlib.sha256(raw_password.encode('utf-8')).hexdigest()
 

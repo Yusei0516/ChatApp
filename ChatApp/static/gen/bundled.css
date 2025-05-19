@@ -24,6 +24,10 @@ body::-webkit-scrollbar {
     scrollbar-width: none; /* Firefoxのスクロールバーを非表示 */
 }
 
+ul {
+    list-style: none; /* リストスタイルをなしにする */
+}
+
 header {
     background-color: var(--all_white); /* ヘッダーの背景色 */
     width: 100%; /* ヘッダーの幅 */
@@ -52,12 +56,8 @@ header img {
     margin: 0; /* マージンを0に設定 */
 }
 
-#burger-icon,
-#burger-close-icon{
-    width: 80px; /* 幅を32pxに設定 */
-    height: 80px; /* 高さを32pxに設定 */
-    cursor: pointer; /* カーソルが手のひらになるように設定 */
-}
+
+
 
 body {
     margin: 0 auto; /* 自動でマージンを設定 */
@@ -351,6 +351,25 @@ button {
     padding: 0;
 }
 
+#admin_menu {
+    display: flex; /* フレックスボックス */
+    margin-top: 80px;
+    flex-direction: column; /* 縦方向に配置 */
+}
+
+#admin_menu ul {
+    text-align: center;
+    padding: 0;
+    margin: 0;
+}
+
+#admin_menu .page-links {
+    display: block;
+    float: none;
+    margin: 64px 0;
+    padding: 0;
+}
+
 .page-links {
     gap: 16px;
     margin: auto;
@@ -379,3 +398,70 @@ button {
   transform: scale(1.05); /* 少し拡大 */
   box-shadow: 0 6px 12px rgba(0, 0, 0, 0.6); /* 影を強調 */
 }
+
+/* ハンバーガメニュー */
+#burger-icon {
+    display: block; 
+    position: fixed;
+    right: 24px;
+    width: 40px;
+    height: 40px;
+    z-index: 2000;
+    cursor: pointer;
+}
+#burger-close-icon {
+    display: none;
+    position: fixed;
+    right: 24px;
+    width: 40px;
+    height: 40px;
+    z-index: 2000;
+    cursor: pointer;
+}
+
+#mobile-header {
+    display: none; /* ハンバーガーメニューが開いているときに表示 */
+    position: fixed;
+    top: 32px; /* ヘッダーの高さ分だけ下げる */
+    left: 0;
+    width: 100vw;
+    height: calc(100vh - 64px); /* ヘッダーを除いた高さ */
+    z-index: 500;
+    flex-direction: column;
+    overflow-y: auto;
+    background-color: var(--main_blue);
+}
+
+#admin-burger-icon {
+    display: block; 
+    position: fixed;
+    right: 24px;
+    width: 40px;
+    height: 40px;
+    z-index: 2000;
+    cursor: pointer;
+}
+#admin-burger-close-icon {
+    display: none;
+    position: fixed;
+    right: 24px;
+    width: 40px;
+    height: 40px;
+    z-index: 2000;
+    cursor: pointer;
+}
+
+#admin_menu {
+    display: none; /* ハンバーガーメニューが開いているときに表示 */
+    position: fixed;
+    top: 32px; /* ヘッダーの高さ分だけ下げる */
+    left: 0;
+    width: 100vw;
+    height: calc(100vh - 64px); /* ヘッダーを除いた高さ */
+    z-index: 500;
+    flex-direction: column;
+    overflow-y: auto;
+    background-color: var(--main_blue);
+}
+
+

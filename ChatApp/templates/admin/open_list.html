@@ -21,10 +21,14 @@
         <div id="admin_open_chat_list">
           <ul>
               <div>
-                 {% for open_chat in open_chats %}
-                  <li>{{ open_chat.name }}</li> 
-                 {% endfor %}
-              </div>    
+                  {% for open_chat in open_chats %}
+                        <button>
+                         <a class="openchat_name_list" href="{{ url_for('open_view(chat_id)',user_id=user.uid ) }}">
+                           <li>{{ open_chat.name }}</li>
+                         </a>
+                        </button>
+                  {% endfor %}
+              </div>   
           </ul>
         </div> 
     </div>
