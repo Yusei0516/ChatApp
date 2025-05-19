@@ -113,7 +113,7 @@ class Private_chats:
         conn = db_pool.get_conn()
         with conn.cursor() as cursor:
             cursor.execute(sql, (user1_id, user2_id, user2_id, user1_id))
-            chat = cursor.ferchone()
+            chat = cursor.fetchone()
             return chat['id'] if chat else None
 
         
