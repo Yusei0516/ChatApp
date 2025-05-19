@@ -31,10 +31,10 @@
           </div>
         </div>
           <div id="open_chat_channels-list">
-            <ul class="channel-box"> 
-                <a href="#" >
-                  1.chat room
-                </a> 
+              <ul class="channel-box"> 
+                {% for open_chat in open_chats %}
+                  <li>{{ open_chat.name }}</li> 
+                 {% endfor %}
             </ul>
           </div> 
     </div>
