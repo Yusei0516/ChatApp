@@ -204,7 +204,7 @@ def delete_group_view():
     return render_template('admin/delete_group.html')
 
 #管理者メニューまとめ(グループチャット削除処理)
-@app.route('/group_chat/delete/<int:group_id', method=['POST'])
+@app.route('/group_chat/delete/<int:group_id>', methods=['POST'])
 def delete_group_chat(group_id):
     user_id = session.get('uid')
     is_admin = session.get('is_admin')
