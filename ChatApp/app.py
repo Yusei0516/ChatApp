@@ -171,14 +171,41 @@ def private_chat(user_id):
     return render_template("chat/private_chat.html", messages=messages, chat_id=chat_id, user_id=user_id)
 
 #管理者メニューまとめ(グループチャット作成)
-@app.route('/admin_menu/group/create', methods=['GET'])
+@app.route('/admin_menu/group/create', methods=['GET', 'POST'])
 def create_group_view():
+    if 'user_id' not in session:
+        return redirect(url_for('login_view'))
+    user_id = session['user_id']
+    if request.method == 'POST':
+        name = request.form.get('name')
+        if not name:
+            return "グループ名を入力してください"
+        result = Group.create_group(name, user_id)
+        if "success" in result:
+            return redirect(url_for('admin_group_list'))
+        else:
+            return result["error"]
     return render_template('admin/create_group.html')
 
 #管理者メニューまとめ(グループチャット削除)
-@app.route('/admin_menu/group/delete', methods=['GET'])
-def delete_group_view():
-    return render_template('admin/delete_group.html')
+@app.route('/admin_menu/group/delete/<int:group_id>', methods=['GET', 'POST'])
+def delete_group_view(group_id):
+    if 'user_id' not in session:
+        return redirect(url_for('login_view'))
+    user_id = session['user_id']
+    if request.method == 'POST':
+        result = Group.delete_group(group_id, user_id)
+        if "success" in result:
+            return redirect(url_for("admin_group_list"))
+        else:
+            return result["error"]
+        
+    group = Group.find_by_id(group_id)
+    if not group:
+        print(f"グループが見つかりません: group_id={group_id}")
+        return "グループが見つかりません"
+    
+    return render_template('admin/delete_group.html', group=group)
 
 #メニューまとめ(オープンチャット作成)
 @app.route('/menu/open/create', methods=['GET'])
