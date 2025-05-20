@@ -159,7 +159,7 @@ def private_chat(user_id):
         chat_id = Private_chats.get_or_create_chat(admin["uid"], user_id)
     else:
         #一般ユーザーは管理者とのチャットのみ可能
-        if user_id != admin["uid"]:
+        if current_user_id != admin["uid"]:
             return "アクセス権限がありません"
         chat_id = Private_chats.get_or_create_chat(user_id, admin["uid"])
     
@@ -306,12 +306,12 @@ def enter_private_chat():
     if not user_id:
         return redirect(url_for("login_view"))
     
-    admin = Private_chats.get_admin()
+    admin = UserModel.get_admin()
     if not admin:
         return "管理者が存在しません"
     
     #チャットID取得
-    chat_id = Private_chat_message.get_chat_id(admin["uid"], user_id)
+    chat_id = Private_chats.get_or_create_chat(admin["uid"], user_id)
 
     #チャットが存在しない場合
     if not chat_id:
@@ -324,10 +324,12 @@ def enter_private_chat():
 #メッセージ送信
 @app.route("/send_message", methods=["POST"])
 def send_message():
-    user_id = session("user_id")
-    chat_id = request.form("chat_id")
-    content = request.form("content")
+    user_id = session.get("user_id")
+    chat_id = request.form.get("chat_id")
+    content = request.form.get("content")
     target_user_id = request.form.get("user_id")
+
+    print(f"送信者: {user_id}, チャットID: {chat_id}, 宛先: {target_user_id}, 内容: {content}")
 
     if not user_id or not content:
         return "無効なリクエストです"
