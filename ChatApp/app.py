@@ -427,10 +427,11 @@ def group_chat_redirect():
 @app.route('/admin/group_list', methods=['GET'])
 def admin_group_list():
     uid = session.get('uid')
+    is_admin = session.get('is_admin')
     if uid is None:
         return redirect(url_for('login_view'))
-    
-    if not Group.is_admin(uid):
+
+    if not is_admin:
         return redirect(url_for('login_view'))
 
     groups = Group.get_all()
@@ -457,8 +458,12 @@ def group_view(group_chat_id):
 @app.route('/admin/create_group/<int:group_chat_id>', methods=['GET','POST'])
 def create_group(group_chat_id):
     uid = session.get('uid')
-    if uid is None or not Group.is_admin(uid):
-        flash("管理者専用ページです")
+    is_admin = session.get('is_admin')
+    
+    if not uid:
+        return redirect(url_for('login_view'))
+    
+    if not is_admin:
         return redirect(url_for('login_view'))
     
     group = Group.find_by_id(group_chat_id)
@@ -476,8 +481,12 @@ def create_group(group_chat_id):
 @app.route('/admin/member_edit/<int:group_chat_id>', methods=['GET', 'POST'])
 def member_edit(group_chat_id):
     uid = session.get('uid')
-    if uid is None or not User.is_admin(uid):
-        flash("管理者専用ページです")
+    is_admin = session.get('is_admin')
+    
+    if not uid:
+        return redirect(url_for('login_view'))
+    
+    if not is_admin:
         return redirect(url_for('login_view'))
 
     if request.method == 'POST':
@@ -497,10 +506,12 @@ def member_edit(group_chat_id):
 @app.route('/admin/open_list', methods=['GET'])
 def admin_open_list():
     uid = session.get('uid')
+    is_admin = session.get('is_admin')
+    
     if uid is None:
         return redirect(url_for('login_view'))
     
-    if not Group.is_admin(uid):
+    if not is_admin:
         return redirect(url_for('login_view'))
 
     open_room = OpenChat.get_all()
@@ -510,7 +521,12 @@ def admin_open_list():
 @app.route('/open_view/<int:id>/messages', methods=['GET','POST'])
 def open_view(chat_id):
     uid = session.get('uid')
-    if uid is None:
+    is_admin = session.get('is_admin')
+    
+    if not uid:
+        return redirect(url_for('login_view'))
+    
+    if not is_admin:
         return redirect(url_for('login_view'))
 
     opens = OpenChat.find_by_id(chat_id)
@@ -527,8 +543,12 @@ def open_view(chat_id):
 @app.route('/admin/create_open/<int:id>', methods=['GET','POST'])
 def create_open(chat_id):
     uid = session.get('uid')
-    if uid is None or not Group.is_admin(uid):
-        flash("管理者専用ページです")
+    is_admin = session.get('is_admin')
+    
+    if not uid:
+        return redirect(url_for('login_view'))
+    
+    if not is_admin:
         return redirect(url_for('login_view'))
     
     open = OpenChat.find_by_id(chat_id)
