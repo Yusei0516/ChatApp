@@ -23,7 +23,7 @@
             {% for message in messages %} <!-- 複数メッセージの中から、順に一つだけ選択し20行目以降のループをする。このmessageには、バックエンドに記載している①UID②CID③messageが含まれている-->
             {% if message.uid == uid %} <!-- メッセージを送信したユーザーが、ログインしているユーザーと同じ場合、以下適用する。-->
             <div class="my-messages">
-                <p class="box box-right">{{ message.message }}</p> <!-- 左のメッセージには、①UID②CID③messageが含まれており、その中のmessageを表示させる文言-->
+                <p class="box box-right">{{ message.content }}</p> <!-- 左のメッセージには、①UID②CID③messageが含まれており、その中のmessageを表示させる文言-->
                 <form
                 action="/user/dashboard/{{ uid }}/messages/{{ message.id }}"
                 method="POST"
@@ -32,7 +32,7 @@
                 {% else %} <!-- メッセージを送信したユーザーが、ログインしているユーザーと異なる場合。-->
                 <div class="messages">
                 <p class="user-name">{{ message.user_name }}</p> <!--メッセージには、①UID②CID③messageが含まれており、その中のuserを表示させる文言-->
-                <p class="box box-left">{{ message.message }}</p> <!--メッセージには、①UID②CID③messageが含まれており、その中のメッセージを表示させる文言 -->
+                <p class="box box-left">{{ message.content }}</p> <!--メッセージには、①UID②CID③messageが含まれており、その中のメッセージを表示させる文言 -->
                 </div>
                 {% endif %} {% endfor %}  <!-- if&for分の終了 --> 
                 {% else %}
@@ -40,9 +40,10 @@
                 {% endif %}
             </div>
             <div class="tying-box-wrapper"> <!-- メッセージ入力画面 -->
-                <form class="typing-box" method="POST" name="newMessageForm">
-                <textarea name="message" id="message" autofocus></textarea>
-                <input type="hidden" name="cid" value="{{ private_chat_id  }}" />
+                <form class="typing-box" method="POST"  action="{{ url_for('send_message') }}">
+                <textarea name="content" id="message" autofocus></textarea>
+                <input type="hidden" name="chat_id" value="{{ chat_id  }}" />
+                <input type="hidden" name="user_id" value="{{ user_id }}" />
                 <button type="submit" id="add-message-button">
                     <ion-icon name="paper-plane"></ion-icon> <!--紙飛行機のアイコンの表示-->
                 </button>

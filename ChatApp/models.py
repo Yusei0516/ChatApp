@@ -141,6 +141,7 @@ class Private_chat_message:
     @staticmethod
     def insert_message(private_chats_id, user_id, content):
         #メッセージを送信する
+        print(f"[DB] insert_message: chat_id={private_chats_id}, user_id={user_id}, content={content}")
         sql = "INSERT INTO private_messages (private_chats_id, user_id, content) VALUES (%s, %s, %s)"
         conn = db_pool.get_conn()
         with conn.cursor() as cursor:
