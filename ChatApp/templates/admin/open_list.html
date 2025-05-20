@@ -22,7 +22,7 @@
           <ul>
               <div>
                   {% for open_chat in open_chats %}
-                  <li>{{ open_chat }}</li>
+                  <li>{{ open_chat.name }}</li>
                   {% endfor %}
               </div>   
           </ul>
@@ -31,3 +31,16 @@
 </div>
 {% endblock %} 
 
+<!-- <div id="admin_private_chat_list">
+  <ul>
+      <div>
+          {% for user in users %}
+                <button>
+                  <a class="private_name_list" href="{{ url_for('private_chat',user_id=user.uid ) }}">
+                    <li>{{ user.user_name }}</li> 
+                  </a>
+                </button>
+          {% endfor %}
+      </div>    
+  </ul>
+</div>  -->

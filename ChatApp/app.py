@@ -121,7 +121,8 @@ def admin_dashboard():
 #管理者：オープンチャット一覧へ
 @app.route('/admin/open/list', methods=['GET'])
 def open_list_view():
-    return render_template('admin/open_list.html')
+    open_chats = OpenChat.get_all_openchats()
+    return render_template('admin/open_list.html',open_chats=open_chats)
 
 #管理者判定
 def is_admin():
@@ -136,7 +137,7 @@ def is_admin():
 def private_list_view():
     if not session.get('is_admin'):
         return redirect(url_for("login_view"))
-    users = UserModel.get_all_users()
+    users = UserModel.get_all_users() #private_list.html line24
 
     if not users:
         users = []
