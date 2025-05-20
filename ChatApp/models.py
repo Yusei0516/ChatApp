@@ -429,6 +429,17 @@ class OpenChat:
                 conn.commit()
         finally:
             db_pool.release(conn)
+    
+
+    @staticmethod
+    def get_all_openchats():
+        sql = "SELECT * FROM open_chats;"
+        conn = db_pool.get_conn()
+        with conn.cursor() as cursor:
+            cursor.execute(sql)
+            open_chats = cursor.fetchall()
+        conn.close()
+        return open_chats
 
 #オープンチャットメッセージクラス
 class OpenChatMessage:
