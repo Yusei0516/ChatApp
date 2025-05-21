@@ -461,20 +461,24 @@ button {
     gap: 16px; /* グリッドアイテム間の隙間 */
     list-style: none; /* リストスタイルをなしにする */
     padding: 0; /* パディングをなしにする */
+    margin: 0; /* マージンをなしにする */
 }
 
 .private_name_list li {
+    width: 100%;
     text-align: center; /* テキストを中央寄せ */
 }
 
 .private_name_list a {
+    display: block; /* aタグ全体をクリック可能に */
     background-color: var(--all_white); /* 背景色を指定 */
-    width: 152px; /* 幅 */
+    width: 80px; /* 幅 */
     height: 32px; /* 高さ */
     border-radius: 64px; /* 角を丸くする */
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5); /* 影をつける */
     white-space: nowrap; /* テキストを折り返さない */
     line-height: 0px; /* 行の高さ */
+    text-decoration: none; /* テキストの装飾をなしにする */
 }
 
 .private_name_list a:hover {
