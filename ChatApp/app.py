@@ -415,7 +415,7 @@ def enter_group_chat():
 #グループチャット(リダイレクト)
 @app.route('/group_view', methods=['GET'])
 def group_chat_redirect():
-    uid = session.get('uid')
+    uid = session.get('user_id')
     if uid is None:
         return redirect(url_for('login_view'))
     
@@ -429,7 +429,7 @@ def group_chat_redirect():
 #管理者用グループチャット
 @app.route('/admin/group_list', methods=['GET'])
 def admin_group_list():
-    uid = session.get('uid')
+    uid = session.get('user_id')
     is_admin = session.get('is_admin')
     if uid is None:
         return redirect(url_for('login_view'))
@@ -443,7 +443,7 @@ def admin_group_list():
 #グループチャット(管理者、一般ユーザ共通)
 @app.route('/group_view/<int:group_chat_id>/messages', methods=['GET','POST'])
 def group_view(group_chat_id):
-    uid = session.get('uid')
+    uid = session.get('user_id')
     if uid is None:
         return redirect(url_for('login_view'))
 
@@ -455,12 +455,14 @@ def group_view(group_chat_id):
         return redirect(url_for('group_view', group_chat_id=group_chat_id))
 
     messages = GroupMessage.get_all(group_chat_id)
-    return render_template('user/group_chat.html', group=group, messages=messages)
+    return render_template('user/group_chat.html', group=group, messages=messages,
+                            uid=uid,
+                            group_chat_id=group_chat_id)
 
 #管理者用グループチャット右上編集ボタン→管理者用チャンネル編集
 @app.route('/admin/create_group/<int:group_chat_id>', methods=['GET','POST'])
 def create_group(group_chat_id):
-    uid = session.get('uid')
+    uid = session.get('user_id')
     is_admin = session.get('is_admin')
     
     if not uid:
@@ -483,7 +485,7 @@ def create_group(group_chat_id):
 #管理者用メンバー登録、削除
 @app.route('/admin/member_edit/<int:group_chat_id>', methods=['GET', 'POST'])
 def member_edit(group_chat_id):
-    uid = session.get('uid')
+    uid = session.get('user_id')
     is_admin = session.get('is_admin')
     
     if not uid:
@@ -508,7 +510,7 @@ def member_edit(group_chat_id):
 #管理者用オープンチャット一覧
 @app.route('/admin/open_list', methods=['GET'])
 def admin_open_list():
-    uid = session.get('uid')
+    uid = session.get('user_id')
     is_admin = session.get('is_admin')
     
     if uid is None:
@@ -523,7 +525,7 @@ def admin_open_list():
 #オープンチャット(管理者、一般ユーザ共通)
 @app.route('/open_view/<int:id>/messages', methods=['GET','POST'])
 def open_view(chat_id):
-    uid = session.get('uid')
+    uid = session.get('user_id')
     is_admin = session.get('is_admin')
     
     if not uid:
@@ -545,7 +547,7 @@ def open_view(chat_id):
 #管理者用オープンチャット右上編集ボタン→管理者用チャンネル編集
 @app.route('/admin/create_open/<int:id>', methods=['GET','POST'])
 def create_open(chat_id):
-    uid = session.get('uid')
+    uid = session.get('user_id')
     is_admin = session.get('is_admin')
     
     if not uid:
