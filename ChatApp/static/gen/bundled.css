@@ -88,10 +88,13 @@ textarea {
     resize: none; /* リサイズを無効にする */
     height: 100%; /* 高さを100%に設定 */
     width: 80%; /* 幅を80%に設定 */
+    min-height: 48px;      /* 必要に応じて調整 */
     letter-spacing: 0.1em; /* 文字間隔を指定 */
     font-size: 16px; /* フォントサイズを指定 */
     border-radius: 8px; /* 角を丸くする */
     background-color: var(--all_white); /* 背景色を指定 */
+    margin-bottom: 0;      /* 余計な余白を消す */
+    box-shadow: 0 2px 8px 0 rgba(0,0,0,0.5) inset; /* 内側に影を追加 */
 }
 
 input {
@@ -99,6 +102,7 @@ input {
     border-radius: 8px; /* 角を丸くする */
     background-color: var(--all_white); /* 背景色を指定 */
     width: 240px; /* 幅を300に設定 */
+    box-shadow: 0 2px 8px 0 rgba(0,0,0,0.5) inset; /* 内側に影を追加 */
 }
 
 input:hover,
@@ -176,7 +180,7 @@ button {
 /* dashboard.css */
 .main-container{
     display: flex; /* フレックスボックス */
-    margin-top: 64px;
+    margin-top: 104px;
     flex-direction: column; /* 縦方向に配置 */
 }
 
@@ -300,6 +304,8 @@ button {
 
 /* admin-group-chat-list */
 .page-title {
+    position: fixed; /* 固定位置 */
+    top: 64px; /* ヘッダーの高さ分だけ下げる */
     background-color: var(--sub_blue); /* 背景色を指定 */
     color: var(--all_white); /* 文字色を指定 */
     width: 100%; /* 幅を100%に設定 */
@@ -455,33 +461,129 @@ button {
 
 
 /* admin_private_chat_list */
-.praivate_name_list {
+.private_name_list {
     display: grid; /* グリッドレイアウト */
     grid-template-columns: 1fr 1fr; /* 2列に分ける */
-    gap: 16px; /* グリッドアイテム間の隙間 */
+    gap: 24px 0px; /* グリッドアイテム間の隙間 */
     list-style: none; /* リストスタイルをなしにする */
     padding: 0; /* パディングをなしにする */
-    margin: 0; /* マージンをなしにする */
+    max-width: 100%; /* 幅を100%に設定 */
 }
 
 .private_name_list li {
-    width: 100%;
     text-align: center; /* テキストを中央寄せ */
 }
 
 .private_name_list a {
     display: block; /* aタグ全体をクリック可能に */
     background-color: var(--all_white); /* 背景色を指定 */
-    width: 80px; /* 幅 */
-    height: 32px; /* 高さ */
+    width: 90%; /* 幅 */
     border-radius: 64px; /* 角を丸くする */
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5); /* 影をつける */
     white-space: nowrap; /* テキストを折り返さない */
-    line-height: 0px; /* 行の高さ */
-    text-decoration: none; /* テキストの装飾をなしにする */
+    line-height: 40px; /* 行の高さ */
+    text-decoration: none; /* テキストの装飾をなしにする */ 
+    margin: auto;
+    color: var(--all_black); /* 文字色を指定 */
 }
 
 .private_name_list a:hover {
     transform: scale(1.05); /* 少し拡大 */
     box-shadow: 0 6px 12px rgba(0, 0, 0, 0.6); /* 影を強調 */
+}
+
+
+/* chat_message */
+/* メッセージエリアをスクロール可能にし、下部入力欄の上まで広げる */
+#message-area {
+    flex: 1;  /* フレックスボックスの要素 */
+    overflow-y: auto; /* 縦方向にスクロール可能 */
+    padding-bottom: 32px; /* 入力欄の高さ分だけ下に余白 */
+    min-height: 0; /* これがないとflex:1が効かない場合あり */
+}
+
+/* 入力欄を画面下部に固定 */
+.typing-box-wrapper {
+    position: fixed; /* 固定位置 */
+    left: 0; 
+    bottom: 0;
+    width: 100%; /* 幅100% */
+    background: var(--sub_blue);
+    padding: 8px 0; /* 上下の余白 */
+    z-index: 10; /* 他の要素より上に表示 */
+}
+
+.typing-box {
+    display: flex; /* フレックスボックス */
+    align-items: center; /* 中央揃え */
+    gap: 16px; /* 入力欄とボタンの間隔 */
+    width: 90%; /* 幅90% */
+    margin: 0 auto; /* 中央揃え */
+    margin: 8px auto; /* 上下の余白 */
+}
+
+
+#add-message-button {
+    width: 48px; /* ボタンの幅 */
+    height: 48px; /* ボタンの高さ */
+    padding: 0; /* 内側の余白 */
+    border-radius: 50%; /* 丸い形 */
+    background: var(--all_white); /* 背景色 */
+    display: flex; /* フレックスボックス */
+    align-items: center; /* 中央揃え */
+    justify-content: center; /* 中央揃え */
+    font-size: 24px; /* フォントサイズ */
+    margin: auto;  /* 上下の余白 */
+}
+
+/* 相手のメッセージ（左寄せ） */
+.messages {
+    display: flex; /* フレックスボックス */
+    flex-direction: column; /* 縦方向に並べる */
+    align-items: flex-start; /* 左寄せ */
+    margin-left: 0; /* 左の余白 */
+    margin-right: auto; /* 右の余白 */
+    width: 100%; /* 幅100% */
+}
+.box-left {
+    background: var(--all_white);
+    color: var(--all_black);
+    border-radius: 16px 16px 16px 0; /* 左上、左下、右下の角を丸く */
+    padding: 8px 16px; /* 内側の余白 */
+    max-width: 60%; /* 最大幅60% */
+    margin-left: 8px; /* 左の余白 */
+    margin-right: auto; /* 右の余白 */
+    box-shadow: 0 2px 6px rgba(0,0,0,0.3);
+}
+
+/* 自分のメッセージ（右寄せ） */
+.my-messages {
+    display: flex; /* フレックスボックス */
+    flex-direction: column; /* 縦方向に並べる */
+    align-items: flex-end; /* 右寄せ */
+    margin-left: auto; /* 左の余白 */
+    margin-right: 0; /* 右の余白 */
+}
+
+.box-right {
+    background: var(--all_white); /* 背景色 */
+    color: var(--all_black); /* 文字色 */
+    border-radius: 16px 16px 0 16px; /* 左上、右上、右下の角を丸く */
+    padding: 8px 16px; /* 内側の余白 */
+    max-width: 60%; /* 最大幅60% */
+    margin-right: 8px; /* 右の余白 */
+    margin-left: auto; /* 左の余白 */
+    box-shadow: 0 2px 6px rgba(0,0,0,0.3);
+}
+
+.box-left,
+.box-right {
+    white-space: pre-wrap; /* 改行を保持 */
+    word-break: break-word; /* 単語の途中で折り返し */
+    overflow-wrap: break-word; /* 長い単語のみ折り返し */
+    min-width: 16px;/* 短文でも枠が細くなりすぎない */
+    max-width: 60%; /* 最大幅60% */
+    width: auto; /* 自動調整 */
+    box-sizing: border-box; /* ボックスモデルをborder-boxに設定 */
+    padding: 8px 16px; /* 内側の余白 */
 }
