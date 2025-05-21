@@ -176,7 +176,7 @@ button {
 /* dashboard.css */
 .main-container{
     display: flex; /* フレックスボックス */
-    margin-top: 60px;
+    margin-top: 64px;
     flex-direction: column; /* 縦方向に配置 */
 }
 
@@ -454,3 +454,30 @@ button {
 }
 
 
+/* admin_private_chat_list */
+.praivate_name_list {
+    display: grid; /* グリッドレイアウト */
+    grid-template-columns: 1fr 1fr; /* 2列に分ける */
+    gap: 16px; /* グリッドアイテム間の隙間 */
+    list-style: none; /* リストスタイルをなしにする */
+    padding: 0; /* パディングをなしにする */
+}
+
+.private_name_list li {
+    text-align: center; /* テキストを中央寄せ */
+}
+
+.private_name_list a {
+    background-color: var(--all_white); /* 背景色を指定 */
+    width: 152px; /* 幅 */
+    height: 32px; /* 高さ */
+    border-radius: 64px; /* 角を丸くする */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5); /* 影をつける */
+    white-space: nowrap; /* テキストを折り返さない */
+    line-height: 0px; /* 行の高さ */
+}
+
+.private_name_list a:hover {
+    transform: scale(1.05); /* 少し拡大 */
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.6); /* 影を強調 */
+}
