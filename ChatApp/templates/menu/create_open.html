@@ -17,7 +17,7 @@
       <div class="page-title">
         <h1>オープンチャット作成</h1>        
       </div>
-      <form class ='chat-form' method="post"> 
+      <form class ='chat-form' method="post" action="{{ url_for('create_open_chat') }}"> 
           <div>
               <input
               type="text"
@@ -30,7 +30,7 @@
             <input
               type="text"
               placeholder="オープンチャット説明文"
-              name="open_description"
+              name="description"
               id="possword-input"
             />
           </div>

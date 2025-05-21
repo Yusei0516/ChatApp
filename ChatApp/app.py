@@ -231,34 +231,37 @@ def create_open_view():
     return render_template('menu/create_open.html')
 
 #オープンチャット作成処理
-app.route('/open_chat/create', methods=['POST'])
+@app.route('/open_chat/create', methods=['GET', 'POST'])
 def create_open_chat():
-    uesr_id = session.get('uid')
+    user_id = session.get('user_id')
     is_admin = session.get('is_admin')
-    name = request.form.get('name')
-    description = request.form.get('description')
 
-    if not uesr_id:
+    if not user_id:
         flash('ログインしてください')
         return redirect(url_for('login_view'))
+    if request.method == 'POST':
+        name = request.form.get('name')
+        description = request.form.get('description')
 
-    if not name:
-        flash('チャットルーム名を入力してください')
-        return redirect(url_for('login_view'))
-    
-    if not description:
-        flash('チャットルームの説明を入力してください')
-        return redirect(url_for('login_view'))
-    
-    try:
-        OpenChat.create(name, description, uesr_id)
-        flash('オープンチャットを作成しました。')
-    except Exception as e:
-        flash(f'エラーが発生しました： {str(e)}')
-    #遷移先を判定
-    if is_admin:
-        return redirect(url_for('admin_dashboard'))
-    return redirect(url_for('user_dashboard'))
+
+        if not name:
+            flash('チャットルーム名を入力してください')
+            return redirect(url_for('login_view'))
+        
+        if not description:
+            flash('チャットルームの説明を入力してください')
+            return redirect(url_for('login_view'))
+        
+        try:
+            OpenChat.create(name, description, user_id)
+            flash('オープンチャットを作成しました。')
+        except Exception as e:
+            flash(f'エラーが発生しました： {str(e)}')
+        #遷移先を判定
+        if is_admin:
+            return redirect(url_for('admin_dashboard'))
+        return redirect(url_for('user_dashboard'))
+    return render_template('create_open_chat.html')
 
 
 #まとめ(オープンチャット削除)
