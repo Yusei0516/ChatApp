@@ -1,5 +1,6 @@
+/* ハンバーガメニュー */
 #burger-icon {
-    display: none;
+    display: block; 
     position: fixed;
     right: 24px;
     width: 40px;
@@ -8,7 +9,7 @@
     cursor: pointer;
 }
 #burger-close-icon {
-    display: block;
+    display: none;
     position: fixed;
     right: 24px;
     width: 40px;
@@ -18,14 +19,46 @@
 }
 
 #mobile-header {
-    display: none;
+    display: none; /* ハンバーガーメニューが開いているときに表示 */
     position: fixed;
-    top: 64px; /* ヘッダーの高さ分だけ下げる */
+    top: -16px; /* ヘッダーの高さ分だけ下げる */
     left: 0;
     width: 100vw;
     height: calc(100vh - 64px); /* ヘッダーを除いた高さ */
-    background: var(--main_blue);
     z-index: 500;
     flex-direction: column;
     overflow-y: auto;
+    background-color: var(--main_blue);
+}
+
+#admin-burger-icon {
+    display: block; 
+    position: fixed;
+    right: 24px;
+    width: 40px;
+    height: 40px;
+    z-index: 2000;
+    cursor: pointer;
+}
+#admin-burger-close-icon {
+    display: none;
+    position: fixed;
+    right: 24px;
+    width: 40px;
+    height: 40px;
+    z-index: 2000;
+    cursor: pointer;
+}
+
+#admin_menu {
+    display: none; /* ハンバーガーメニューが開いているときに表示 */
+    position: fixed;
+    top: -16px; /* ヘッダーの高さ分だけ下げる */
+    left: 0;
+    width: 100vw;
+    height: calc(100vh - 64px); /* ヘッダーを除いた高さ */
+    z-index: 500;
+    flex-direction: column;
+    overflow-y: auto;
+    background-color: var(--main_blue);
 }
