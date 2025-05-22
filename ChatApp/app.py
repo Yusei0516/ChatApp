@@ -169,7 +169,7 @@ def private_chat(user_id):
     
     #メッセージ取得
     messages = Private_chat_message.get_message(chat_id)
-    return render_template("chat/private_chat.html", messages=messages, chat_id=chat_id, user_id=user_id)
+    return render_template("chat/private_chat.html", messages=messages, current_user_id=current_user_id, chat_id=chat_id, user_id=user_id,)
 
 #管理者メニューまとめ(グループチャット作成)
 @app.route('/admin_menu/group/create', methods=['GET'])
@@ -323,7 +323,8 @@ def enter_private_chat():
     
     #メッセージ取得
     messages = Private_chat_message.get_message(chat_id)
-    return render_template("chat/private_chat.html", messages=messages, chat_id=chat_id, user_id=admin["uid"])
+    current_user_id = user_id
+    return render_template("chat/private_chat.html", messages=messages, chat_id=chat_id, user_id=admin["uid"], current_user_id=current_user_id)
 
 #メッセージ送信
 @app.route("/send_message", methods=["POST"])
@@ -338,10 +339,10 @@ def send_message():
     if not user_id or not content:
         return "無効なリクエストです"
     
-    Private_chat_message.insert_message(chat_id, user_id, content)
+    sender_id = Private_chat_message.insert_message(chat_id, user_id, content)
 
     if is_admin():
-        return redirect(url_for("private_chat", user_id=target_user_id))
+        return redirect(url_for("private_chat", user_id=target_user_id, sender_id=sender_id))
     else:
         return redirect(url_for("enter_private_chat"))
 

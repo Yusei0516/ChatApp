@@ -500,6 +500,7 @@ button {
     overflow-y: auto; /* 縦方向にスクロール可能 */
     padding-bottom: 32px; /* 入力欄の高さ分だけ下に余白 */
     min-height: 0; /* これがないとflex:1が効かない場合あり */
+    margin-bottom: 64px;
 }
 
 /* 入力欄を画面下部に固定 */
@@ -534,6 +535,7 @@ button {
     justify-content: center; /* 中央揃え */
     font-size: 24px; /* フォントサイズ */
     margin: auto;  /* 上下の余白 */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
 }
 
 /* 相手のメッセージ（左寄せ） */
@@ -544,6 +546,7 @@ button {
     margin-left: 0; /* 左の余白 */
     margin-right: auto; /* 右の余白 */
     width: 100%; /* 幅100% */
+    gap: 4px; /* メッセージ間の隙間 */
 }
 .box-left {
     background: var(--all_white);
@@ -554,6 +557,7 @@ button {
     margin-left: 8px; /* 左の余白 */
     margin-right: auto; /* 右の余白 */
     box-shadow: 0 2px 6px rgba(0,0,0,0.3);
+    margin-top: 0;
 }
 
 /* 自分のメッセージ（右寄せ） */
@@ -586,4 +590,14 @@ button {
     width: auto; /* 自動調整 */
     box-sizing: border-box; /* ボックスモデルをborder-boxに設定 */
     padding: 8px 16px; /* 内側の余白 */
+}
+
+.user-name {
+    padding-left: 8px; /* 左の余白 */
+    margin-bottom: 0;
+    font-size: 16px;
+}
+
+.messages p.user-name {
+    margin-bottom: 0;
 }
