@@ -22,7 +22,12 @@
           <ul>
               <div>
                   {% for open_chat in open_chats %}
-                  <li>{{ open_chat.name }}</li>
+                    <button>
+                      <a class="open_chat_name_list" href="{{ url_for('') }}>
+                          <li>{{ open_chat.name }}</li>
+                          <li>{{ open.description }} </li>  
+                      </a>
+                   </button>
                   {% endfor %}
               </div>   
           </ul>
