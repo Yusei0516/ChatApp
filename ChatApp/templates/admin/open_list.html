@@ -23,9 +23,9 @@
               <div>
                   {% for open_chat in open_chats %}
                     <button>
-                      <a class="open_chat_name_list" href="{{ url_for('') }}>
+                      <a class="open_chat_list" href="{{ url_for('open_view',chat_id=open_chat.id)}}">
                           <li>{{ open_chat.name }}</li>
-                          <li>{{ open.description }} </li>  
+                          <li>{{ open_chat.description }} </li>  
                       </a>
                    </button>
                   {% endfor %}
@@ -36,16 +36,4 @@
 </div>
 {% endblock %} 
 
-<!-- <div id="admin_private_chat_list">
-  <ul>
-      <div>
-          {% for user in users %}
-                <button>
-                  <a class="private_name_list" href="{{ url_for('private_chat',user_id=user.uid ) }}">
-                    <li>{{ user.user_name }}</li> 
-                  </a>
-                </button>
-          {% endfor %}
-      </div>    
-  </ul>
-</div>  -->
+

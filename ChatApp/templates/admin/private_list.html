@@ -29,17 +29,8 @@
                           </a>
                         </button>
                   {% endfor %}
-              </div>    
-          </ul>
-          <ul class="private_name_list">
-            {% for user in users %}
-              <li>
-                <a href="{{ url_for('private_chat',user_id=user.uid ) }}">
-                {{ user.user_name }}
-                </a>
-              </li>
-            {% endfor %}
-          </ul>
+              </div>
+          </ul>    
         </div> 
     </div>
 </div>

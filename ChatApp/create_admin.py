@@ -2,7 +2,7 @@ import hashlib
 from models import User
 
 def create_admin():
-    uid = 'admin123'
+    uid = 'admin123456789'
     name = '管理者'
     email = 'adminFteam@example.com'
     raw_password = 'adminpassFteam'

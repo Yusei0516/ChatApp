@@ -512,22 +512,22 @@ def member_edit(group_chat_id):
                            group_chat_id=group_chat_id)
 
 #管理者用オープンチャット一覧
-@app.route('/admin/open_list', methods=['GET'])
-def admin_open_list():
-    uid = session.get('user_id')
-    is_admin = session.get('is_admin')
+# @app.route('/admin/open_list', methods=['GET'])
+# def admin_open_list():
+#     uid = session.get('user_id')
+#     is_admin = session.get('is_admin')
     
-    if uid is None:
-        return redirect(url_for('login_view'))
+#     if uid is None:
+#         return redirect(url_for('login_view'))
     
-    if not is_admin:
-        return redirect(url_for('login_view'))
+#     if not is_admin:
+#         return redirect(url_for('login_view'))
 
-    open_room = OpenChat.get_all()
-    return render_template('admin/open_list.html', open_room = open_room)
+#     open_room = OpenChat.get_all()
+#     return render_template('admin/open_list.html', open_room = open_room)
 
 #オープンチャット(管理者、一般ユーザ共通)
-@app.route('/open_view/<int:id>/messages', methods=['GET','POST'])
+@app.route('/open_view/<int:chat_id>/messages', methods=['GET','POST'])
 def open_view(chat_id):
     uid = session.get('user_id')
     is_admin = session.get('is_admin')
