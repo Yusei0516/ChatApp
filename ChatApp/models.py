@@ -251,8 +251,8 @@ class Group:
                 sql_delete = "DELETE FROM group_members WHERE group_chat_id = %s"
                 cur.execute(sql_delete, (group_chat_id,))
                 sql_insert = "INSERT INTO group_members (group_chat_id, user_id, created_at) VALUES (%s, %s, NOW())"
-                for uid in user_ids:
-                    cur.execute(sql_insert, (group_chat_id, uid))
+                for user_id in user_ids:
+                    cur.execute(sql_insert, (group_chat_id, user_id))
             conn.commit()
         finally:
             db_pool.release(conn)
@@ -317,7 +317,7 @@ class GroupMessage:
                 sql = """
                     SELECT users.user_name, group_messages.content
                     FROM group_messages
-                    JOIN users ON group_messages.user_id = users.uid
+                    JOIN users ON group_messages.user_id = users.user_id
                     WHERE group_messages.group_chat_id = %s
                     ORDER BY group_messages.created_at ASC
                 """
@@ -469,7 +469,7 @@ class OpenChatMessage:
                 sql = """
                     SELECT users.user_name, open_chat_messages.content
                     FROM open_chat_messages
-                    JOIN users ON open_chat_messages.user_id = users.uid
+                    JOIN users ON open_chat_messages.user_id = users.user_id
                     WHERE open_chat_messages.open_chat_id = %s
                     ORDER BY open_chat_messages.created_at ASC
                 """
@@ -480,52 +480,3 @@ class OpenChatMessage:
             abort(500)
         finally:
             db_pool.release(conn)    
-
-
-# #オープンチャット
-# class Opc:
-#     @classmethod
-#     def create(cls, uid, name, description, is_open):
-#         conn = db_pool.get_conn()
-#         try:
-#             with conn.cursor() as cur:
-#                 sql = """
-#                     INSERT INTO open_chats(create_id, name, description, is_open, created_at)
-#                     VALUES(%s, %s, %s, NOW())
-#                 """
-#                 cur.execute(sql, (uid, name, description, is_open))
-#                 conn.commit()
-#         except pymysql.Error as e:
-#             print(f'エラー: {e}')
-#             abort(500)
-#         finally:
-#             db_pool.release(conn)
-            
-#     @classmethod
-#     def find_by_name(cls, name):
-#         conn = db_pool.get_conn()
-#         try:
-#             with conn.cursor() as cur:
-#                 sql = "SELECT * FROM open_chats WHERE name=%s:"
-#                 cur.execute(sql, (name,))
-#                 opc_room = cur.fetchone()
-#                 return opc_room
-#         except pymysql.Error as e:
-#             print(f'エラーが発生しています : {e}')
-#             abort(500)
-#         finally:
-#             db_pool.release(conn)
-    
-#     @classmethod
-#     def delete(cls, room_id, uid):
-#         conn = db_pool.get_conn()
-#         try:
-#             with conn.cursor() as cur:
-#                 sql = "DELETE FROM open_chats WHERE id = %s AND create_id = %s;"
-#                 cur.execute(sql, (room_id, uid))
-#                 conn.commit()
-#         except pymysql.Error as e:
-#             print(f'エラーが発生しています : {e}')
-#             abort(500)
-#         finally:
-#             db_pool.release(conn)
