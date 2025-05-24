@@ -30,13 +30,16 @@
             </a> 
           </div>
         </div>
-          <div id="open_chat_channels-list">
-              <ul class="channel-box"> 
-                {% for open_chat in open_chats %}
-                  <li>{{ open_chat.name }}</li> 
-                 {% endfor %}
-            </ul>
-          </div> 
+        <div id="chat_list">
+          <ul class="chat_list">
+            {% for open_chat in open_chats %}
+              <a href="{{ url_for('open_view',chat_id=open_chat.id)}}">
+                <li class="chat_name">{{ open_chat.name }}</li>
+                <li class="chat_description">{{ open_chat.description }} </li>  
+              </a>
+            {% endfor %}   
+          </ul>
+        </div> 
     </div>
 </div>
 {% endblock %} 
