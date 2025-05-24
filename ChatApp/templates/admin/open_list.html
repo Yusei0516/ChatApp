@@ -16,20 +16,16 @@
 <div class="main-wrapper">
     <div class="main-container">
         <div class="page-title">
-          <h1>オープンチャット一覧</h1>        
+          <h1>オープンチャット一覧</h1>
         </div>
-        <div id="admin_open_chat_list">
-          <ul>
-              <div>
-                  {% for open_chat in open_chats %}
-                    <button>
-                      <a class="open_chat_list" href="{{ url_for('open_view',chat_id=open_chat.id)}}">
-                          <li>{{ open_chat.name }}</li>
-                          <li>{{ open_chat.description }} </li>  
-                      </a>
-                   </button>
-                  {% endfor %}
-              </div>   
+        <div id="chat_list">
+          <ul class="chat_list">
+            {% for open_chat in open_chats %}
+              <a href="{{ url_for('open_view',open_chat_id=open_chat.id)}}">
+                <li class="chat_name">{{ open_chat.name }}</li>
+                <li class="chat_description">{{ open_chat.description }} </li>  
+              </a>
+            {% endfor %}   
           </ul>
         </div> 
     </div>

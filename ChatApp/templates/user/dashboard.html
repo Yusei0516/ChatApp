@@ -30,43 +30,22 @@
             </a> 
           </div>
         </div>
-          <div id="open_chat_channels-list">
-              <ul class="channel-box"> 
-                {% for open_chat in open_chats %}
-                  <li>{{ open_chat.name }}</li> 
-                 {% endfor %}
-            </ul>
-          </div> 
+        <div id="chat_list">
+          <ul class="chat_list">
+            {% for open_chat in open_chats %}
+              <a href="{{ url_for('open_view',open_chat_id=open_chat.id)}}">
+                <li class="chat_name">{{ open_chat.name }}</li>
+                <li class="chat_description">{{ open_chat.description }} </li>  
+              </a>
+            {% endfor %}   
+          </ul>
+        </div> 
     </div>
 </div>
 {% endblock %} 
 
-<!-- 以下不要かと。後日削除 -->
-{#
-{% block script%}
-<script type="text/javascript">
-  // prettier-ignore
-  const channels = JSON.parse('{{ channels|tojson }}');
-  // prettier-ignore
-  const uid = JSON.parse('{{ uid|tojson}}')
-</script>
-<script
-  src="{{url_for('static',filename='js/channels/create-channel.js')}}"
-  type="module"
-></script>
-<script
-  src="{{url_for('static',filename='js/pagination.js')}}"
-  type="module"
-  ></script>
-<script
-  src="{{url_for('static',filename='js/channels/delete-channel.js')}}"
-  type="module"
-></script> 
-{% endblock %}
-#}
 
 
-<!-- ハンバーガーメニューは、javascriptにて作成する。-->
-<!-- 「paragraph」（段落）の頭文字の「p」でHTMLで段落を表すためのタグです。 -->
+<!-- paragraph(段落)の頭文字の「p」でHTMLで段落を表すためのタグです。 -->
 <!-- spanタグとは、指定したテキストだけに対してCSSを適用させて、デザインを付与・変更するHTMLタグ。範囲を指定するという役割を持つだけのタグであり、spanタグ単体を使用する意味はありません。また、spanタグはインライン要素なので、ブロック要素の中で使用する必要がある。 -->
 <!-- open chat はjava scriptにて作成する。よく理解できていないが、コード記載している。 -->
