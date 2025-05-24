@@ -248,11 +248,12 @@ class Group:
         conn = db_pool.get_conn()
         try:
             with conn.cursor() as cur:
-                sql_delete = "DELETE FROM group_members WHERE group_chats_id = %s"
-                cur.execute(sql_delete, (group_chats_id,))
-                sql_insert = "INSERT INTO group_members (group_chats_id, user_id, created_at) VALUES (%s, %s, NOW())"
+
+                sql_delete = "DELETE FROM group_members WHERE group_chat_id = %s"
+                cur.execute(sql_delete, (group_chat_id,))
+                sql_insert = "INSERT INTO group_members (group_chat_id, user_id, created_at) VALUES (%s, %s, NOW())"
                 for user_id in user_ids:
-                    cur.execute(sql_insert, (group_chats_id, user_id))
+                    cur.execute(sql_insert, (group_chat_id, user_id))
             conn.commit()
         finally:
             db_pool.release(conn)
@@ -317,8 +318,9 @@ class GroupMessage:
                 sql = """
                     SELECT users.user_name, group_messages.content
                     FROM group_messages
-                    JOIN users ON group_messages.user_id = users.uid
-                    WHERE group_messages.group_chats_id = %s
+
+                    JOIN users ON group_messages.user_id = users.user_id
+                    WHERE group_messages.group_chat_id = %s
                     ORDER BY group_messages.created_at ASC
                 """
                 cur.execute(sql, (group_chats_id,))
@@ -469,7 +471,7 @@ class OpenChatMessage:
                 sql = """
                     SELECT users.user_name, open_chat_messages.user_id, open_chat_messages.content
                     FROM open_chat_messages
-                    JOIN users ON open_chat_messages.user_id = users.uid
+                    JOIN users ON open_chat_messages.user_id = users.user_id
                     WHERE open_chat_messages.open_chat_id = %s
                     ORDER BY open_chat_messages.created_at ASC
                 """

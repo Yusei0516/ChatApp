@@ -435,8 +435,12 @@ def group_chat_redirect():
 #管理者用グループチャット
 @app.route('/admin/group_list', methods=['GET'])
 def admin_group_list():
-    group_chats = Group.get_all()
-    return render_template('admin/group_list.html',group_chats=group_chats)
+
+    user_id = session.get('user_id')
+    is_admin = session.get('is_admin')
+    if user_id is None:
+        return redirect(url_for('login_view'))
+
 
     # user_id = session.get('user_id')
     # is_admin = session.get('is_admin')
@@ -450,27 +454,33 @@ def admin_group_list():
     # return render_template('admin/group_list.html', groups=groups)
 
 #グループチャット(管理者、一般ユーザ共通)
-@app.route('/group_view/<int:group_chats_id>/messages', methods=['GET','POST'])
-def group_view(group_chats_id):
-    current_user_id = session.get('user_id')
-    if current_user_id is None:
+
+@app.route('/group_view/<int:group_chat_id>/messages', methods=['GET','POST'])
+def group_view(group_chat_id):
+    user_id = session.get('user_id')
+    if user_id is None:
+
         return redirect(url_for('login_view'))
 
     group = Group.find_by_id(group_chats_id)
     if request.method == 'POST':
-        content = request.form.get('content')
-        if content:
-            GroupMessage.create(current_user_id, group_chats_id, content)
-        return redirect(url_for('group_view', group_chats_id=group_chats_id))
+
+        message = request.form.get('message')
+        if message:
+            GroupMessage.create(user_id, group_chat_id, message)
+        return redirect(url_for('group_view', group_chat_id=group_chat_id))
+
 
     messages = GroupMessage.get_all(group_chats_id)
     return render_template('user/group_chat.html', group=group, messages=messages,
-                            current_user_id=current_user_id,
-                            group_chat_id=group_chats_id)
+
+                            user_id=user_id,
+                            group_chat_id=group_chat_id)
 
 #管理者用グループチャット右上編集ボタン→管理者用チャンネル編集
 @app.route('/admin/create_group/<int:group_chat_id>', methods=['GET','POST'])
-def create_group(group_chats_id):
+def create_group(group_chat_id):
+
     user_id = session.get('user_id')
     is_admin = session.get('is_admin')
     
@@ -493,7 +503,9 @@ def create_group(group_chats_id):
 
 #グループチャット管理者用メンバー登録、削除
 @app.route('/admin/member_edit/<int:group_chat_id>', methods=['GET', 'POST'])
-def member_edit(group_chats_id):
+
+def member_edit(group_chat_id):
+
     user_id = session.get('user_id')
     is_admin = session.get('is_admin')
     
@@ -514,15 +526,17 @@ def member_edit(group_chats_id):
     return render_template('admin/member_edit.html',
                             users=all_users,
                             member_ids=current_member_ids,
-                            group_chat_id=group_chats_id)
+
+                            group_chat_id=group_chat_id)
+
 
 #管理者用オープンチャット一覧
 # @app.route('/admin/open_list', methods=['GET'])
 # def admin_open_list():
-#     uid = session.get('user_id')
+#     user_id = session.get('user_id')
 #     is_admin = session.get('is_admin')
     
-#     if uid is None:
+#     if user_id is None:
 #         return redirect(url_for('login_view'))
     
 #     if not is_admin:
@@ -532,10 +546,11 @@ def member_edit(group_chats_id):
 #     return render_template('admin/open_list.html', open_room = open_room)
 
 #オープンチャット(管理者、一般ユーザ共通)
-@app.route('/open_view/<int:open_chat_id>/messages', methods=['GET','POST'])
-def open_view(open_chat_id):
+
+@app.route('/open_view/<int:chat_id>/messages', methods=['GET','POST'])
+def open_view(chat_id):
     user_id = session.get('user_id')
-    open_chat_id = int(open_chat_id)
+
     is_admin = session.get('is_admin')
     
     if not user_id:
@@ -546,17 +561,21 @@ def open_view(open_chat_id):
 
     opens = OpenChat.find_by_id(open_chat_id)
     if request.method == 'POST':
-        content = request.form.get('content')
-        if content:
-            OpenChatMessage.create(user_id, open_chat_id, content)
-        return redirect(url_for('open_view', open_chat_id=open_chat_id))
+
+        message = request.form.get('message')
+        if message:
+            OpenChatMessage.create(user_id, chat_id, message)
+        return redirect(url_for('open_view', chat_id=chat_id))
+
 
     messages = OpenChatMessage.get_all(open_chat_id)
     return render_template('chat/open_chat.html', opens=opens, messages=messages, open_chat_id=open_chat_id, user_id=user_id)
 
 #管理者用オープンチャット右上編集ボタン→管理者用チャンネル編集
-@app.route('/admin/create_open/<int:open_chat_id>', methods=['GET','POST'])
-def create_open(open_chat_id):
+
+@app.route('/admin/create_open/<int:id>', methods=['GET','POST'])
+def create_open(chat_id):
+
     user_id = session.get('user_id')
     is_admin = session.get('is_admin')
     
