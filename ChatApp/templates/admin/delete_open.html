@@ -18,14 +18,17 @@
         <div class="page-title">
           <h1>オープンチャット削除</h1>        
         </div>
-        <div id="admin_group_chat_list_delete">
-          <ul>
-              <div> 
-                <p>1234</p>
-                <form>
-                    <button class="button-pink">作成</button>
-                </form>
-              </div>
+        <div id="admin_open_chat_list_delete">
+          <ul >
+              {% for open_chat in open_chats %}
+                   <a href="{{ url_for('open_view',open_chat_id=open_chat.id)}}">
+                     <li class="chat_name">{{ open_chat.name }}</li>
+                     <li class="chat_description">{{ open_chat.description }}</li>  
+                   </a>
+                   <form>
+                     <button class="button-pink">削除</button>
+                   </form>
+              {% endfor %} 
           </ul>
         </div> 
     </div>

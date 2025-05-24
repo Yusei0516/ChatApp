@@ -16,14 +16,18 @@
 <div class="main-wrapper">
     <div class ="main-container">
         <div class = "page-title">
+<<<<<<< HEAD
             {% if message.open_chat.id == open_chat.id %}
             <h1>{{ open_chat.name }}</h1>
             {% endif %}
+=======
+            <h1>{{ opens.name }}</h1>
+>>>>>>> c1335e0e4bf05f8cf83e26dc23d215d8fe876af1
         </div>
         <div id ="message-area">
             {% if messages|length > 0 %} <!-- メッセージの長さが1以上だと送信可能 -->
             {% for message in messages %} <!-- 複数メッセージの中から、順に一つだけ選択し20行目以降のループをする。このmessageには、バックエンドに記載している①UID②CID③messageが含まれている-->
-            {% if message.user_id == user_id %} <!-- メッセージを送信したユーザーが、ログインしているユーザーと同じ場合、以下適用する。-->
+            {% if message.user_id == current_user_id %} <!-- メッセージを送信したユーザーが、ログインしているユーザーと同じ場合、以下適用する。-->
             <div class="my-messages">
                 <p class="box box-right">{{ message.content }}</p> <!-- 左のメッセージには、①UID②CID③messageが含まれており、その中のmessageを表示させる文言-->
                 <form
@@ -31,26 +35,26 @@
                 method="POST"
                 >
                 </form>
+            </div>
                 {% else %} <!-- メッセージを送信したユーザーが、ログインしているユーザーと異なる場合。-->
-                <div class="messages">
+            <div class="messages">
                 <p class="user-name">{{ message.user_name }}</p> <!--メッセージには、①UID②CID③messageが含まれており、その中のuserを表示させる文言-->
                 <p class="box box-left">{{ message.content }}</p> <!--メッセージには、①UID②CID③messageが含まれており、その中のメッセージを表示させる文言 -->
-                </div>
+            </div>
                 {% endif %} {% endfor %}  <!-- if&for文の終了 --> 
                 {% else %}
-                <p id="first-message">このメッセージには、まだ投稿はありません。</p> 
+                <p id="no-message">まだメッセージはありません</p>
                 {% endif %}
-            </div>
-            <div class="tying-box-wrapper"> <!-- メッセージ入力画面 -->
-                <form class="typing-box" method="POST" action="{{ url_for('open_vew') }}">
-                <textarea name="message" id="message" autofocus></textarea>
-                <input type="hidden" name="chat_id" value="{{ chat_id  }}" /> 
-                <input type="hidden" name="user_id" value="{{ user_id  }}" />
-                <button type="submit" id="add-message-button">
-                    <ion-icon name="paper-plane"></ion-icon> <!--紙飛行機のアイコンの表示-->
-                </button>
-                </form>
-            </div>
+        </div>
+        <div class="typing-box-wrapper"> <!-- メッセージ入力画面 -->
+            <form class="typing-box" method="POST" action="{{ url_for('open_view', open_chat_id=open_chat_id) }}">
+            <textarea name="content" id="message" autofocus></textarea>
+            <input type="hidden" name="open_chat_id" value="{{ open_chat_id }}" /> 
+            <input type="hidden" name="user_id" value="{{ user_id }}" />
+            <button type="submit" id="add-message-button">
+                <ion-icon name="paper-plane"></ion-icon> <!--紙飛行機のアイコンの表示-->
+            </button>
+            </form>
         </div>
     </div>
 </div>

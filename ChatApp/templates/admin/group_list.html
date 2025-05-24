@@ -18,10 +18,14 @@
         <div class="page-title">
           <h1>グループチャット一覧</h1>        
         </div>
-        <div id="admin_group_chat_list">
-          <ul> 
-
-            </div>  
+        <div id="chat_list">
+          <ul class="chat_list">
+            {% for group_chat in group_chats %}
+              <a href="{{ url_for('group_view',group_chats_id = group_chat.id)}}">
+                <li class="chat_name">{{ group_chat.name }}</li>
+                <li class="chat_description">{{ group_chat.description }} </li>  
+              </a>
+            {% endfor %}   
           </ul>
         </div> 
     </div>
