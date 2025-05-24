@@ -33,7 +33,11 @@
         <div id="chat_list">
           <ul class="chat_list">
             {% for open_chat in open_chats %}
+<<<<<<< HEAD
+              <a href="{{ url_for('open_view',chat_id=open_chat.id)}}">
+=======
               <a href="{{ url_for('open_view',open_chat_id=open_chat.id)}}">
+>>>>>>> c1335e0e4bf05f8cf83e26dc23d215d8fe876af1
                 <li class="chat_name">{{ open_chat.name }}</li>
                 <li class="chat_description">{{ open_chat.description }} </li>  
               </a>
