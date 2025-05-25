@@ -28,7 +28,7 @@
             <div class="my-messages">
                 <p class="box box-right">{{ message.message }}</p> <!-- 左のメッセージには、①UID②CID③messageが含まれており、その中のmessageを表示させる文言-->
                 <form
-                action="/user/dashboard/{{ group_chat_id }}/messages/{{ message.id }}"
+                action="/user/dashboard/{{ group_chats_id }}/messages/{{ message.id }}"
                 method="POST"
                 > <!-- バックエンドへ報告。 message.id = 送信したメッセージとなる。 user/dashboard/private//{#{ channnel.id (例1,2,3)}#}/{#{ message.id }#}-->
                 </form>

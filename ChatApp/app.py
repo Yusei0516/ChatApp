@@ -202,7 +202,7 @@ def create_group_chat():
 #管理者メニューまとめ(グループチャット削除)
 @app.route('/admin_menu/group/delete', methods=['GET'])
 def delete_group_view():
-    return render_template('admin/delete_group.html')
+    return render_template('admin/delete_group.html', group)
 
 #管理者メニューまとめ(グループチャット削除処理)
 @app.route('/group_chat/delete/<int:group_id>', methods=['POST'])
@@ -455,7 +455,6 @@ def group_view(group_chats_id):
     current_user_id = session.get('user_id')
     if current_user_id is None:
         return redirect(url_for('login_view'))
-
     group = Group.find_by_id(group_chats_id)
     if request.method == 'POST':
         content = request.form.get('content')
@@ -466,7 +465,7 @@ def group_view(group_chats_id):
     messages = GroupMessage.get_all(group_chats_id)
     return render_template('user/group_chat.html', group=group, messages=messages,
                             current_user_id=current_user_id,
-                            group_chat_id=group_chats_id)
+                            group_chats_id=group_chats_id)
 
 #管理者用グループチャット右上編集ボタン→管理者用チャンネル編集
 @app.route('/admin/create_group/<int:group_chat_id>', methods=['GET','POST'])

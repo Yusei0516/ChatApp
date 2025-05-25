@@ -1,6 +1,6 @@
 {% extends 'admin/base.html' %} 
 {% block title %}
-<title>admin group chat delete</title>
+<title>admin_group_chat_delete</title>
 {% endblock %}
 
 {% block body %}
@@ -18,14 +18,23 @@
         <div class="page-title">
           <h1>グループチャット削除</h1>        
         </div>
-        <div id="admin_group_chat_list_delete">
+        <div>
           <ul>
-              <div> 
-                <p>1234</p>
-                <form>
-                    <button class="button-pink">作成</button>
-                </form>
-              </div>
+              <div>
+                  <ul class="chat_list">
+                  {% for group_chat in group_chats %}
+                    <a href="{{ url_for('group_view',group_chats_id = group_chat.id)}}">
+                        <li class="chat_name">{{ group_chat.name }}</li>
+                        <li class="chat_description">{{ group_chat.description }} </li>  
+                        <!-- <form method="POST">
+                          <input type="hidden" name="group_id" value="{{  group_chats_id  }}" />
+                          <input type="hidden" name="user_id" value="{{ user_id }}" />
+                          <button type="submit" name="" class="button-pink">削除</button>
+                        </form>    -->
+                    </a>
+                  {% endfor %}
+                  </ul>
+              </div> 
           </ul>
         </div> 
     </div>

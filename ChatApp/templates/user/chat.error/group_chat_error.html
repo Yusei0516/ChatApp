@@ -1,6 +1,9 @@
-{% extends 'user/base.html' %} {% block title %}
+{% extends 'user/base.html' %} 
+{% block title %}
 <title>group_chat_error</title>
-{% endblock %} {% block body %}
+{% endblock %} 
+
+{% block body %}
 <header>
     <div>
       <img
@@ -19,10 +22,10 @@
           <p>グループチャットは<br>ご利用いただけません。</p>
           <p>まずは個人チャットを<br>ご利用ください。</p>
         </div>
-        <form>
-        <div class="button-container"> <!--ボタンの幅等-->
-            <button class="button-white">戻る</button>
+        <div> 
+            <a class="page-links" href="{{ url_for('user_dashboard') }}">
+                戻る
+            </a>
         </div>
-      </form>
     </div>
 </div>

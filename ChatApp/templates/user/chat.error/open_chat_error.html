@@ -1,15 +1,15 @@
-{% extends 'user/base.html' %} {% block title %}
+{% extends 'user/base.html' %} 
+{% block title %}
 <title>open_chat_error</title>
-{% endblock %} {% block body %}
+{% endblock %} 
+
+{% block body %}
 <header>
     <div>
       <img
           src="{{ url_for('static' ,filename='img/hagyutto-logo.png')}}"
           alt="logo"
       > 
-    </div>
-    <div>
-        <button class="backButton"><</button> 
     </div>
 </header>
 
@@ -21,10 +21,10 @@
         <div>
           <p>このオープンチャットは<br>既に削除されています。</p>
         </div>
-        <form>
-        <div class="button-container"> <!--ボタンの幅等-->
-            <button class="button-white">戻る</button>
+        <div> 
+            <a class="page-links" href="{{ url_for('user_dashboard') }}">
+                戻る
+            </a>
         </div>
-      </form>
     </div>
 </div>
