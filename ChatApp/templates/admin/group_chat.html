@@ -12,25 +12,26 @@
         > 
     </div>
     <div>
-        <form>
-            <button class="button-white">編集</button>
-        </form>
+        <!-- <a class="page-links" href="{{ url_for('@@@@@@@@@') }}">
+                編集
+            </a> 
+         -->
     </div>
 </header>
 
 <div class="main-wrapper">
     <div class ="main-container">
         <div class = "page-title">
-            <p>グループチャット</p> 
+            <h1>グループチャット</h1> 
         </div>
         <div id ="message-area">
             {% if messages|length > 0 %} <!-- メッセージの長さが1以上だと送信可能 -->
             {% for message in messages %} <!-- 複数メッセージの中から、順に一つだけ選択し20行目以降のループをする。このmessageには、バックエンドに記載している①UID②CID③messageが含まれている-->
-            {% if message.uid == uid %} <!-- メッセージを送信したユーザーが、ログインしているユーザーと同じ場合、以下適用する。-->
+            {% if message.uid == current_user_id %} <!-- メッセージを送信したユーザーが、ログインしているユーザーと同じ場合、以下適用する。-->
             <div class="my-messages">
-                <p class="box box-right">{{ message.message }}</p> <!-- 左のメッセージには、①UID②CID③messageが含まれており、その中のmessageを表示させる文言-->
+                <p class="box box-right">{{ message.content }}</p> <!-- 左のメッセージには、①UID②CID③messageが含まれており、その中のmessageを表示させる文言-->
                 <form
-                action="/user/dashboard/{{ group_chat_id }}/messages/{{ message.id }}"
+                action="/user/dashboard/{{ group_chats_id }}/messages/{{ message.id }}"
                 method="POST"
                 > <!-- message.id = 送信したメッセージとなる。 user/dashboard/private//{#{ channnel.id (例1,2,3)}#}/{#{ message.id }#}-->
                 </form>
@@ -38,25 +39,25 @@
                 {% else %} <!-- メッセージを送信したユーザーが、ログインしているユーザーと異なる場合。-->
             <div class="messages">
                 <p class="user-name">{{ message.user_name }}</p> <!--メッセージには、①UID②CID③messageが含まれており、その中のuserを表示させる文言-->
-                <p class="box box-left">{{ message.message }}</p> <!--メッセージには、①UID②CID③messageが含まれており、その中のメッセージを表示させる文言 -->
+                <p class="box box-left">{{ message.content }}</p> <!--メッセージには、①UID②CID③messageが含まれており、その中のメッセージを表示させる文言 -->
             </div>
                 {% endif %} {% endfor %}  <!-- if&for分の終了 --> 
                 {% else %}
-                <p id="first-message">メッセージを送信してみましょう！</p> 
+                <p id="no-message">まだメッセージはありません</p> 
                 {% endif %}
         </div>
         <div class="typing-box-wrapper"> <!-- メッセージ入力画面 -->
-                <form class="typing-box" method="POST" name="newMessageForm">
-                <textarea name="message" id="message" autofocus></textarea>
-                <input type="hidden" name="cid" value="{{ group_chat_id  }}" />
-                <button type="submit" id="add-message-button">
-                    <ion-icon name="paper-plane"></ion-icon> <!--紙飛行機のアイコンの表示-->
-                </button>
-                </form>
+            <form class="typing-box" method="POST" action="{{ url_for('group_view', group_chats_id=group_chats_id) }}">
+            <textarea name="content" id="message" autofocus></textarea>
+            <input type="hidden" name="group_chats_id" value="{{ group_chats_id  }}" />
+            <input type="hidden" name="user_id" value="{{ user_id }}" />
+            <button type="submit" id="add-message-button"></button>
+               <ion-icon name="paper-plane"></ion-icon> <!--紙飛行機のアイコンの表示-->
+            </button>
+            </form>
         </div>
     </div>
 </div>
-
 {% endblock %}
 
 {% block script%}
