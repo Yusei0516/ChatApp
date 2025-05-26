@@ -20,7 +20,7 @@
         <h1>グループチャット作成</h1>        
       </div>
       <form class ='chat-form' method="post"> 
-          <div>
+          <div class="group-name-form">
               <input
               type="text"
               placeholder="グループチャット名" 
@@ -28,13 +28,13 @@
               id="create-group-channel-name"
               /> 
           </div>
-          <div>
-            <input
+          <div class="group-description-form">
+            <textarea
               type="text"
               placeholder="グループチャット説明文"
               name="group_description"
               id="possword-input"
-            />
+            ></textarea>
           </div>
           <div class="button-container"> 
             {% with messages = get_flashed_messages() %} 

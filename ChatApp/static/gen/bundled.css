@@ -7,6 +7,7 @@
     --group_yellow: #FEFFD9;
     --open_green: #D9FFD9;
     --all_white: #FFFFFF;
+    --all_black: #000000;
 }
 
 body::-webkit-scrollbar {
@@ -329,7 +330,7 @@ button {
 }
 
 .sub_button {
-    background-color: var(--button_pink); /* 背景色を指定 */
+    background-color: var(--all_white); /* 背景色を指定 */
     width: 80px; /* 幅 */
     height: 24px; /* 高さ */
     border-radius: 64px; /* 角を丸くする */
@@ -340,7 +341,7 @@ button {
 
 .sub_button a{
     text-decoration: none; /* 下線などの装飾を消す */
-    color: var(--all_white); /* 文字色を指定 */
+    color: var(--all_black); /* 文字色を指定 */
 }
 
 .sub_button:hover {
@@ -666,4 +667,44 @@ button {
 
 .chat_description {
     font-size: 16px; /* フォントサイズ */
+}
+
+/* edit-chat */
+.chat-form {
+    display: flex;
+    width: 80%; /* 幅を80%に設定 */
+    margin: auto; /* 中央寄せ */
+    flex-direction: column;
+    gap: 32px;
+}
+
+.group-name-form input{
+    display: flex; /* フレックスボックス */
+    flex-direction: column; /* 縦方向に配置 */
+    width: 100%; /* 幅を80%に設定 */
+    margin: auto; /* 中央寄せ */;
+}
+
+.group-description-form textarea{
+    display: flex; /* フレックスボックス */
+    flex-direction: column; /* 縦方向に配置 */
+    width: 100%; /* 幅を80%に設定 */
+    margin: auto; /* 中央寄せ */
+    height: 120px;  
+}
+
+.button-container {
+    display: flex;
+    flex-direction: column;
+    gap: 32px;
+    align-items: center;
+}
+.button-white {
+    width: 256px;
+    margin: 0;
+}
+
+.button-white:hover {
+  transform: scale(1.05); /* 少し拡大 */
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.6); /* 影を強調 */
 }

@@ -19,7 +19,7 @@
         <h1>オープンチャット作成</h1>        
       </div>
       <form class ='chat-form' method="post" action="{{ url_for('create_open_chat') }}"> 
-          <div>
+          <div class="group-name-form">
               <input
               type="text"
               placeholder="オープンチャット名" 
@@ -27,13 +27,13 @@
               id="create-open-channel-name"
               /> <!-- nameタグをバックエンドへ連絡-->
           </div>
-          <div>
-            <input
+          <div class="group-description-form">
+            <textarea
               type="text"
               placeholder="オープンチャット説明文"
               name="description"
               id="possword-input"
-            />
+            ></textarea>
           </div>
           <div class="button-container"> <!--ボタンの幅等-->
             {% with messages = get_flashed_messages() %} <!-- flash message:ユーザーが操作をしたときに、画面にその結果を表示する機能やメッセージのこと。ログインした。投稿した。ログインできなかった。-->
