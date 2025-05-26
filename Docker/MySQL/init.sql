@@ -90,6 +90,7 @@ INSERT INTO group_chats(name, creator_id, is_open) VALUES('開発者グループ
 INSERT INTO open_chats(name, creator_id, is_open, description) VALUES('アニメ好き集まれ', 'b9ec6802-f2a2-4069-81ee-3909ec6851ad', TRUE, '好きなアニメについて話しましょう！');
 INSERT INTO open_chats(name, creator_id, is_open, description) VALUES('ドラマ好き集まれ', 'b9ec6802-f2a2-4069-81ee-3909ec6851ad', TRUE, '好きなドラマについて話しましょう！');
 INSERT INTO open_chats(name, creator_id, is_open, description) VALUES('バンド好き集まれ', 'b9ec6802-f2a2-4069-81ee-3909ec6851ad', TRUE, '好きなバンドについて話しましょう！');
+-- INSERT INTO group_members (group_chats_id, user_id) VALUES ('1', 'b9ec6802-f2a2-4069-81ee-3909ec6851ad');
 -- INSERT INTO chat_rooms(name, type, creator_id, is_open) VALUES('開発者グループ', 'group', 'admin123456789', FALSE);
 -- INSERT INTO chat_rooms(name, type, creator_id, is_open, description) VALUES('アニメ好き集まれ', 'open', 'b9ec6802-f2a2-4069-81ee-3909ec6851ad', TRUE, '好きなアニメについて話しましょう！');
 -- INSERT INTO chat_rooms(name, type, creator_id, is_open, description) VALUES('ドラマ好き集まれ', 'open', 'b9ec6802-f2a2-4069-81ee-3909ec6851ad', TRUE, '好きなドラマについて話しましょう！');
