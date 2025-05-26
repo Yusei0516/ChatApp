@@ -1,0 +1,39 @@
+/* edit-chat */
+.chat-form {
+    display: flex;
+    width: 80%; /* 幅を80%に設定 */
+    margin: auto; /* 中央寄せ */
+    flex-direction: column;
+    gap: 32px;
+}
+
+.group-name-form input{
+    display: flex; /* フレックスボックス */
+    flex-direction: column; /* 縦方向に配置 */
+    width: 100%; /* 幅を80%に設定 */
+    margin: auto; /* 中央寄せ */;
+}
+
+.group-description-form textarea{
+    display: flex; /* フレックスボックス */
+    flex-direction: column; /* 縦方向に配置 */
+    width: 100%; /* 幅を80%に設定 */
+    margin: auto; /* 中央寄せ */
+    height: 120px;  
+}
+
+.button-container {
+    display: flex;
+    flex-direction: column;
+    gap: 32px;
+    align-items: center;
+}
+.button-white {
+    width: 256px;
+    margin: 0;
+}
+
+.button-white:hover {
+  transform: scale(1.05); /* 少し拡大 */
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.6); /* 影を強調 */
+}
