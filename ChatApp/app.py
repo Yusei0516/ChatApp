@@ -3,7 +3,7 @@ from datetime import timedelta
 import hashlib, uuid, re, os
 from models import User, Group, GroupMessage, OpenChat, OpenChatMessage, UserModel, Private_chats, Private_chat_message
 # from util.assets import bundle_css_files
- 
+
 # 定数定義
 EMAIL_PATTERN = r"^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$"
 SESSION_DAYS = 30
@@ -275,6 +275,8 @@ def delete_open_view():
 def delete_open_chat(chat_id):
     user_id = session.get('uid')
     is_admin = session.get('is_admin')
+    # chat_id = request.form.get('chat_id')
+
 
     if not user_id:
         flash('ログインしてください')
@@ -463,32 +465,28 @@ def group_view(group_chats_id):
         return redirect(url_for('group_view', group_chats_id=group_chats_id))
 
     messages = GroupMessage.get_all(group_chats_id)
-    return render_template('user/group_chat.html', group=group, messages=messages,
+    return render_template('chat/group_chat.html', group=group, messages=messages,
                             current_user_id=current_user_id,
                             group_chats_id=group_chats_id)
 
 #管理者用グループチャット右上編集ボタン→管理者用チャンネル編集
 @app.route('/admin/create_group/<int:group_chat_id>', methods=['GET','POST'])
-def create_group(group_chats_id):
-    user_id = session.get('user_id')
+def create_group(group_chat_id):
     is_admin = session.get('is_admin')
-    
-    if not user_id:
-        return redirect(url_for('login_view'))
-    
+        
     if not is_admin:
-        return redirect(url_for('login_view'))
+        return render_template('error/500.html'),500
     
-    group = Group.find_by_id(group_chats_id)
+    group = Group.find_by_id(group_chat_id)
     if request.method == 'POST':
         name = request.form.get('name')
         description = request.form.get('description')
         if name:
-            Group.update(group_chats_id, name, description)
+            Group.update(group_chat_id, name, description)
             flash("グループ情報を更新しました")
-            return redirect(url_for('create_group', group_chat_id=group_chats_id))
+            return redirect(url_for('create_group', group_chat_id=group_chat_id))
     
-    return render_template('admin/create_group.html', group=group)
+    return render_template('menu/edit_open.html', group=group)
 
 #グループチャット管理者用メンバー登録、削除
 @app.route('/admin/member_edit/<int:group_chat_id>', methods=['GET', 'POST'])
@@ -535,13 +533,13 @@ def member_edit(group_chats_id):
 def open_view(open_chat_id):
     user_id = session.get('user_id')
     open_chat_id = int(open_chat_id)
-    is_admin = session.get('is_admin')
+    # is_admin = session.get('is_admin')
     
     if not user_id:
         return redirect(url_for('login_view'))
     
-    if not is_admin:
-        return redirect(url_for('login_view'))
+    # if not is_admin:
+    #     return redirect(url_for('login_view'))
 
     opens = OpenChat.find_by_id(open_chat_id)
     if request.method == 'POST':

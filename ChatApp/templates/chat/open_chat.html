@@ -11,6 +11,7 @@
         alt="logo"
         > 
     </div>
+    {% include 'util/admin_menu.html' %}
 </header>
 
 <div class="main-wrapper">
@@ -21,7 +22,7 @@
         <div id ="message-area">
             {% if messages|length > 0 %} <!-- メッセージの長さが1以上だと送信可能 -->
             {% for message in messages %} <!-- 複数メッセージの中から、順に一つだけ選択し20行目以降のループをする。このmessageには、バックエンドに記載している①UID②CID③messageが含まれている-->
-            {% if message.user_id == current_user_id %} <!-- メッセージを送信したユーザーが、ログインしているユーザーと同じ場合、以下適用する。-->
+            {% if message.user_id == user_id %} <!-- メッセージを送信したユーザーが、ログインしているユーザーと同じ場合、以下適用する。-->
             <div class="my-messages">
                 <p class="box box-right">{{ message.content }}</p> <!-- 左のメッセージには、①UID②CID③messageが含まれており、その中のmessageを表示させる文言-->
                 <form

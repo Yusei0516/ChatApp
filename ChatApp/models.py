@@ -326,6 +326,7 @@ class GroupMessage:
                 """
                 cur.execute(sql, (group_chats_id,))
                 messages = cur.fetchall()
+                # print("取得したメッセージ:", messages)
                 return messages
         except pymysql.Error as e:
             print(f'エラーが発生しています: {e}')

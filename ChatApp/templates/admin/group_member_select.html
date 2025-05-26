@@ -11,17 +11,18 @@
         alt="logo"
     /> 
   </div>
-  <div>
-        <form>
-            <button class="button-white">確定</button>
-        </form>
-    </div>
+  {% include 'util/admin_menu.html' %}
 </header>
 
 <div class="main-wrapper">
     <div class="main-container">
         <div class="page-title">
-          <h1>メンバー追加・退会</h1> <!--以下、aタグとformタグの場所確認する-->    
+          <h1>メンバー追加・退会</h1> <!--request.form.getはadd.pyにある？-->    
+          <div class="button-white">
+              <!-- <form method="POST" action="{#{{ url_for('member_edit',group_chat_id=group_chat.id ) }}#}">
+                      <input type="hidden" name="users_ids" value="{#{{  users.uid  }}#}" />
+                      <button type="submit" name="" class="button-pink">削除</button> -->
+          </div>
         </div>
         <div id="admin_private_chat_list">
             <ul class="private_name_list_delete_and_add">
