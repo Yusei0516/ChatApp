@@ -1,0 +1,44 @@
+/* delete-group */
+.chat_delete {
+    display: flex; /*フレックスボックス */
+    flex-direction: column; /* 縦方向に配置 */
+    gap: 16px; /* アイテム間の隙間 */
+    list-style: none; /* リストスタイルをなしにする */
+    max-width: 100%; /* 最大幅を90%に設定 */
+    margin: auto; /* 中央寄せ */
+    padding: 24px; /* パディングを追加 */
+}
+
+.chat_list_delete{
+    background-color: var(--all_white); /* 背景色を指定 */
+    padding: 8px 16px 64px 16px; /* 下の余白を56pxなど大きめに */
+    border-radius: 16px; /* 角を丸くする */
+    text-decoration: none; 
+    color: var(--all_black); /* 文字色を指定 */
+    position: relative; /* ← これを追加！ */
+}
+
+.delete-button {
+    position: absolute;
+    right: 16px;
+    z-index: 1;
+    width: 96px;
+    height: 40px;
+    background: var(--button_pink);
+    color: var(--all_white);
+    border-radius: 32px;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+    font-size: 16px;
+    border: none;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    bottom: -16px; /* 下の余白を24pxに設定 */
+    white-space: nowrap;
+}
+
+.delete-button:hover {
+  transform: scale(1.05); /* 少し拡大 */
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.6); /* 影を強調 */
+}

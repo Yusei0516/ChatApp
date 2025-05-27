@@ -19,25 +19,20 @@
         <div class="page-title">
           <h1>グループチャット削除</h1>        
         </div>
-        <div>
-          <ul>
-              <div>
-                  <ul class="chat_list">
-                  {% for group_chat in group_chats %}
-                    <a href="{{ url_for('group_view',group_chats_id = group_chat.id)}}">
-                        <li class="chat_name">{{ group_chat.name }}</li>
-                        <li class="chat_description">{{ group_chat.description }} </li>  
-                        <!-- <form method="POST">
-                          <input type="hidden" name="group_id" value="{{  group_chats_id  }}" />
-                          <input type="hidden" name="user_id" value="{{ user_id }}" />
-                          <button type="submit" name="" class="button-pink">削除</button>
-                        </form>    -->
-                    </a>
-                  {% endfor %}
-                  </ul>
-              </div> 
-          </ul>
-        </div> 
+          <div id="chat_list_delete">
+            <ul class="chat_delete">
+              {% for group_chat in group_chats %}
+                <li class="chat_list_delete">
+                  <div class="chat_name">{{ group_chat.name }}</div>
+                  <div class="chat_description">{{ group_chat.description }} </div>  
+                  <form method="POST" action="{{ url_for('delete_group_chat', group_id=group_chat.id) }}">
+                    <input type="hidden" name="group_id" value="{{  group_chat.id  }}" />
+                      <button type="submit"  class="delete-button">削除</button>
+                  </form>
+                </li>
+              {% endfor %}
+            </ul>
+          </div>  
     </div>
 </div>
 {% endblock %} 

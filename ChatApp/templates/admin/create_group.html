@@ -19,7 +19,7 @@
       <div class="page-title">
         <h1>グループチャット作成</h1>        
       </div>
-      <form class ='chat-form' method="post"> 
+      <form class ='chat-form' method="post" action="{{ url_for('create_group_chat') }}"> 
           <div class="group-name-form">
               <input
               type="text"
@@ -32,24 +32,14 @@
             <textarea
               type="text"
               placeholder="グループチャット説明文"
-              name="group_description"
-              id="possword-input"
+              name="description"
             ></textarea>
           </div>
           <div class="button-container"> 
-            {% with messages = get_flashed_messages() %} 
-            {% if messages %} 
-            <ul class="flashes">
-              {% for message in messages %} 
-                <li>{{ message }}</li> 
-              {% endfor %}
-            </ul>
-            {% endif %} {% endwith %} 
             <button class="button-white">作成</button>
           </div>
       </form>
   </div>
-</div>
 {% endblock %}
 
 
