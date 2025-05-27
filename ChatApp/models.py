@@ -217,7 +217,7 @@ class Group:
         conn = db_pool.get_conn()
         try:
             with conn.cursor(pymysql.cursors.DictCursor) as cur:
-                sql = "SELECT id, name FROM group_chats;"
+                sql = "SELECT id, name, description FROM group_chats;"
                 cur.execute(sql)
                 groups = cur.fetchall()
                 return groups
@@ -228,8 +228,8 @@ class Group:
             db_pool.release(conn)
 
     @classmethod
-    def is_admin(cls, uid):
-        return uid == "admin123"
+    def is_admin(cls, user_id):
+        return user_id == "admin123456789"
 
     @classmethod
     def get_member_ids(cls, group_chats_id):
@@ -258,7 +258,7 @@ class Group:
             db_pool.release(conn)
 
     @classmethod
-    def create_group(cls, name, creator_id):
+    def create_group(cls, name, description, creator_id, is_open=False):
         #グループチャットの作成（管理者のみ）
         if not cls.is_admin(creator_id):
             return {"error": "権限がありません"}
@@ -266,8 +266,8 @@ class Group:
         conn = db_pool.get_conn()
         try:
             with conn.cursor() as cur:
-                sql = "INSERT INTO group_chats (name, is_open, created_at) VALUES (%s, FALSE, NOW())"
-                cur.execute(sql, (name,))
+                sql = "INSERT INTO group_chats (name, description, is_open, creator_id) VALUES (%s, %s, %s, %s)"
+                cur.execute(sql, (name, description, is_open, creator_id))
                 conn.commit()
                 return {"success": "グループチャット作成されました"}
         finally:
@@ -372,7 +372,7 @@ class OpenChat:
         try:
             with conn.cursor() as cur:
                 #チャットルームの情報取得
-                sql = "SELECT create_id FROM group_chats WHERE id = %s"
+                sql = "SELECT creator_id FROM open_chats WHERE id = %s"
                 cur.execute(sql, (chat_id,))
                 chat = cur.fetchone()
 
@@ -381,7 +381,7 @@ class OpenChat:
                     return False
                 
                 #管理者または作成者のみが削除可能
-                if chat['creator_id'] == user_id or User.is_admin(user_id):
+                if chat['creator_id'] == user_id or Group.is_admin(user_id):
                     sql = "DELETE FROM open_chats WHERE id = %s"
                     cur.execute(sql, (chat_id,))
                     conn.commit()

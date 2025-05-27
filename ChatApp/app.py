@@ -177,37 +177,44 @@ def create_group_view():
     return render_template('admin/create_group.html')
 
 #管理者メニューまとめ(グループチャットの作成処理)
-@app.route('/group_chat/create', methods=['POST'])
+@app.route('/group_chat/create', methods=['GET','POST'])
 def create_group_chat():
-    user_id = session.get('uid')
+    user_id = session.get('user_id')
     is_admin = session.get('is_admin')
-    name = request.form.get('name')
 
     if not user_id:
         flash('ログインしてください')
         return redirect(url_for('login_view'))
-    
-    if not name:
-        flash('グループチャット名を入力してください')
-        return redirect(url_for('login_view'))
-    try:
-        Group.create_group(name, user_id)
-        flash('グループチャットを作成しました。')
-    except Exception as e:
-        flash(f'エラーが発生しました： {str(e)}')
-    if not is_admin:
-        return redirect(url_for('login_view'))
+    if request.method == 'POST':
+        name = request.form.get('name')
+        description = request.form.get('description')
+
+        if not name:
+            flash('グループチャット名を入力してください')
+            return redirect(url_for('login_view'))
+        
+        if not description:
+            flash('チャットルームの説明を入力してください')
+            return redirect(url_for('login_view'))
+        try:
+            Group.create_group(name, description, user_id)
+            flash('グループチャットを作成しました。')
+        except Exception as e:
+            flash(f'エラーが発生しました： {str(e)}')
+        if not is_admin:
+            return redirect(url_for('login_view'))
     return redirect(url_for('admin_dashboard'))
 
 #管理者メニューまとめ(グループチャット削除)
 @app.route('/admin_menu/group/delete', methods=['GET'])
 def delete_group_view():
-    return render_template('admin/delete_group.html', group)
+    group_chats = Group.get_all()
+    return render_template('admin/delete_group.html', group_chats=group_chats)
 
 #管理者メニューまとめ(グループチャット削除処理)
 @app.route('/group_chat/delete/<int:group_id>', methods=['POST'])
 def delete_group_chat(group_id):
-    user_id = session.get('uid')
+    user_id = session.get('user_id')
     is_admin = session.get('is_admin')
 
     if not user_id:
@@ -273,9 +280,10 @@ def delete_open_view():
 #オープンチャットの削除
 @app.route('/open_chat/delete/<int:chat_id>', methods=['POST'])        
 def delete_open_chat(chat_id):
-    user_id = session.get('uid')
+    user_id = session.get('user_id')
     is_admin = session.get('is_admin')
-    # chat_id = request.form.get('chat_id')
+    print('セッションuser_id:', session.get('user_id'))
+    print('セッションis_admin:', session.get('is_admin'))
 
 
     if not user_id:
@@ -486,7 +494,7 @@ def create_group(group_chat_id):
             flash("グループ情報を更新しました")
             return redirect(url_for('create_group', group_chat_id=group_chat_id))
     
-    return render_template('menu/edit_open.html', group=group)
+    return render_template('menu/edit_group.html', group=group)
 
 #グループチャット管理者用メンバー登録、削除
 @app.route('/admin/member_edit/<int:group_chat_id>', methods=['GET', 'POST'])
