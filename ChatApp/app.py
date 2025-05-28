@@ -494,11 +494,11 @@ def create_group(group_chat_id):
             flash("グループ情報を更新しました")
             return redirect(url_for('create_group', group_chat_id=group_chat_id))
     
-    return render_template('menu/edit_group.html', group=group)
+    return render_template('menu/edit_group.html', group=group, group_chat_id=group_chat_id)
 
 #グループチャット管理者用メンバー登録、削除
 @app.route('/admin/member_edit/<int:group_chat_id>', methods=['GET', 'POST'])
-def member_edit(group_chats_id):
+def member_edit(group_chat_id):
     user_id = session.get('user_id')
     is_admin = session.get('is_admin')
     
@@ -510,16 +510,16 @@ def member_edit(group_chats_id):
 
     if request.method == 'POST':
         selected_user_ids = request.form.getlist('user_ids')
-        Group.update_members(group_chats_id, selected_user_ids)
+        Group.update_members(group_chat_id, selected_user_ids)
         flash("メンバーを更新しました")
-        return redirect(url_for('member_edit', group_chat_id=group_chats_id))
+        return redirect(url_for('member_edit', group_chat_id=group_chat_id))
 
     all_users = User.get_all()
-    current_member_ids = Group.get_member_ids(group_chats_id)
-    return render_template('admin/member_edit.html',
+    current_member_ids = Group.get_member_ids(group_chat_id)
+    return render_template('admin/group_member_select.html',
                             users=all_users,
                             member_ids=current_member_ids,
-                            group_chat_id=group_chats_id)
+                            group_chat_id=group_chat_id)
 
 #管理者用オープンチャット一覧
 # @app.route('/admin/open_list', methods=['GET'])

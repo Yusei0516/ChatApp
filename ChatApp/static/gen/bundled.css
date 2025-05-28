@@ -699,12 +699,38 @@ button {
     gap: 32px;
     align-items: center;
 }
+
 .button-white {
     width: 256px;
     margin: 0;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
+    font-size: 16px;
+    text-decoration: none;
+    color: var(--all_black);
+    transition: all 0.5s;
+}
+
+a.button-white {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 256px;
+    height: 48px;
+    border-radius: 32px;
+    background: var(--all_white);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
+    font-size: 16px;
+    text-decoration: none;
+    color: var(--all_black);
+    transition: all 0.5s;
 }
 
 .button-white:hover {
+  transform: scale(1.05); /* 少し拡大 */
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.6); /* 影を強調 */
+}
+
+a.button-white:hover {
   transform: scale(1.05); /* 少し拡大 */
   box-shadow: 0 6px 12px rgba(0, 0, 0, 0.6); /* 影を強調 */
 }
