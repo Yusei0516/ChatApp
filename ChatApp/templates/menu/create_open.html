@@ -11,7 +11,9 @@
           alt="logo"
       > 
     </div>
-    {% include 'util/admin_menu.html' %}
+    <div>
+        <button type="button" onclick="history.back()"><</button>
+    </div>
 </header>
 
 <div class="main-wrapper">
@@ -35,15 +37,7 @@
               name="description"
             ></textarea>
           </div>
-          <div class="button-container"> <!--ボタンの幅等-->
-            {% with messages = get_flashed_messages() %} <!-- flash message:ユーザーが操作をしたときに、画面にその結果を表示する機能やメッセージのこと。ログインした。投稿した。ログインできなかった。-->
-            {% if messages %} 
-            <ul class="flashes">
-              {% for message in messages %} <!-- Flask:バックエンド側にてmessagesの中に複数のエラー分が入っており、その中からmessageが出てくるようになっている。for:ループ。@がない。大文字を使用してね。等-->
-                <li>{{ message }}</li> <!-- エラーが出た分だけ、messageが表示される。-->
-              {% endfor %}
-            </ul>
-            {% endif %} {% endwith %} 
+          <div class="button-container"> 
             <button class="button-white">作成</button>
           </div>
       </form>

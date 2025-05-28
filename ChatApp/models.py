@@ -217,7 +217,7 @@ class Group:
         conn = db_pool.get_conn()
         try:
             with conn.cursor(pymysql.cursors.DictCursor) as cur:
-                sql = "SELECT id, name, description FROM group_chats;"
+                sql = "SELECT * FROM group_chats;"
                 cur.execute(sql)
                 groups = cur.fetchall()
                 return groups
@@ -244,15 +244,15 @@ class Group:
             db_pool.release(conn)
 
     @classmethod
-    def update_members(cls, group_chats_id, user_ids):
+    def update_members(cls, group_chat_id, user_ids):
         conn = db_pool.get_conn()
         try:
             with conn.cursor() as cur:
                 sql_delete = "DELETE FROM group_members WHERE group_chats_id = %s"
-                cur.execute(sql_delete, (group_chats_id,))
+                cur.execute(sql_delete, (group_chat_id,))
                 sql_insert = "INSERT INTO group_members (group_chats_id, user_id, created_at) VALUES (%s, %s, NOW())"
                 for user_id in user_ids:
-                    cur.execute(sql_insert, (group_chats_id, user_id))
+                    cur.execute(sql_insert, (group_chat_id, user_id))
             conn.commit()
         finally:
             db_pool.release(conn)
