@@ -779,3 +779,39 @@ a.button-white:hover {
   transform: scale(1.05); /* 少し拡大 */
   box-shadow: 0 6px 12px rgba(0, 0, 0, 0.6); /* 影を強調 */
 }
+
+/* member-select */
+.sub_button button {
+    background-color: var(--all_white); /* 背景色を指定 */
+    height: 24px; /* 高さ */
+    line-height: 0;
+    padding: 8px 16px; /* パディングを指定 */
+}
+
+#admin_private_chat_list {
+    max-height: 60vh;
+    overflow-y: auto;
+    padding: 16px 0;
+}
+
+.private_name_list span {
+    display: block; /* aタグ全体をクリック可能に */
+    background-color: var(--all_white); /* 背景色を指定 */
+    width: 90%; /* 幅 */
+    border-radius: 64px; /* 角を丸くする */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5); /* 影をつける */
+    white-space: nowrap; /* テキストを折り返さない */
+    line-height: 40px; /* 行の高さ */
+    text-decoration: none; /* テキストの装飾をなしにする */ 
+    margin: auto;
+    color: var(--all_black); /* 文字色を指定 */ 
+}
+
+.checkbox {
+    display:; /* フレックスボックス */
+    align-items: center; /* 縦方向に中央寄せ */
+    gap: 8px; /* チェックボックスとラベルの間隔 */
+    width: 16px;
+    height:16px;
+    margin: auto;
+}
