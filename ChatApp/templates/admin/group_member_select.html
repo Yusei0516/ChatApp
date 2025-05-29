@@ -19,28 +19,25 @@
         <div class="page-title">
           <h1>メンバー追加・退会</h1>    
           <div class="button-white">
-              <form method="POST" action="{{ url_for('member_edit',group_chat_id = group_chat_id ) }}">
-                 <input type="hidden" name="users_ids" value="{{ user_id }}" />
+              <button type="submit" form="selection" class="button-pink">確定</button>
+              <!-- <form method="POST" action="{#{{ url_for('member_edit',group_chat_id = group_chat_id ) }}">
+                 <input type="hidden" name="users_ids" value="{{ user_id }}"#} />
                  <button type="submit" class="button-pink">確定</button>
-              </form>
+              </form> -->
           </div>
         </div>
         <div id="admin_private_chat_list">
             <ul class="private_name_list_delete_and_add">
                 {% for user in users %} 
                   <li>
-                    <a href="{{ url_for('private_chat',user_id=user.uid ) }}">
-                      {{ user.user_name }}
-                    </a>
-                    <form>
+                    <p>{{ user.user_name }}</p>
+                    <form method='POST' id="selection" action="{{ url_for('member_edit',group_chat_id = group_chat_id ) }}">
                         <input 
                          type="checkbox" 
-                         name="user_ids"
+                         name="user_ids[]"
                          id="checkbox"
-                         value="{#{{ user.uid }}"
-                         {% if usr.uid in member_ids %}checked{% endif %}
-                        />
-                        {{ user.user_name}}#}
+                         value="{{ user_uid }}"
+                         >
                     </form>
                   </li>
                 {% endfor %}
@@ -54,7 +51,7 @@
 
   // ページが読み込まれたときチェックボックスの状態を復元
   window.onload = function(){
-      const inChecked = localStorage.getItem("checkboxState") === "true";
+      const isChecked = localStorage.getItem("checkboxState") === "true";
       checkbox.checked = isChecked; //チェックボックスの状態を設定
   };
 
