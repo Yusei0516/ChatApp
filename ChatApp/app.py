@@ -437,8 +437,7 @@ def group_chat_redirect():
     
     group = Group.find_by_user_id(user_id)
     if group is None:
-        flash("グループに所属していません")    
-        return redirect(url_for('user_dashboard'))
+        return render_template('error/500.html'),500   
 
     return redirect(url_for('group_view',group_chats_id=group['id']))
 
