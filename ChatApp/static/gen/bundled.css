@@ -815,3 +815,12 @@ a.button-white:hover {
     height:16px;
     margin: auto;
 }
+
+.back-button button{
+    width: 40px; 
+    height: 32px; /* ボタンの高さ */
+    padding: auto;
+    margin: auto; /* 中央寄せ */
+    text-align: center; /* テキストを中央寄せ */
+    line-height: 0px; 
+}
