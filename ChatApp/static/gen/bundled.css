@@ -808,7 +808,7 @@ a.button-white:hover {
 }
 
 .checkbox {
-    display:flexbox; /* フレックスボックス */
+    display:flex; /* フレックスボックス */
     align-items: center; /* 縦方向に中央寄せ */
     gap: 8px; /* チェックボックスとラベルの間隔 */
     width: 16px;
