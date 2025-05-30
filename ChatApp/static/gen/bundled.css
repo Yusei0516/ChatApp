@@ -824,3 +824,25 @@ a.button-white:hover {
     text-align: center; /* テキストを中央寄せ */
     line-height: 0px; 
 }
+
+.error-content {
+    text-align: center; /* テキストを中央寄せ */
+    margin-top: 160px; /* 上マージン */
+}
+
+.error-button {
+    display: inline-block; /* インラインブロック */
+    background-color: var(--button_pink); /* 背景色を指定 */
+    color: var(--all_white); /* 文字色を指定 */
+    padding: 8px 16px; /* パディングを指定 */
+    border-radius: 32px; /* 角を丸くする */
+    text-decoration: none; /* テキストの装飾をなしにする */
+    font-size: 16px; /* フォントサイズ */
+    margin-top: 32px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5); /* 影をつける */
+}
+
+.error-button:hover {
+  transform: scale(1.05); /* 少し拡大 */
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.6); /* 影を強調 */
+}
