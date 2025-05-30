@@ -33,6 +33,7 @@
                          name="user_ids"
                          class="checkbox"
                          value="{{ user.uid }}"
+                         {% if user.uid in member_ids %}checked{% endif %}
                         >
                     </span>
                   </li>
