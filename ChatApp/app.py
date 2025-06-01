@@ -1,4 +1,4 @@
-from flask import Flask, request, redirect, render_template, session, flash, abort, url_for
+from flask import Flask, request, redirect, render_template, session, flash, abort, url_for, jsonify
 from datetime import timedelta
 import hashlib, uuid, re, os
 from models import User, Group, GroupMessage, OpenChat, OpenChatMessage, UserModel, Private_chats, Private_chat_message
@@ -457,6 +457,11 @@ def admin_group_list():
 
     # groups = Group.get_all()
     # return render_template('admin/group_list.html', groups=groups)
+# #リアルタイムでチャット更新
+# @app.route('/api/group_messages/<int:group_chats_id>')
+# def get_group_messages(group_chats_id):
+#     messages = GroupMessage.get_all(group_chats_id)
+#     return jsonify(messages)
 
 #グループチャット(管理者、一般ユーザ共通)
 @app.route('/group_view/<int:group_chats_id>/messages', methods=['GET','POST'])

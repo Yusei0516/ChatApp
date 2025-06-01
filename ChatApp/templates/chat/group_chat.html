@@ -69,4 +69,61 @@
     type="text/javascript"
 >
 </script> 
+
+<!-- <script>
+  function fetchMessages() {
+    const groupId = "{{ group_chats_id }}";
+    fetch(`/api/group_messages/${groupId}`)
+      .then(response => response.json())
+      .then(data => {
+        const messageArea = document.getElementById("message-area");
+        messageArea.innerHTML = ""; // 一旦クリア
+
+        data.forEach(msg => {
+          const msgDiv = document.createElement("div");
+          msgDiv.className = (msg.uid === "{{ current_user_id }}") ? "my-messages" : "messages";
+
+          if (msgDiv.className === "messages") {
+            const name = document.createElement("p");
+            name.className = "user-name";
+            name.textContent = msg.user_name;
+            msgDiv.appendChild(name);
+          }
+
+          const content = document.createElement("p");
+          content.className = (msg.uid === "{{ current_user_id }}") ? "box box-right" : "box box-left";
+          content.textContent = msg.content;
+          msgDiv.appendChild(content);
+
+          messageArea.appendChild(msgDiv);
+        });
+      });
+  }
+
+  setInterval(fetchMessages, 5000); // 5秒ごとに取得
+  window.onload = fetchMessages;
+  document.addEventListener("DOMContentLoaded", function () {
+    const form = document.querySelector(".typing-box");
+    const textarea = document.querySelector("#message");
+
+    form.addEventListener("submit", function (event) {
+      event.preventDefault(); // フォームの通常の送信を防ぐ
+
+      const formData = new FormData(form);
+
+      fetch(form.action, {
+        method: "POST",
+        body: formData
+      })
+      .then(response => {
+        if (response.ok) {
+          textarea.value = "";  // 入力欄クリア
+          fetchMessages();      // 送信直後にメッセージ再取得
+        } else {
+          alert("送信に失敗しました");
+        }
+      });
+    });
+  });
+</script> -->
 {% endblock %}
