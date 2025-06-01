@@ -808,10 +808,40 @@ a.button-white:hover {
 }
 
 .checkbox {
-    display:; /* フレックスボックス */
     align-items: center; /* 縦方向に中央寄せ */
     gap: 8px; /* チェックボックスとラベルの間隔 */
     width: 16px;
     height:16px;
     margin: auto;
+}
+
+.back-button button{
+    width: 40px; 
+    height: 32px; /* ボタンの高さ */
+    padding: auto;
+    margin: auto; /* 中央寄せ */
+    text-align: center; /* テキストを中央寄せ */
+    line-height: 0px; 
+}
+
+.error-content {
+    text-align: center; /* テキストを中央寄せ */
+    margin-top: 160px; /* 上マージン */
+}
+
+.error-button {
+    display: inline-block; /* インラインブロック */
+    background-color: var(--button_pink); /* 背景色を指定 */
+    color: var(--all_white); /* 文字色を指定 */
+    padding: 8px 16px; /* パディングを指定 */
+    border-radius: 32px; /* 角を丸くする */
+    text-decoration: none; /* テキストの装飾をなしにする */
+    font-size: 16px; /* フォントサイズ */
+    margin-top: 32px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5); /* 影をつける */
+}
+
+.error-button:hover {
+  transform: scale(1.05); /* 少し拡大 */
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.6); /* 影を強調 */
 }

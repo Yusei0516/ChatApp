@@ -11,8 +11,8 @@
             alt="logo"
         /> 
     </div>
-    <div>
-        <button type="button" onclick="window.history.back()"><</button>
+    <div class="back-button">
+        <button type="button" onclick="window.history.back()">＜</button>
     </div>
 </header>
 
@@ -45,7 +45,7 @@
         </div>
         <div class="typing-box-wrapper"> <!-- メッセージ入力画面 -->
             <form class="typing-box" method="POST"  action="{{ url_for('send_message') }}">
-            <textarea name="content" id="message" autofocus></textarea>
+            <textarea name="content" id="message"></textarea>
             <input type="hidden" name="chat_id" value="{{ chat_id  }}" />
             <input type="hidden" name="user_id" value="{{ user_id }}" />
             <button type="submit" id="add-message-button">

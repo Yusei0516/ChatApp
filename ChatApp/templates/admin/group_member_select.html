@@ -33,7 +33,8 @@
                          name="user_ids"
                          class="checkbox"
                          value="{{ user.uid }}"
-                         {% if user.uid in memder_ids %}checkde{% endif %}
+
+                         {% if user.uid in member_ids %}checked{% endif %}
                         >
                     </span>
                   </li>
