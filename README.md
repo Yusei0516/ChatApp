@@ -101,7 +101,7 @@ cp .env.example .env
 # ビルド
 docker comose build
 
-# 軌道
+# 起動
 docker compose up
 
 # ブラウザで確認
