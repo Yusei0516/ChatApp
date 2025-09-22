@@ -99,7 +99,7 @@ ChatApp
 cp .env.example .env
 
 # ビルド
-docker comose build
+docker compose build
 
 # 起動
 docker compose up
